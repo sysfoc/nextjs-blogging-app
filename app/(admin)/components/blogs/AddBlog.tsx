@@ -3,9 +3,14 @@ import dynamic from "next/dynamic";
 import React, { Suspense, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { useRouter } from "next/navigation";
 const LazyJoditEditor = dynamic(() => import("jodit-react"), { ssr: false });
 
 const AddBlog = () => {
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  const navigate = useRouter();
   const [formData, setFormData] = useState({
     title: "",
     description: "",
@@ -65,15 +70,64 @@ const AddBlog = () => {
       return updated;
     });
   };
+  const handleFormData = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setLoading(true);
+    try {
+      const form = new FormData();
+      Object.entries(formData).forEach(([key, value]) => {
+        form.append(key, value);
+      });
+
+      const res = await fetch("/api/v1/blog/add", {
+        method: "POST",
+        body: form,
+      });
+
+      const data = await res.json();
+      setLoading(false);
+      if (res.ok) {
+        console.log(data);
+        setFormData({
+          title: "",
+          description: "",
+          image: "",
+          slug: "",
+          metaTitle: "",
+          metaDescription: "",
+          writer: "",
+          content: "",
+        });
+      } else {
+        setError(true);
+        setErrorMessage(data.message);
+        setFormData({
+          title: "",
+          description: "",
+          image: "",
+          slug: "",
+          metaTitle: "",
+          metaDescription: "",
+          writer: "",
+          content: "",
+        });
+        setLoading(false);
+      }
+    } catch (error: any) {
+      setError(true);
+      setErrorMessage(error.message);
+      setLoading(false);
+    }
+  };
   return (
-    <form encType='multipart/form-data'>
+    <form onSubmit={handleFormData} encType='multipart/form-data'>
       <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
         <div className='flex flex-col gap-2'>
-          <Label htmlFor='meta-title'>Meta Title</Label>
+          <Label htmlFor='metaTitle'>Meta Title</Label>
           <Input
             type='text'
-            id='meta-title'
-            name='meta-title'
+            id='metaTitle'
+            name='metaTitle'
             placeholder='Meta Title'
             className='border border-black placeholder:text-black'
             required
@@ -82,11 +136,11 @@ const AddBlog = () => {
           />
         </div>
         <div className='flex flex-col gap-2'>
-          <Label htmlFor='meta-description'>Meta Description</Label>
+          <Label htmlFor='metaDescription'>Meta Description</Label>
           <Input
             type='text'
-            id='meta-description'
-            name='meta-description'
+            id='metaDescription'
+            name='metaDescription'
             placeholder='Meta Description'
             className='border border-black placeholder:text-black'
             required
