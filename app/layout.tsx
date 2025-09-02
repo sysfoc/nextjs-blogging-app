@@ -2,8 +2,7 @@ import type { Metadata } from "next";
 import { Montserrat } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/app/(public)/components/ThemeProvider";
-import Header from "@/app/(public)/components/Header";
-import Footer from "@/app/(public)/components/Footer";
+import StoreProvider from './StoreProvider';
 import LayoutWrapper from "./LayoutWrapper";
 
 const montserrat = Montserrat({
@@ -33,7 +32,9 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
+          <StoreProvider>
           <LayoutWrapper>{children}</LayoutWrapper>
+          </StoreProvider>
         </ThemeProvider>
       </body>
     </html>
