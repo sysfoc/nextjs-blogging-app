@@ -4,7 +4,7 @@ import { NextResponse } from "next/server";
 
 export async function DELETE(
   req: Request,
-  context: { params: { id: string } }
+  context: any
 ) {
   const { id } = context.params;
   connectToDatabase();

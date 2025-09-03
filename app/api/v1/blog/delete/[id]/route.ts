@@ -6,7 +6,7 @@ import { connectToDatabase } from "@/app/utils/db";
 
 export async function DELETE(
   req: Request,
-  context: { params: { id: string } }
+  context: any
 ) {
   await connectToDatabase();
   const { id } = context.params;
