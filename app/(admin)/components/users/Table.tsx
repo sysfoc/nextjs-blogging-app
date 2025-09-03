@@ -9,6 +9,17 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 import Link from "next/link";
 import { Pen, Trash2 } from "lucide-react";
 const Table = () => {
@@ -31,6 +42,19 @@ const Table = () => {
   React.useEffect(() => {
     getAllUsers();
   }, []);
+
+  const handleDeleteUser = async (id: string) => {
+    try {
+      const res = await fetch(`/api/v1/user/delete/${id}`, {
+        method: "DELETE",
+        credentials: "include",
+      });
+      await res.json();
+      getAllUsers();
+    } catch (error) {
+      alert("Something went wrong");
+    }
+  };
   return (
     <div>
       <TableWrapper>
@@ -65,9 +89,33 @@ const Table = () => {
                     >
                       <Pen size={12} />
                     </Link>
-                    <button className='bg-red-500 text-white cursor-pointer px-2 py-2 rounded'>
-                      <Trash2 size={12} />
-                    </button>
+                    <AlertDialog>
+                      <AlertDialogTrigger>
+                        <button className='bg-red-500 text-white cursor-pointer px-2 py-2 rounded'>
+                          <Trash2 size={12} />
+                        </button>
+                      </AlertDialogTrigger>
+                      <AlertDialogContent>
+                        <AlertDialogHeader>
+                          <AlertDialogTitle>
+                            Are you absolutely sure?
+                          </AlertDialogTitle>
+                          <AlertDialogDescription>
+                            This action cannot be undone. This will permanently
+                            delete the user account and remove all of it data
+                            from our servers.
+                          </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                          <AlertDialogCancel>Cancel</AlertDialogCancel>
+                          <AlertDialogAction
+                            onClick={() => handleDeleteUser(user._id)}
+                          >
+                            Continue
+                          </AlertDialogAction>
+                        </AlertDialogFooter>
+                      </AlertDialogContent>
+                    </AlertDialog>
                   </div>
                 </TableCell>
               </TableRow>

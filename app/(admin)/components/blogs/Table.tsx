@@ -9,6 +9,17 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 import Image from "next/image";
 import Link from "next/link";
 import { Pen, Trash2 } from "lucide-react";
@@ -31,6 +42,19 @@ const Table = () => {
   useEffect(() => {
     getAllBlogs();
   }, []);
+
+  const handleDeleteBlog = async (id: string) => {
+    try {
+      const res = await fetch(`/api/v1/blog/delete/${id}`, {
+        method: "DELETE",
+        credentials: "include",
+      });
+      await res.json();
+      getAllBlogs();
+    } catch (error) {
+      alert("Something went wrong, please try again");
+    }
+  };
   return (
     <div>
       <TableWrapper>
@@ -70,14 +94,38 @@ const Table = () => {
                 <TableCell>
                   <div className='flex gap-x-2 items-center'>
                     <Link
-                      href={"/admin/blogs/edit/id"}
+                      href={`/admin/blogs/edit/${item._id}`}
                       className='bg-green-500 text-white px-2 py-2 rounded'
                     >
                       <Pen size={12} />
                     </Link>
-                    <button className='bg-red-500 text-white cursor-pointer px-2 py-2 rounded'>
-                      <Trash2 size={12} />
-                    </button>
+                    <AlertDialog>
+                      <AlertDialogTrigger>
+                        <button className='bg-red-500 text-white cursor-pointer px-2 py-2 rounded'>
+                          <Trash2 size={12} />
+                        </button>
+                      </AlertDialogTrigger>
+                      <AlertDialogContent>
+                        <AlertDialogHeader>
+                          <AlertDialogTitle>
+                            Are you absolutely sure?
+                          </AlertDialogTitle>
+                          <AlertDialogDescription>
+                            This action cannot be undone. This will permanently
+                            delete the blog and its content will no longer be
+                            available.
+                          </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                          <AlertDialogCancel>Cancel</AlertDialogCancel>
+                          <AlertDialogAction
+                            onClick={() => handleDeleteBlog(item._id)}
+                          >
+                            Continue
+                          </AlertDialogAction>
+                        </AlertDialogFooter>
+                      </AlertDialogContent>
+                    </AlertDialog>
                   </div>
                 </TableCell>
               </TableRow>
