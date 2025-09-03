@@ -4,9 +4,9 @@ import { NextResponse } from "next/server";
 
 export async function DELETE(
   req: Request,
-  { params }: { params: { id: string } }
+  context: { params: { id: string } }
 ) {
-  const id = params.id;
+  const { id } = context.params;
   connectToDatabase();
   try {
     await User.findByIdAndDelete(id);

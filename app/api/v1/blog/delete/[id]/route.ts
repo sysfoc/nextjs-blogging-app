@@ -6,10 +6,10 @@ import { connectToDatabase } from "@/app/utils/db";
 
 export async function DELETE(
   req: Request,
-  { params }: { params: { id: string } }
+  context: { params: { id: string } }
 ) {
   await connectToDatabase();
-  const { id } = params;
+  const { id } = context.params;
 
   try {
     const blog = await Blog.findById(id);
