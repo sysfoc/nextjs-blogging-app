@@ -1,50 +1,65 @@
 "use client";
+import React, { useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useRouter } from "next/navigation";
-import React from "react";
+import { useParams, useRouter } from "next/navigation";
 
-const AddUser = () => {
-  const [loading, setLoading] = React.useState(false);
-  const [error, setError] = React.useState(false);
-  const [errorMessage, setErrorMessage] = React.useState("");
-  const [formData, setFormData] = React.useState({
-    name: "",
-    email: "",
-    password: "",
-  });
+const EditCategory = () => {
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
   const router = useRouter();
+  const params = useParams();
+  const [formData, setFormData] = useState({
+    _id: "",
+    name: "",
+    metaTitle: "",
+    metaDescription: "",
+    h1Title: "",
+  });
+  const getCategoryById = async () => {
+    setLoading(true);
+    const res = await fetch(`/api/v1/category/get-single-category/${params.id}`, {
+      method: "GET",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    const data = await res.json();
+    setLoading(false);
+    setFormData(data.category);
+  };
+  useEffect(() => {
+    getCategoryById();
+  },[])
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
+  }
+  
   const handleFormData = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
     try {
-      const res = await fetch("/api/v1/auth/register", {
-        method: "POST",
+      const res = await fetch(`/api/v1/category/update/${formData._id}`, {
+        method: "PATCH",
         credentials: "include",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(formData),
       });
-      const data = await res.json();
+      await res.json();
       setLoading(false);
       if (res.ok) {
-        router.push("/admin/users");
-      } else {
-        setLoading(false);
-        setError(true);
-        setErrorMessage(data.message);
+        router.push("/admin/category");
       }
     } catch (error) {
       setError(true);
-      setLoading(false);
       setErrorMessage("Something went wrong");
     }
-  };
+  }
   return (
     <form onSubmit={handleFormData}>
       {error && (
@@ -54,7 +69,7 @@ const AddUser = () => {
       )}
       <div className='grid grid-cols-1 gap-4'>
         <div className='flex flex-col gap-2'>
-          <Label htmlFor='name'>Name</Label>
+          <Label htmlFor='name'>Category name</Label>
           <Input
             type='text'
             id='name'
@@ -68,30 +83,44 @@ const AddUser = () => {
           />
         </div>
         <div className='flex flex-col gap-2'>
-          <Label htmlFor='email'>Email</Label>
+          <Label htmlFor='metaTitle'>Meta Title</Label>
           <Input
-            type='email'
-            id='email'
-            name='email'
-            placeholder='Enter Email'
+            type='text'
+            id='metaTitle'
+            name='metaTitle'
+            placeholder='Enter Meta Title'
             className='border border-black placeholder:text-black'
             required
             autoComplete='off'
-            value={formData.email}
+            value={formData.metaTitle}
             onChange={handleChange}
           />
         </div>
         <div className='flex flex-col gap-2'>
-          <Label htmlFor='password'>Password</Label>
+          <Label htmlFor='metaDescription'>Meta Description</Label>
           <Input
-            type='password'
-            id='password'
-            name='password'
-            placeholder='Enter Password'
+            type='text'
+            id='metaDescription'
+            name='metaDescription'
+            placeholder='Enter Meta Description'
             className='border border-black placeholder:text-black'
             required
             autoComplete='off'
-            value={formData.password}
+            value={formData.metaDescription}
+            onChange={handleChange}
+          />
+        </div>
+        <div className='flex flex-col gap-2'>
+          <Label htmlFor='h1Title'>H1 Title</Label>
+          <Input
+            type='text'
+            id='h1Title'
+            name='h1Title'
+            placeholder='Enter H1 Title'
+            className='border border-black placeholder:text-black'
+            required
+            autoComplete='off'
+            value={formData.h1Title}
             onChange={handleChange}
           />
         </div>
@@ -102,11 +131,11 @@ const AddUser = () => {
           disabled={loading}
           className='w-full py-3 px-4 bg-gradient-to-r from-[#FE4F70] to-[#FFA387] cursor-pointer text-white rounded-full text-sm'
         >
-          Create
+          Update
         </button>
       </div>
     </form>
   );
 };
 
-export default AddUser;
+export default EditCategory;

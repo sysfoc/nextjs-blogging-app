@@ -2,6 +2,8 @@ import mongoose, { Schema, Document } from "mongoose";
 
 interface IBlog extends Document {
   userId: mongoose.Schema.Types.ObjectId;
+  category: mongoose.Schema.Types.ObjectId;
+  subCategory: mongoose.Schema.Types.ObjectId;
   title: string;
   content: string;
   slug: string;
@@ -9,7 +11,6 @@ interface IBlog extends Document {
   metaDescription: string;
   blogWriter: string;
   image: string;
-  category: string;
   isEditorPick: boolean;
 }
 
@@ -19,6 +20,16 @@ export const blogSchema = new Schema<IBlog>(
       type: mongoose.Schema.Types.ObjectId,
       required: true,
       ref: "User",
+    },
+    category: {
+      type: mongoose.Schema.Types.ObjectId,
+      required: true,
+      ref: "Category",
+    },
+    subCategory: {
+      type: mongoose.Schema.Types.ObjectId,
+      required: true,
+      ref: "SubCategory",
     },
     title: {
       type: String,
@@ -51,11 +62,6 @@ export const blogSchema = new Schema<IBlog>(
       trim: true,
     },
     image: {
-      type: String,
-      required: true,
-      trim: true,
-    },
-    category: {
       type: String,
       required: true,
       trim: true,

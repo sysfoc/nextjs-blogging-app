@@ -4,14 +4,15 @@ import { Label } from "@/components/ui/label";
 import { useRouter } from "next/navigation";
 import React from "react";
 
-const AddUser = () => {
+const AddCategory = () => {
   const [loading, setLoading] = React.useState(false);
   const [error, setError] = React.useState(false);
   const [errorMessage, setErrorMessage] = React.useState("");
   const [formData, setFormData] = React.useState({
     name: "",
-    email: "",
-    password: "",
+    metaTitle: "",
+    metaDescription: "",
+    h1Title: "",
   });
   const router = useRouter();
 
@@ -22,7 +23,7 @@ const AddUser = () => {
     e.preventDefault();
     setLoading(true);
     try {
-      const res = await fetch("/api/v1/auth/register", {
+      const res = await fetch("/api/v1/category/add", {
         method: "POST",
         credentials: "include",
         headers: {
@@ -33,7 +34,7 @@ const AddUser = () => {
       const data = await res.json();
       setLoading(false);
       if (res.ok) {
-        router.push("/admin/users");
+        router.push("/admin/category");
       } else {
         setLoading(false);
         setError(true);
@@ -54,7 +55,7 @@ const AddUser = () => {
       )}
       <div className='grid grid-cols-1 gap-4'>
         <div className='flex flex-col gap-2'>
-          <Label htmlFor='name'>Name</Label>
+          <Label htmlFor='name'>Category name</Label>
           <Input
             type='text'
             id='name'
@@ -68,30 +69,44 @@ const AddUser = () => {
           />
         </div>
         <div className='flex flex-col gap-2'>
-          <Label htmlFor='email'>Email</Label>
+          <Label htmlFor='metaTitle'>Meta Title</Label>
           <Input
-            type='email'
-            id='email'
-            name='email'
-            placeholder='Enter Email'
+            type='text'
+            id='metaTitle'
+            name='metaTitle'
+            placeholder='Enter Meta Title'
             className='border border-black placeholder:text-black'
             required
             autoComplete='off'
-            value={formData.email}
+            value={formData.metaTitle}
             onChange={handleChange}
           />
         </div>
         <div className='flex flex-col gap-2'>
-          <Label htmlFor='password'>Password</Label>
+          <Label htmlFor='metaDescription'>Meta Description</Label>
           <Input
-            type='password'
-            id='password'
-            name='password'
-            placeholder='Enter Password'
+            type='text'
+            id='metaDescription'
+            name='metaDescription'
+            placeholder='Enter Meta Description'
             className='border border-black placeholder:text-black'
             required
             autoComplete='off'
-            value={formData.password}
+            value={formData.metaDescription}
+            onChange={handleChange}
+          />
+        </div>
+        <div className='flex flex-col gap-2'>
+          <Label htmlFor='h1Title'>H1 Title</Label>
+          <Input
+            type='text'
+            id='h1Title'
+            name='h1Title'
+            placeholder='Enter H1 Title'
+            className='border border-black placeholder:text-black'
+            required
+            autoComplete='off'
+            value={formData.h1Title}
             onChange={handleChange}
           />
         </div>
@@ -109,4 +124,4 @@ const AddUser = () => {
   );
 };
 
-export default AddUser;
+export default AddCategory;

@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect } from "react";
+import React from "react";
 import {
   Table as TableWrapper,
   TableBody,
@@ -20,15 +20,15 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import Image from "next/image";
 import Link from "next/link";
 import { Pen, Trash2 } from "lucide-react";
 const Table = () => {
   const [formData, setFormData] = React.useState([]);
   const [loading, setLoading] = React.useState(false);
-  const getAllBlogs = async () => {
+
+  const getAllUsers = async () => {
     setLoading(true);
-    const res = await fetch("/api/v1/blog/get-all", {
+    const res = await fetch("/api/v1/category/get-all", {
       method: "GET",
       credentials: "include",
       headers: {
@@ -37,64 +37,41 @@ const Table = () => {
     });
     const data = await res.json();
     setLoading(false);
-    setFormData(data.blogs);
+    setFormData(data.categories);
   };
-  useEffect(() => {
-    getAllBlogs();
+  React.useEffect(() => {
+    getAllUsers();
   }, []);
-
-  const handleDeleteBlog = async (id: string) => {
-    try {
-      const res = await fetch(`/api/v1/blog/delete/${id}`, {
-        method: "DELETE",
-        credentials: "include",
-      });
-      await res.json();
-      getAllBlogs();
-    } catch (error) {
-      alert("Something went wrong, please try again");
-    }
-  };
   return (
     <div>
       <TableWrapper>
-        <TableCaption>A list of your recently created blogs.</TableCaption>
+        <TableCaption>A list of your recently created users.</TableCaption>
         <TableHeader className='!bg-[#fe4f70]/70 hover:!bg-[#fe4f70]'>
           <TableRow>
             <TableHead className='w-[100px]'>ID</TableHead>
-            <TableHead>Image</TableHead>
-            <TableHead>Title</TableHead>
             <TableHead>Category</TableHead>
+            <TableHead>H1 Title</TableHead>
             <TableHead>Actions</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
           {loading && (
             <TableRow>
-              <TableCell colSpan={5} className='text-center'>
+              <TableCell colSpan={4} className='text-center'>
                 Loading...
               </TableCell>
             </TableRow>
           )}
           {formData?.length > 0 ? (
-            formData?.map((item: any, index) => (
-              <TableRow key={index}>
-                <TableCell>{item._id.slice(0, 12)}...</TableCell>
-                <TableCell>
-                  <Image
-                    src={item.image}
-                    alt={`${item.title}-image`}
-                    width={30}
-                    height={30}
-                    className='size-auto object-cover w-[30px] h-[30px] rounded-full'
-                  />
-                </TableCell>
-                <TableCell>{item?.title.slice(0, 20)}</TableCell>
-                <TableCell>{item?.category}</TableCell>
+            formData.map((category: any) => (
+              <TableRow key={category._id}>
+                <TableCell>{category._id.slice(0, 13)}...</TableCell>
+                <TableCell>{category.name}</TableCell>
+                <TableCell>{category.h1Title}</TableCell>
                 <TableCell>
                   <div className='flex gap-x-2 items-center'>
                     <Link
-                      href={`/admin/blogs/edit/${item._id}`}
+                      href={`/admin/category/edit/${category._id}`}
                       className='bg-green-500 text-white px-2 py-2 rounded'
                     >
                       <Pen size={12} />
@@ -110,17 +87,13 @@ const Table = () => {
                           </AlertDialogTitle>
                           <AlertDialogDescription>
                             This action cannot be undone. This will permanently
-                            delete the blog and its content will no longer be
-                            available.
+                            delete the user account and remove all of it data
+                            from our servers.
                           </AlertDialogDescription>
                         </AlertDialogHeader>
                         <AlertDialogFooter>
                           <AlertDialogCancel>Cancel</AlertDialogCancel>
-                          <AlertDialogAction
-                            onClick={() => handleDeleteBlog(item._id)}
-                          >
-                            Continue
-                          </AlertDialogAction>
+                          <AlertDialogAction>Continue</AlertDialogAction>
                         </AlertDialogFooter>
                       </AlertDialogContent>
                     </AlertDialog>
@@ -130,8 +103,8 @@ const Table = () => {
             ))
           ) : (
             <TableRow>
-              <TableCell colSpan={5} className='text-center'>
-                No Data Found
+              <TableCell colSpan={4} className='text-center'>
+                No categories found
               </TableCell>
             </TableRow>
           )}

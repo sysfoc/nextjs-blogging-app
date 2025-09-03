@@ -256,7 +256,7 @@ const AddBlog = () => {
           type='submit'
           className='w-full py-3 px-4 bg-gradient-to-r from-[#FE4F70] to-[#FFA387] cursor-pointer text-white rounded-full text-sm'
         >
-          Submit
+          Create
         </button>
       </div>
     </form>

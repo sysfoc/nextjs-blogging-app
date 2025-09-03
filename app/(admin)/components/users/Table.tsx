@@ -90,10 +90,8 @@ const Table = () => {
                       <Pen size={12} />
                     </Link>
                     <AlertDialog>
-                      <AlertDialogTrigger>
-                        <button className='bg-red-500 text-white cursor-pointer px-2 py-2 rounded'>
-                          <Trash2 size={12} />
-                        </button>
+                      <AlertDialogTrigger className='bg-red-500 text-white cursor-pointer px-2 py-2 rounded'>
+                        <Trash2 size={12} />
                       </AlertDialogTrigger>
                       <AlertDialogContent>
                         <AlertDialogHeader>
