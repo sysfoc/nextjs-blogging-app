@@ -1,7 +1,7 @@
-import mongoose, { Schema, Document, Types } from "mongoose";
+import mongoose, { Schema, Document } from "mongoose";
 
 interface IBlog extends Document {
-  userId: Types.ObjectId;
+  userId: mongoose.Schema.Types.ObjectId;
   title: string;
   content: string;
   slug: string;
@@ -9,6 +9,8 @@ interface IBlog extends Document {
   metaDescription: string;
   blogWriter: string;
   image: string;
+  category: string;
+  isEditorPick: boolean;
 }
 
 export const blogSchema = new Schema<IBlog>(
@@ -52,6 +54,15 @@ export const blogSchema = new Schema<IBlog>(
       type: String,
       required: true,
       trim: true,
+    },
+    category: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    isEditorPick: {
+      type: Boolean,
+      default: false,
     },
   },
   {

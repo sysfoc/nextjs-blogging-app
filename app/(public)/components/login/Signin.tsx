@@ -21,6 +21,7 @@ const Signin = () => {
   };
   const handleFormData = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setLoading(true);
     try {
       const res = await fetch("/api/v1/auth/login", {
         method: "POST",
@@ -31,13 +32,17 @@ const Signin = () => {
         body: JSON.stringify(formData),
       });
       const data = await res.json();
+      setLoading(false);
       if (res.ok) {
         dispatch(loginUser(data.user));
+        window.location.href = "/admin";
       } else {
         setError(true);
+        setErrorMessage(data.message);
       }
     } catch (error) {
       setError(true);
+      setErrorMessage("Something went wrong");
     }
   };
   return (
@@ -65,8 +70,8 @@ const Signin = () => {
           </div>
         </div>
         {error && (
-          <div className='mb-3'>
-            <span className='font-medium'>{errorMessage}</span>
+          <div className='mb-3 flex items-center rounded-lg bg-red-200 p-4'>
+            <span className='font-normal text-sm'>{errorMessage}</span>
           </div>
         )}
         <form className='space-y-4' onSubmit={handleFormData}>

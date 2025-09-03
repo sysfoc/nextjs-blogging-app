@@ -31,6 +31,8 @@ export async function POST(req: Request) {
   const slug = formData.get("slug") as string | null;
   const writer = formData.get("writer") as string | null;
   const image = formData.get("image") as File | null;
+  const category = formData.get("category") as string | null;
+  const isEditorPick = formData.get("isEditorPick") as boolean | null;
 
   if (
     !title ||
@@ -39,7 +41,8 @@ export async function POST(req: Request) {
     !metaDescription ||
     !image ||
     !slug ||
-    !writer
+    !writer ||
+    !category
   ) {
     return NextResponse.json(
       { message: "Please fill complete form" },
@@ -51,7 +54,10 @@ export async function POST(req: Request) {
   if (!user) {
     return NextResponse.json({ message: "User not found" }, { status: 404 });
   }
-
+  const existingBlog = await Blog.findOne({ slug });
+  if (existingBlog) {
+    return NextResponse.json({ message: "Blog already exists" }, { status: 400 });
+  }
   try {
     const buffer = Buffer.from(await image.arrayBuffer());
     const filename = `${Date.now()}-${image.name}`;
@@ -67,6 +73,8 @@ export async function POST(req: Request) {
       image: `/blog/${filename}`,
       slug,
       blogWriter: writer,
+      category,
+      isEditorPick,
     });
 
     return NextResponse.json(

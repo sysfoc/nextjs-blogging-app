@@ -1,7 +1,7 @@
-import mongoose, { Schema, Document, Types } from "mongoose";
+import mongoose, { Schema, Document } from "mongoose";
 
 interface IComment extends Document {
-  blogId: Types.ObjectId;
+  blogId: mongoose.Schema.Types.ObjectId;
   name: string;
   email: string;
   comment: string;

@@ -3,6 +3,7 @@ import dynamic from "next/dynamic";
 import React, { Suspense, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Checkbox } from "@/components/ui/checkbox";
 import { useRouter } from "next/navigation";
 const LazyJoditEditor = dynamic(() => import("jodit-react"), { ssr: false });
 
@@ -10,7 +11,7 @@ const AddBlog = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
-  const navigate = useRouter();
+  const router = useRouter();
   const [formData, setFormData] = useState({
     title: "",
     description: "",
@@ -20,6 +21,8 @@ const AddBlog = () => {
     metaDescription: "",
     writer: "",
     content: "",
+    category: "",
+    isEditorPick: false,
   });
 
   const config = {
@@ -75,8 +78,13 @@ const AddBlog = () => {
     setLoading(true);
     try {
       const form = new FormData();
+
       Object.entries(formData).forEach(([key, value]) => {
-        form.append(key, value);
+        if (typeof value === "boolean") {
+          form.append(key, value ? "true" : "false");
+        } else {
+          form.append(key, value as any);
+        }
       });
 
       const res = await fetch("/api/v1/blog/add", {
@@ -87,7 +95,7 @@ const AddBlog = () => {
       const data = await res.json();
       setLoading(false);
       if (res.ok) {
-        console.log(data);
+        router.push("/admin/blogs");
         setFormData({
           title: "",
           description: "",
@@ -97,6 +105,8 @@ const AddBlog = () => {
           metaDescription: "",
           writer: "",
           content: "",
+          category: "",
+          isEditorPick: false,
         });
       } else {
         setError(true);
@@ -110,6 +120,8 @@ const AddBlog = () => {
           metaDescription: "",
           writer: "",
           content: "",
+          category: "",
+          isEditorPick: false,
         });
         setLoading(false);
       }
@@ -121,6 +133,11 @@ const AddBlog = () => {
   };
   return (
     <form onSubmit={handleFormData} encType='multipart/form-data'>
+      {error && (
+        <div className='mb-3 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative'>
+          <span className='block sm:inline text-sm'>{errorMessage}</span>
+        </div>
+      )}
       <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
         <div className='flex flex-col gap-2'>
           <Label htmlFor='metaTitle'>Meta Title</Label>
@@ -187,6 +204,29 @@ const AddBlog = () => {
             onChange={handleChange}
           />
         </div>
+        <div className='flex flex-col gap-2'>
+          <Label htmlFor='category'>Category</Label>
+          <select
+            name='category'
+            id='category'
+            onChange={(e) => setFormData({ ...formData, category: e.target.value })}
+            className='border border-black py-2 px-3 rounded-md text-sm'
+          >
+            <option value='wishes'>Best Wishes</option>
+            <option value='hami'>Hami</option>
+          </select>
+        </div>
+        <div className='flex flex-row gap-2'>
+          <Checkbox
+            id='isEditorPick'
+            className='border border-black'
+            checked={formData.isEditorPick}
+            onCheckedChange={(checked) =>
+              setFormData({ ...formData, isEditorPick: checked === true })
+            }
+          />
+          <Label htmlFor='isEditorPick'>Mark as editor pick</Label>
+        </div>
         <div className='flex flex-col col-span-2 gap-2'>
           <Label htmlFor='image'>Select image</Label>
           <Input
@@ -212,6 +252,7 @@ const AddBlog = () => {
       </div>
       <div className='mt-6'>
         <button
+          disabled={loading}
           type='submit'
           className='w-full py-3 px-4 bg-gradient-to-r from-[#FE4F70] to-[#FFA387] cursor-pointer text-white rounded-full text-sm'
         >
