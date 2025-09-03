@@ -43,6 +43,11 @@ const items = [
     icon: Calendar,
   },
   {
+    title: "Sub-categories",
+    url: "/admin/sub-category",
+    icon: Calendar,
+  },
+  {
     title: "Blogs",
     url: "/admin/blogs",
     icon: Search,

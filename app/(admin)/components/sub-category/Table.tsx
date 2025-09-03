@@ -22,34 +22,77 @@ import {
 } from "@/components/ui/alert-dialog";
 import Link from "next/link";
 import { Pen, Trash2 } from "lucide-react";
+
+interface MainCategory {
+  _id: string;
+  name: string;
+}
 const Table = () => {
   const [formData, setFormData] = React.useState([]);
   const [loading, setLoading] = React.useState(false);
+  const [mainCategories, setMainCategories] = React.useState<MainCategory[]>(
+    []
+  );
 
-  const getAllUsers = async () => {
-    setLoading(true);
-    const res = await fetch("/api/v1/category/get-all", {
-      method: "GET",
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-    const data = await res.json();
-    setLoading(false);
-    setFormData(data.categories);
+  const fetchData = async () => {
+    try {
+      setLoading(true);
+
+      const [subRes, catRes] = await Promise.all([
+        fetch("/api/v1/sub-category/get-all", {
+          method: "GET",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }),
+        fetch("/api/v1/category/get-all", {
+          method: "GET",
+          credentials: "include",
+        }),
+      ]);
+
+      const [subData, catData] = await Promise.all([
+        subRes.json(),
+        catRes.json(),
+      ]);
+
+      setFormData(subData.subCategories);
+      setMainCategories(catData.categories);
+    } catch (error) {
+      alert("Something went wrong");
+    } finally {
+      setLoading(false);
+    }
   };
+
   React.useEffect(() => {
-    getAllUsers();
+    fetchData();
   }, []);
+
+  const handleDeleteCategory = async (id: string) => {
+    try {
+      const res = await fetch(`/api/v1/sub-category/delete/${id}`, {
+        method: "DELETE",
+        credentials: "include",
+      });
+      await res.json();
+      fetchData();
+    } catch (error) {
+      alert("Something went wrong");
+    }
+  };
   return (
     <div>
       <TableWrapper>
-        <TableCaption>A list of your recently created categories.</TableCaption>
+        <TableCaption>
+          A list of your recently created sub-categories.
+        </TableCaption>
         <TableHeader className='!bg-[#fe4f70]/70 hover:!bg-[#fe4f70]'>
           <TableRow>
-            <TableHead className='w-[100px]'>ID</TableHead>
-            <TableHead>Category</TableHead>
+            <TableHead>ID</TableHead>
+            <TableHead>Main Category</TableHead>
+            <TableHead>Sub Category</TableHead>
             <TableHead>H1 Title</TableHead>
             <TableHead>Actions</TableHead>
           </TableRow>
@@ -66,12 +109,19 @@ const Table = () => {
             formData.map((category: any) => (
               <TableRow key={category._id}>
                 <TableCell>{category._id.slice(0, 13)}...</TableCell>
+                <TableCell>
+                  {
+                    mainCategories.find(
+                      (cat: any) => cat._id === category.category
+                    )?.name
+                  }
+                </TableCell>{" "}
                 <TableCell>{category.name}</TableCell>
                 <TableCell>{category.h1Title}</TableCell>
                 <TableCell>
                   <div className='flex gap-x-2 items-center'>
                     <Link
-                      href={`/admin/category/edit/${category._id}`}
+                      href={`/admin/sub-category/edit/${category._id}`}
                       className='bg-green-500 text-white px-2 py-2 rounded'
                     >
                       <Pen size={12} />
@@ -87,13 +137,17 @@ const Table = () => {
                           </AlertDialogTitle>
                           <AlertDialogDescription>
                             This action cannot be undone. This will permanently
-                            delete the category and remove all of it data
+                            delete the sub category and remove all of it data
                             from our servers.
                           </AlertDialogDescription>
                         </AlertDialogHeader>
                         <AlertDialogFooter>
                           <AlertDialogCancel>Cancel</AlertDialogCancel>
-                          <AlertDialogAction>Continue</AlertDialogAction>
+                          <AlertDialogAction
+                            onClick={() => handleDeleteCategory(category._id)}
+                          >
+                            Continue
+                          </AlertDialogAction>
                         </AlertDialogFooter>
                       </AlertDialogContent>
                     </AlertDialog>
