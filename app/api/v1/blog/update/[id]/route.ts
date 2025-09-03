@@ -6,10 +6,10 @@ import { connectToDatabase } from "@/app/utils/db";
 
 export async function PATCH(
   req: Request,
-  { params }: { params: { id: string } }
+  context: any
 ) {
   await connectToDatabase();
-  const { id } = params;
+  const { id } = context.params;
   const formData = await req.formData();
 
   const title = formData.get("title") as string | null;

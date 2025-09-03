@@ -4,9 +4,9 @@ import { NextResponse } from "next/server";
 
 export async function GET(
   req: Request,
-  { params }: { params: { id: string } }
+  context: any
 ) {
-  const id = params.id;
+  const { id } = context.params;
   connectToDatabase();
   try {
     const user = await User.findById(id).select("-password");
