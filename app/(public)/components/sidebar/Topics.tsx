@@ -50,7 +50,7 @@ const Topics = () => {
       <div className='my-4 flex flex-col'>
         {topics?.map((topic, index) => (
           <Link
-            href={`/category/${topic?.parentCategory}/${topic?.subCategoryName}`}
+            href={`/category/${topic?.parentCategorySlug}/${topic?.subCategorySlug}`}
             key={index}
             className='flex items-center justify-between border-t border-gray-200/70 py-3'
           >

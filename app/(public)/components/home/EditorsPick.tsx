@@ -87,7 +87,7 @@ const EditorsPick = () => {
                 </div>
                 <div>
                   <Link
-                    href={`/category/${post?.category?.name}/${post?.subCategory?.name}/${post?.slug}`}
+                    href={`/category/${post?.category?.slug}/${post?.subCategory?.slug}/${post?.slug}`}
                   >
                     <h4 className='font-bold text-xl'>
                       {post?.title.slice(0, 48)}...

@@ -35,7 +35,9 @@ export async function GET() {
         $project: {
           _id: 0,
           subCategoryName: "$subCategory.name",
+          subCategorySlug: "$subCategory.slug",
           parentCategory: "$parentCategory.name",
+          parentCategorySlug: "$parentCategory.slug",
           count: 1,
         },
       },

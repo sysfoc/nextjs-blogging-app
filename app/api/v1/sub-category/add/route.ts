@@ -11,9 +11,11 @@ export async function POST(req: Request) {
       { status: 400 }
     );
   }
+  const slug = name.toLowerCase().replace(/ /g, "-");
   try {
     const subcategory = await SubCategory.create({
       name,
+      slug,
       metaTitle,
       metaDescription,
       h1Title,

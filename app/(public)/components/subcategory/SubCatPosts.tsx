@@ -56,7 +56,7 @@ const SubCatPosts = ({ blogs: data }: Props) => {
                   </p>
                 </div>
                 <Link
-                  href={`/category/${post?.category?.name}/${post?.subCategory?.name}/${post?.slug}`}
+                  href={`/category/${post?.category?.slug}/${post?.subCategory?.slug}/${post?.slug}`}
                 >
                   <h3 className='font-bold text-xl'>{post?.title}</h3>
                 </Link>

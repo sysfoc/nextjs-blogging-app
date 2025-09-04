@@ -8,8 +8,8 @@ export async function GET(req: Request) {
     const blog = await Blog.find()
       .sort({ createdAt: -1 })
       .limit(6)
-      .populate({ path: "category", select: "name" })
-      .populate({ path: "subCategory", select: "name" })
+      .populate({ path: "category", select: "name slug" })
+      .populate({ path: "subCategory", select: "name slug" })
       .select("-__v -userId -metaTitle -metaDescription");
 
     if (!blog) {

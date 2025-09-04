@@ -9,7 +9,7 @@ export async function GET(
   const { id } = context.params;
   connectToDatabase();
   try {
-    const category = await Category.findOne({ name: id});
+    const category = await Category.findOne({ slug: id});
     return NextResponse.json({ category }, { status: 200 });
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 });

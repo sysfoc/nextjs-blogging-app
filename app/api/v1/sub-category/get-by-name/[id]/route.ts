@@ -6,7 +6,7 @@ export async function GET(req: Request, context: any) {
   const { id } = context.params;
   connectToDatabase();
   try {
-    const subCategory = await SubCategory.findOne({ name: id });
+    const subCategory = await SubCategory.findOne({ slug: id });
     return NextResponse.json({ subCategory }, { status: 200 });
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 });

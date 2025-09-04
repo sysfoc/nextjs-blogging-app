@@ -7,8 +7,8 @@ export async function GET(req: Request, context: any) {
   try {
     const { id } = context.params;
     const blogs = await Blog.find({ category: id })
-      .populate({ path: "category", select: "name" })
-      .populate({ path: "subCategory", select: "name" })
+      .populate({ path: "category", select: "name slug" })
+      .populate({ path: "subCategory", select: "name slug" })
       .select("-__v -userId -metaTitle -metaDescription")
       .sort({ createdAt: -1 });
 
