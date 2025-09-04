@@ -1,8 +1,9 @@
 import Category from "@/app/(public)/pages/Category";
+import { Metadata } from "next";
 type Props = {
   params: { category: string };
 };
-export async function generateMetadata({ params }: Props) {
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const res = await fetch(
     `${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/category/get-by-category/${params.category}`,
     { cache: "no-store" }
