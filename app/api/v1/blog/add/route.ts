@@ -7,6 +7,7 @@ import { cookies } from "next/headers";
 import { config } from "@/app/utils/env-config";
 import jwt from "jsonwebtoken";
 import User from "@/app/model/User.model";
+import mongoose from "mongoose";
 
 export async function POST(req: Request) {
   await connectToDatabase();
@@ -33,6 +34,7 @@ export async function POST(req: Request) {
   const image = formData.get("image") as File | null;
   const category = formData.get("category") as string | null;
   const isEditorPick = formData.get("isEditorPick") as boolean | null;
+  const subCategory = formData.get("subCategory") as string | null;
 
   if (
     !title ||
@@ -42,7 +44,8 @@ export async function POST(req: Request) {
     !image ||
     !slug ||
     !writer ||
-    !category
+    !category ||
+    !subCategory
   ) {
     return NextResponse.json(
       { message: "Please fill complete form" },
@@ -56,7 +59,10 @@ export async function POST(req: Request) {
   }
   const existingBlog = await Blog.findOne({ slug });
   if (existingBlog) {
-    return NextResponse.json({ message: "Blog already exists" }, { status: 400 });
+    return NextResponse.json(
+      { message: "Blog already exists" },
+      { status: 400 }
+    );
   }
   try {
     const buffer = Buffer.from(await image.arrayBuffer());
@@ -73,7 +79,10 @@ export async function POST(req: Request) {
       image: `/blog/${filename}`,
       slug,
       blogWriter: writer,
-      category,
+      category: category ? new mongoose.Types.ObjectId(category) : undefined,
+      subCategory: subCategory
+        ? new mongoose.Types.ObjectId(subCategory)
+        : undefined,
       isEditorPick,
     });
 

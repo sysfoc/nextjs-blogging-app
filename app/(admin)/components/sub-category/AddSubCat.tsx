@@ -65,7 +65,7 @@ const AddSubCat = () => {
       } else {
         setLoading(false);
         setError(true);
-        setErrorMessage(data.message);
+        setErrorMessage(data?.message);
       }
     } catch (error) {
       setError(true);
@@ -84,16 +84,20 @@ const AddSubCat = () => {
       <div className='grid grid-cols-1 gap-4'>
         <div className='flex flex-col gap-2'>
           <Label htmlFor='category'>Category</Label>
-          <Select name='category' value={formData.category} onValueChange={(e) => setFormData({ ...formData, category: e })}>
+          <Select
+            name='category'
+            value={formData?.category}
+            onValueChange={(e) => setFormData({ ...formData, category: e })}
+          >
             <SelectTrigger className='w-full border border-black'>
               <SelectValue placeholder='Select main category' />
             </SelectTrigger>
             <SelectContent>
               <SelectGroup>
                 <SelectLabel>Main Categories</SelectLabel>
-                {mainCategories.map((category: any) => (
-                  <SelectItem key={category._id} value={category._id}>
-                    {category.name}
+                {mainCategories?.map((category: any) => (
+                  <SelectItem key={category?._id} value={category?._id}>
+                    {category?.name}
                   </SelectItem>
                 ))}
               </SelectGroup>
@@ -110,7 +114,7 @@ const AddSubCat = () => {
             className='border border-black placeholder:text-black'
             required
             autoComplete='off'
-            value={formData.name}
+            value={formData?.name}
             onChange={handleChange}
           />
         </div>
@@ -124,7 +128,7 @@ const AddSubCat = () => {
             className='border border-black placeholder:text-black'
             required
             autoComplete='off'
-            value={formData.metaTitle}
+            value={formData?.metaTitle}
             onChange={handleChange}
           />
         </div>
@@ -138,7 +142,7 @@ const AddSubCat = () => {
             className='border border-black placeholder:text-black'
             required
             autoComplete='off'
-            value={formData.metaDescription}
+            value={formData?.metaDescription}
             onChange={handleChange}
           />
         </div>
@@ -152,7 +156,7 @@ const AddSubCat = () => {
             className='border border-black placeholder:text-black'
             required
             autoComplete='off'
-            value={formData.h1Title}
+            value={formData?.h1Title}
             onChange={handleChange}
           />
         </div>

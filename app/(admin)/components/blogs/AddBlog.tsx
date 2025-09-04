@@ -1,9 +1,18 @@
 "use client";
 import dynamic from "next/dynamic";
-import React, { Suspense, useState } from "react";
+import React, { Suspense, useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { useRouter } from "next/navigation";
 const LazyJoditEditor = dynamic(() => import("jodit-react"), { ssr: false });
 
@@ -11,10 +20,11 @@ const AddBlog = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const [mainCategories, setMainCategories] = useState([]);
+  const [subCategories, setSubCategories] = useState([]);
   const router = useRouter();
   const [formData, setFormData] = useState({
     title: "",
-    description: "",
     image: "",
     slug: "",
     metaTitle: "",
@@ -22,6 +32,7 @@ const AddBlog = () => {
     writer: "",
     content: "",
     category: "",
+    subCategory: "",
     isEditorPick: false,
   });
 
@@ -38,6 +49,43 @@ const AddBlog = () => {
         url: "/api/upload",
       },
     },
+  };
+
+  const getCategories = async () => {
+    try {
+      const res = await fetch("/api/v1/category/get-all", {
+        method: "GET",
+        credentials: "include",
+      });
+      const data = await res.json();
+      setMainCategories(data.categories);
+    } catch (error) {
+      setError(true);
+      setErrorMessage("Something went wrong");
+    }
+  };
+
+  useEffect(() => {
+    getCategories();
+  }, []);
+
+  const handleChangeCategory = async (categoryId: string) => {
+    setFormData((prev) => ({ ...prev, category: categoryId, subCategory: "" }));
+    try {
+      const res = await fetch(
+        `/api/v1/sub-category/get-by-main-category/${categoryId}`,
+        {
+          method: "GET",
+          credentials: "include",
+        }
+      );
+      if (!res.ok) throw new Error("Failed to load sub-categories");
+      const data = await res.json();
+      setSubCategories(data.subCategory ?? []);
+    } catch (error) {
+      setError(true);
+      setErrorMessage("Something went wrong");
+    }
   };
   const handleContentChange = (newContent: string) => {
     setFormData((prev) => ({
@@ -98,7 +146,6 @@ const AddBlog = () => {
         router.push("/admin/blogs");
         setFormData({
           title: "",
-          description: "",
           image: "",
           slug: "",
           metaTitle: "",
@@ -106,6 +153,7 @@ const AddBlog = () => {
           writer: "",
           content: "",
           category: "",
+          subCategory: "",
           isEditorPick: false,
         });
       } else {
@@ -113,7 +161,6 @@ const AddBlog = () => {
         setErrorMessage(data.message);
         setFormData({
           title: "",
-          description: "",
           image: "",
           slug: "",
           metaTitle: "",
@@ -121,6 +168,7 @@ const AddBlog = () => {
           writer: "",
           content: "",
           category: "",
+          subCategory: "",
           isEditorPick: false,
         });
         setLoading(false);
@@ -131,6 +179,8 @@ const AddBlog = () => {
       setLoading(false);
     }
   };
+
+  console.log(formData);
   return (
     <form onSubmit={handleFormData} encType='multipart/form-data'>
       {error && (
@@ -204,19 +254,55 @@ const AddBlog = () => {
             onChange={handleChange}
           />
         </div>
-        <div className='flex flex-col gap-2'>
-          <Label htmlFor='category'>Category</Label>
-          <select
-            name='category'
-            id='category'
-            onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-            className='border border-black py-2 px-3 rounded-md text-sm'
-          >
-            <option value='wishes'>Best Wishes</option>
-            <option value='hami'>Hami</option>
-          </select>
+        <div className='flex items-center col-span-2 gap-4'>
+          <div className='flex flex-1 flex-col gap-2'>
+            <Label htmlFor='category'>Category</Label>
+            <Select
+              name='category'
+              value={formData.category}
+              onValueChange={handleChangeCategory}
+            >
+              <SelectTrigger className='w-full border border-black'>
+                <SelectValue placeholder='Select main category' />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectGroup>
+                  <SelectLabel>Main Categories</SelectLabel>
+                  {mainCategories.map((category: any) => (
+                    <SelectItem key={category?._id} value={category?._id}>
+                      {category?.name}
+                    </SelectItem>
+                  ))}
+                </SelectGroup>
+              </SelectContent>
+            </Select>
+          </div>
+          <div className='flex flex-1 flex-col gap-2'>
+            <Label htmlFor='category'>Sub Category</Label>
+            <Select
+              name='subCategory'
+              value={formData.subCategory}
+              onValueChange={(e) =>
+                setFormData({ ...formData, subCategory: e })
+              }
+            >
+              <SelectTrigger className='w-full border border-black'>
+                <SelectValue placeholder='Select sub category' />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectGroup>
+                  <SelectLabel>Sub Categories</SelectLabel>
+                  {subCategories.map((category: any) => (
+                    <SelectItem key={category?._id} value={category?._id}>
+                      {category?.name}
+                    </SelectItem>
+                  ))}
+                </SelectGroup>
+              </SelectContent>
+            </Select>
+          </div>
         </div>
-        <div className='flex flex-row gap-2'>
+        <div className='flex flex-row col-span-2 gap-2'>
           <Checkbox
             id='isEditorPick'
             className='border border-black'
