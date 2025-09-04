@@ -3,7 +3,7 @@ import React from "react";
 
 interface Props {
   categoryInfo: any;
-  parentCategory: string;
+  parentCategory?: string;
 }
 const HeroSection = ({ categoryInfo, parentCategory }: Props) => {
   return (
