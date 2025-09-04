@@ -6,7 +6,7 @@ import React from "react";
 interface Props {
   blogs: any[];
 }
-const CategoryPosts = ({ blogs: data }: Props) => {
+const SubCatPosts = ({ blogs: data }: Props) => {
   return (
     <div className='border border-gray-200/70 rounded-xl'>
       <div className='p-4'>
@@ -29,7 +29,7 @@ const CategoryPosts = ({ blogs: data }: Props) => {
                 />
                 <div className='absolute top-4 left-4'>
                   <button className='w-fit py-2 px-4 bg-gradient-to-r from-[#FE4F70] to-[#FFA387] text-white rounded-full text-sm capitalize'>
-                    {post?.category?.name}
+                    {post?.subCategory?.name}
                   </button>
                 </div>
               </div>
@@ -72,4 +72,4 @@ const CategoryPosts = ({ blogs: data }: Props) => {
   );
 };
 
-export default CategoryPosts;
+export default SubCatPosts;

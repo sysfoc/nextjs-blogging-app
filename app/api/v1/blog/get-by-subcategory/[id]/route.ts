@@ -6,7 +6,7 @@ export async function GET(req: Request, context: any) {
   connectToDatabase();
   try {
     const { id } = context.params;
-    const blogs = await Blog.find({ category: id })
+    const blogs = await Blog.find({ subCategory: id })
       .populate({ path: "category", select: "name" })
       .populate({ path: "subCategory", select: "name" })
       .select("-__v -userId -metaTitle -metaDescription")
