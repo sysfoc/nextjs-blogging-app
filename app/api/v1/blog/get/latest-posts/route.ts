@@ -2,14 +2,15 @@ import Blog from "@/app/model/Blog.model";
 import { connectToDatabase } from "@/app/utils/db";
 import { NextResponse } from "next/server";
 
-export async function GET(req: Request, context: any) {
+export async function GET(req: Request) {
   connectToDatabase();
   try {
-    const { id } = context.params;
-    const blog = await Blog.findOne({ slug: id })
+    const blog = await Blog.find()
+      .sort({ createdAt: -1 })
+      .limit(6)
       .populate({ path: "category", select: "name" })
       .populate({ path: "subCategory", select: "name" })
-      .select("-__v -userId");
+      .select("-__v -userId -metaTitle -metaDescription");
 
     if (!blog) {
       return NextResponse.json({ error: "Blog not found" }, { status: 404 });

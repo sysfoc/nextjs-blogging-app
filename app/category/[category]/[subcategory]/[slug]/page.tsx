@@ -14,14 +14,14 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   );
   if (!res.ok) {
     return {
-      title: "SubCategory does not exist",
-      description: "SubCategory does not exist",
+      title: "Slug does not exist",
+      description: "Slug does not exist",
     };
   }
   const data = await res.json();
   return {
-    title: data?.blog?.metaTitle || "SubCategory does not exist",
-    description: data?.blog?.metaDescription || "SubCategory does not exist",
+    title: data?.blog?.metaTitle || "Slug does not exist",
+    description: data?.blog?.metaDescription || "Slug does not exist",
   };
 }
 export default function DetailPage() {
