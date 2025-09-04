@@ -1,31 +1,28 @@
+"use client";
 import Image from "next/image";
 import Link from "next/link";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { FaFireFlameCurved } from "react-icons/fa6";
 
-const data = [
-  {
-    id: 1,
-    title: "What Can You Do About Fashion Right Now",
-    date: "August 17, 2022",
-  },
-  {
-    id: 2,
-    title: "3 Easy Ways To Make Your iPhone Faster",
-    date: "August 17, 2022",
-  },
-  {
-    id: 3,
-    title: "Facts About Business That Will Help You Success",
-    date: "August 17, 2022",
-  },
-  {
-    id: 4,
-    title: "Your Light Is About To Stop Being Relevant",
-    date: "August 17, 2022",
-  },
-];
 const Popular = () => {
+  const [blogs, setBlogs] = useState<any[]>([]);
+
+  const getLatestBlogs = async () => {
+    try {
+      const blogRes = await fetch(`/api/v1/blog/get/latest-posts`, {
+        method: "GET",
+        credentials: "include",
+      });
+      if (!blogRes.ok) throw new Error("Failed to load blogs");
+      const blogData = await blogRes.json();
+      setBlogs(blogData.blog);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  useEffect(() => {
+    getLatestBlogs();
+  }, []);
   return (
     <div className='px-4 border border-gray-200 rounded-xl'>
       <div className='mt-4 flex flex-col items-center justify-center'>
@@ -51,15 +48,15 @@ const Popular = () => {
         </div>
       </div>
       <div className='mt-4 flex flex-col'>
-        {data?.map((post) => (
+        {blogs?.slice(0, 4)?.map((post, index) => (
           <div
-            key={post?.id}
+            key={index}
             className='flex items-center gap-x-5 border-t border-gray-200/70 py-4'
           >
             <div className='w-[65px] h-[65px] rounded-full overflow-hidden relative shrink-0'>
               <Image
-                src='/blog-img.jpg'
-                alt='blog-image'
+                src={post?.image}
+                alt={`${post?.title}-img`}
                 fill
                 className='object-cover'
                 fetchPriority='high'
@@ -67,10 +64,18 @@ const Popular = () => {
               />
             </div>
             <div>
-              <Link href='/'>
+              <Link
+                href={`/category/${post?.category?.name}/${post?.subCategory?.name}/${post?.slug}`}
+              >
                 <h3 className='font-bold'>{post?.title}</h3>
               </Link>
-              <p className='text-xs text-gray-400 mt-1'>{post?.date}</p>
+              <p className='text-xs text-gray-400 mt-1'>
+                {new Date(post?.createdAt).toLocaleDateString("en-US", {
+                  year: "numeric",
+                  month: "long",
+                  day: "numeric",
+                })}
+              </p>
             </div>
           </div>
         ))}

@@ -86,9 +86,13 @@ const EditorsPick = () => {
                   </p>
                 </div>
                 <div>
-                  <h4 className='font-bold text-xl'>
-                    {post?.title.slice(0, 48)}...
-                  </h4>
+                  <Link
+                    href={`/category/${post?.category?.name}/${post?.subCategory?.name}/${post?.slug}`}
+                  >
+                    <h4 className='font-bold text-xl'>
+                      {post?.title.slice(0, 48)}...
+                    </h4>
+                  </Link>
                   <p className='mt-2 text-gray-500'>
                     {post?.content?.slice(3, 100)}
                   </p>
@@ -114,7 +118,7 @@ const EditorsPick = () => {
                     />
                   </div>
                   <div>
-                    <Link href='/'>
+                    <Link href={`/category/${post?.category?.name}/${post?.subCategory?.name}/${post?.slug}`}>
                       <h3 className='font-bold'>
                         {post?.title.slice(0, 48)}...
                       </h3>

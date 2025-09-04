@@ -1,6 +1,25 @@
-import React from "react";
+"use client";
+import React, { useEffect, useState } from "react";
 
 const Tags = () => {
+  const [tags, setTags] = useState<any[]>([]);
+
+  const getTags = async () => {
+    try {
+      const topicRes = await fetch(`/api/v1/blog/get/topics`, {
+        method: "GET",
+        credentials: "include",
+      });
+      if (!topicRes.ok) throw new Error("Failed to load topics");
+      const topicData = await topicRes.json();
+      setTags(topicData.topics);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  useEffect(() => {
+    getTags();
+  }, []);
   return (
     <div className='px-4 border border-gray-200 rounded-xl'>
       <div className='mt-4 flex flex-col items-center justify-center'>
@@ -38,36 +57,14 @@ const Tags = () => {
       </div>
       <div className='my-6'>
         <div className='flex flex-wrap gap-3'>
-          <p className='text-xs text-gray-400 px-2 py-1 border-gray-400 border-1 w-fit rounded-full'>
-            #Audio
-          </p>
-          <p className='text-xs text-gray-400 px-2 py-1 border-gray-400 border-1 w-fit rounded-full'>
-            #Content
-          </p>
-          <p className='text-xs text-gray-400 px-2 py-1 border-gray-400 border-1 w-fit rounded-full'>
-            #Featured
-          </p>
-          <p className='text-xs text-gray-400 px-2 py-1 border-gray-400 border-1 w-fit rounded-full'>
-            #Image
-          </p>
-          <p className='text-xs text-gray-400 px-2 py-1 border-gray-400 border-1 w-fit rounded-full'>
-            #Inpiration
-          </p>
-          <p className='text-xs text-gray-400 px-2 py-1 border-gray-400 border-1 w-fit rounded-full'>
-            #Lifestyle
-          </p>
-          <p className='text-xs text-gray-400 px-2 py-1 border-gray-400 border-1 w-fit rounded-full'>
-            #Photo
-          </p>
-          <p className='text-xs text-gray-400 px-2 py-1 border-gray-400 border-1 w-fit rounded-full'>
-            #Pick
-          </p>
-          <p className='text-xs text-gray-400 px-2 py-1 border-gray-400 border-1 w-fit rounded-full'>
-            #Slide
-          </p>
-          <p className='text-xs text-gray-400 px-2 py-1 border-gray-400 border-1 w-fit rounded-full'>
-            #Trending
-          </p>
+          {tags?.map((tag, index) => (
+            <p
+              key={index}
+              className='text-xs text-gray-400 px-2 py-1 border-gray-400 border-1 w-fit rounded-full'
+            >
+              #{tag?.subCategoryName}
+            </p>
+          ))}
         </div>
       </div>
     </div>

@@ -1,40 +1,28 @@
-import React from "react";
+"use client";
+import Link from "next/link";
+import React, { useEffect, useState } from "react";
 import { FaFireFlameCurved } from "react-icons/fa6";
 import { IoIosArrowForward } from "react-icons/io";
 
-const TopicsData = [
-  {
-    id: 1,
-    title: "Fashion",
-    count: 10,
-  },
-  {
-    id: 2,
-    title: "Beauty",
-    count: 10,
-  },
-  {
-    id: 3,
-    title: "Style",
-    count: 10,
-  },
-  {
-    id: 4,
-    title: "Technology",
-    count: 10,
-  },
-  {
-    id: 5,
-    title: "Health",
-    count: 10,
-  },
-  {
-    id: 6,
-    title: "Travel",
-    count: 10,
-  },
-];
 const Topics = () => {
+  const [topics, setTopics] = useState<any[]>([]);
+
+  const getTopics = async () => {
+    try {
+      const topicRes = await fetch(`/api/v1/blog/get/topics`, {
+        method: "GET",
+        credentials: "include",
+      });
+      if (!topicRes.ok) throw new Error("Failed to load topics");
+      const topicData = await topicRes.json();
+      setTopics(topicData.topics);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  useEffect(() => {
+    getTopics();
+  }, []);
   return (
     <div className='px-4 border border-gray-200 rounded-xl'>
       <div className='mt-4 flex flex-col items-center justify-center'>
@@ -60,19 +48,22 @@ const Topics = () => {
         </div>
       </div>
       <div className='my-4 flex flex-col'>
-        {TopicsData?.map((topic) => (
-          <div
-            key={topic?.id}
-            className='flex items-center justify-between border-t border-gray-200/70 py-3 cursor-pointer'
+        {topics?.map((topic, index) => (
+          <Link
+            href={`/category/${topic?.parentCategory}/${topic?.subCategoryName}`}
+            key={index}
+            className='flex items-center justify-between border-t border-gray-200/70 py-3'
           >
             <div className='flex items-center gap-x-4'>
               <IoIosArrowForward size={18} className='text-[#FE4F70]' />
-              <h2 className='text-sm font-semibold'>{topic?.title}</h2>
+              <h2 className='text-sm font-semibold capitalize'>
+                {topic?.subCategoryName}
+              </h2>
             </div>
             <div>
               <span className='text-sm'>({topic?.count})</span>
             </div>
-          </div>
+          </Link>
         ))}
       </div>
     </div>
