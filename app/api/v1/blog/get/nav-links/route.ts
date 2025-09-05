@@ -6,8 +6,6 @@ import SubCategory from "@/app/model/SubCategory.model";
 export async function GET() {
   try {
     await connectToDatabase();
-
-    // Select only "name" and "slug"
     const categories = await Category.find({}, "name slug").lean();
 
     const result = await Promise.all(
