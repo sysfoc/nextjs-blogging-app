@@ -1,6 +1,8 @@
 import Blog from "@/app/model/Blog.model";
 import { connectToDatabase } from "@/app/utils/db";
 import { NextResponse } from "next/server";
+import "@/app/model/Category.model";
+import "@/app/model/SubCategory.model";
 
 export async function GET() {
   connectToDatabase();

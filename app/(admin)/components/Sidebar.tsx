@@ -1,11 +1,17 @@
 import {
   Calendar,
+  Folder,
   HandCoins,
   Home,
   Inbox,
+  Newspaper,
   Pen,
+  Pencil,
+  Rss,
   Search,
   Settings,
+  Tag,
+  UserRoundPlus,
 } from "lucide-react";
 
 import {
@@ -35,22 +41,32 @@ const items = [
   {
     title: "Users",
     url: "/admin/users",
-    icon: Calendar,
+    icon: UserRoundPlus,
   },
   {
     title: "Categories",
     url: "/admin/category",
-    icon: Calendar,
+    icon: Folder,
   },
   {
     title: "Sub-categories",
     url: "/admin/sub-category",
-    icon: Calendar,
+    icon: Tag,
+  },
+  {
+    title: "Posts",
+    url: "/admin/blogs",
+    icon: Pencil,
   },
   {
     title: "Blogs",
-    url: "/admin/blogs",
-    icon: Search,
+    url: "/admin/blog-posts",
+    icon: Rss,
+  },
+  {
+    title: "News",
+    url: "/admin/news",
+    icon: Newspaper,
   },
   {
     title: "Settings",

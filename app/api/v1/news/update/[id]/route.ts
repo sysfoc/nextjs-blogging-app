@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server";
 import path from "path";
 import { writeFile, unlink } from "fs/promises";
-import Blog from "@/app/model/Blog.model";
 import { connectToDatabase } from "@/app/utils/db";
+import News from "@/app/model/News.model";
 
 export async function PATCH(req: Request, context: any) {
   await connectToDatabase();
@@ -15,26 +15,21 @@ export async function PATCH(req: Request, context: any) {
   const metaDescription = formData.get("metaDescription") as string | null;
   const slug = formData.get("slug") as string | null;
   const writer = formData.get("writer") as string | null;
-  const category = formData.get("category") as string | null;
-
-  const isEditorPick =
-    formData.get("isEditorPick")?.toString() === "true" ? true : false;
-
   const image = formData.get("image");
 
   try {
-    const blog = await Blog.findById(id);
-    if (!blog) {
-      return NextResponse.json({ message: "Blog not found" }, { status: 404 });
+    const news = await News.findOne({ slug: id });
+    if (!news) {
+      return NextResponse.json({ message: "News not found" }, { status: 404 });
     }
 
-    let imagePath = blog.image;
+    let imagePath = news.image;
 
     if (image instanceof File && image.size > 0) {
       const buffer = Buffer.from(await image.arrayBuffer());
 
-      if (blog.image) {
-        const oldPath = path.join(process.cwd(), "public", blog.image);
+      if (news.image) {
+        const oldPath = path.join(process.cwd(), "public", news.image);
         try {
           await unlink(oldPath);
         } catch (err: any) {
@@ -43,14 +38,14 @@ export async function PATCH(req: Request, context: any) {
       }
 
       const filename = `${Date.now()}-${image.name}`;
-      const fullPath = path.join(process.cwd(), "public", "blog", filename);
+      const fullPath = path.join(process.cwd(), "public", "news", filename);
       await writeFile(fullPath, buffer);
 
-      imagePath = `/blog/${filename}`;
+      imagePath = `/news/${filename}`;
     }
 
-    const updatedBlog = await Blog.findOneAndUpdate(
-      { _id: id },
+    const updatedNews = await News.findOneAndUpdate(
+      { slug: id },
       {
         title,
         content,
@@ -59,13 +54,11 @@ export async function PATCH(req: Request, context: any) {
         image: imagePath,
         slug,
         blogWriter: writer,
-        category,
-        isEditorPick,
       },
       { new: true }
     );
 
-    return NextResponse.json({ blog: updatedBlog }, { status: 200 });
+    return NextResponse.json({ news: updatedNews }, { status: 200 });
   } catch (error: any) {
     console.error(error);
     return NextResponse.json({ message: error.message }, { status: 500 });

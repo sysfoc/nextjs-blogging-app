@@ -40,7 +40,7 @@ export default function BlogPage() {
   }, []);
   return (
     <section>
-      <div className='flex justify-between gap-x-6 gap-y-5'>
+      <div className='flex flex-wrap md:flex-nowrap justify-between gap-x-6 gap-y-5'>
         <div className='w-full md:w-[68%]'>
           <HeroSection data={heroData} loading={loading} />
           <EditorsPick data={heroData} loading={loading} />

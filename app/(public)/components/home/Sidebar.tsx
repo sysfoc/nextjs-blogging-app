@@ -90,7 +90,7 @@ const Sidebar = () => {
   }, []);
 
   return (
-    <aside className='hidden md:flex md:w-[32%] flex-col gap-y-5'>
+    <aside className='flex md:w-[32%] flex-col gap-y-5'>
       <Popular data={popularBlogs} loading={loading} />
       <Recent data={editorsBlogs} loading={loading} />
       <Topics data={topics} loading={loading} />

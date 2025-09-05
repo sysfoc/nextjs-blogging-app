@@ -1,9 +1,7 @@
-import Blog from "@/app/model/Blog.model";
+import News from "@/app/model/News.model";
 import { connectToDatabase } from "@/app/utils/db";
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
-import "@/app/model/Category.model";
-import "@/app/model/SubCategory.model";
 
 export async function GET(req: Request, context: any) {
   await connectToDatabase();
@@ -12,23 +10,20 @@ export async function GET(req: Request, context: any) {
     const { id } = context.params;
     const cookieStore = await cookies();
     const visitorId = cookieStore.get("visitorId")?.value;
-    const blog = await Blog.findOne({ slug: id })
-      .populate({ path: "category", select: "name" })
-      .populate({ path: "subCategory", select: "name" })
-      .select("-__v -userId -viewedBy");
+    const news = await News.findOne({ slug: id });
 
-    if (!blog) {
-      return NextResponse.json({ error: "Blog not found" }, { status: 404 });
+    if (!news) {
+      return NextResponse.json({ error: "News not found" }, { status: 404 });
     }
 
     if (visitorId) {
-      await Blog.updateOne(
+      await News.updateOne(
         { slug: id, viewedBy: { $ne: visitorId } },
         { $inc: { postViews: 1 }, $push: { viewedBy: visitorId } }
       );
     }
 
-    return NextResponse.json({ blog }, { status: 200 });
+    return NextResponse.json({ news }, { status: 200 });
   } catch (error: any) {
     console.error(error);
     return NextResponse.json({ error: error.message }, { status: 500 });
