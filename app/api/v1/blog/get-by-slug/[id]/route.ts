@@ -2,6 +2,8 @@ import Blog from "@/app/model/Blog.model";
 import { connectToDatabase } from "@/app/utils/db";
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
+import "@/app/model/Category.model";
+import "@/app/model/SubCategory.model";
 
 export async function GET(req: Request, context: any) {
   await connectToDatabase();
