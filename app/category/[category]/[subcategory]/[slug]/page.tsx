@@ -3,7 +3,9 @@ import { Metadata } from "next";
 import { cookies } from "next/headers";
 
 type Props = {
-  params: { slug: string };
+  params: Promise<{
+    slug: string;
+  }>;
 };
 
 async function getBlogData(slug: string, type: string) {
@@ -29,7 +31,8 @@ async function getBlogData(slug: string, type: string) {
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const data = await getBlogData(params.slug, "server");
+  const { slug } = await params;
+  const data = await getBlogData(slug, "server");
 
   return {
     title: data?.blog?.metaTitle || "Slug does not exist",
@@ -38,7 +41,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function DetailPage({ params }: Props) {
-  const data = await getBlogData(params.slug, "client");
+  const { slug } = await params;
+  const data = await getBlogData(slug, "client");
 
   return (
     <main>{data ? <Detail blog={data.blog} /> : <p>Blog not found</p>}</main>
