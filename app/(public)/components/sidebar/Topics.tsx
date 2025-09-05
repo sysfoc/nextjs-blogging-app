@@ -1,28 +1,12 @@
-"use client";
 import Link from "next/link";
-import React, { useEffect, useState } from "react";
 import { FaFireFlameCurved } from "react-icons/fa6";
 import { IoIosArrowForward } from "react-icons/io";
 
-const Topics = () => {
-  const [topics, setTopics] = useState<any[]>([]);
-
-  const getTopics = async () => {
-    try {
-      const topicRes = await fetch(`/api/v1/blog/get/topics`, {
-        method: "GET",
-        credentials: "include",
-      });
-      if (!topicRes.ok) throw new Error("Failed to load topics");
-      const topicData = await topicRes.json();
-      setTopics(topicData.topics);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-  useEffect(() => {
-    getTopics();
-  }, []);
+interface Props {
+  data: any;
+  loading: boolean;
+}
+const Topics = ({ data: topics, loading }: Props) => {
   return (
     <div className='px-4 border border-gray-200 rounded-xl'>
       <div className='mt-4 flex flex-col items-center justify-center'>
@@ -48,23 +32,40 @@ const Topics = () => {
         </div>
       </div>
       <div className='my-4 flex flex-col'>
-        {topics?.map((topic, index) => (
-          <Link
-            href={`/category/${topic?.parentCategorySlug}/${topic?.subCategorySlug}`}
-            key={index}
-            className='flex items-center justify-between border-t border-gray-200/70 py-3'
-          >
-            <div className='flex items-center gap-x-4'>
-              <IoIosArrowForward size={18} className='text-[#FE4F70]' />
-              <h2 className='text-sm font-semibold capitalize'>
-                {topic?.subCategoryName}
-              </h2>
-            </div>
-            <div>
-              <span className='text-sm'>({topic?.count})</span>
-            </div>
-          </Link>
-        ))}
+        {loading ? (
+          <div className='flex flex-col gap-y-3 mb-4'>
+            {Array.from({ length: 4 }).map((_, index) => (
+              <div
+                key={index}
+                className='flex items-center justify-between w-full border-t border-gray-200/70 py-3'
+              >
+                <div className='flex items-center gap-x-4'>
+                  <div className='w-4 h-4 bg-gray-200 rounded-full animate-pulse' />
+                  <div className='w-32 h-4 bg-gray-200 rounded animate-pulse' />
+                </div>
+                <div className='w-10 h-4 bg-gray-200 rounded animate-pulse' />
+              </div>
+            ))}
+          </div>
+        ) : (
+          topics?.map((topic: any, index: number) => (
+            <Link
+              href={`/category/${topic?.parentCategorySlug}/${topic?.subCategorySlug}`}
+              key={index}
+              className='flex items-center justify-between border-t border-gray-200/70 py-3'
+            >
+              <div className='flex items-center gap-x-4'>
+                <IoIosArrowForward size={18} className='text-[#FE4F70]' />
+                <h2 className='text-sm font-semibold capitalize'>
+                  {topic?.subCategoryName}
+                </h2>
+              </div>
+              <div>
+                <span className='text-sm'>({topic?.count})</span>
+              </div>
+            </Link>
+          ))
+        )}
       </div>
     </div>
   );

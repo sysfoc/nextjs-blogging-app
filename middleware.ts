@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { jwtVerify } from "jose";
+import { v4 as uuidv4 } from "uuid";
 
 const SECRET = new TextEncoder().encode(process.env.JWT_SECRET_KEY);
 
@@ -28,10 +29,25 @@ export async function middleware(req: NextRequest) {
       return NextResponse.redirect(new URL("/login", req.url));
     }
   }
+  const res = NextResponse.next();
+  if (pathname.startsWith("/category")) {
+    let visitorId = req.cookies.get("visitorId")?.value;
 
-  return NextResponse.next();
+    if (!visitorId) {
+      visitorId = uuidv4();
+      res.cookies.set("visitorId", visitorId, {
+        httpOnly: true,
+        secure: true,
+        sameSite: "lax",
+        maxAge: 60 * 60 * 24 * 365,
+        path: "/",
+      });
+    }
+  }
+
+  return res;
 }
 
 export const config = {
-  matcher: ["/admin/:path*"],
+  matcher: ["/admin/:path*", "/category/:path*"],
 };

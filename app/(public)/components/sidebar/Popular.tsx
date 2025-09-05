@@ -1,28 +1,12 @@
-"use client";
 import Image from "next/image";
 import Link from "next/link";
-import React, { useEffect, useState } from "react";
 import { FaFireFlameCurved } from "react-icons/fa6";
 
-const Popular = () => {
-  const [blogs, setBlogs] = useState<any[]>([]);
-
-  const getLatestBlogs = async () => {
-    try {
-      const blogRes = await fetch(`/api/v1/blog/get/latest-posts`, {
-        method: "GET",
-        credentials: "include",
-      });
-      if (!blogRes.ok) throw new Error("Failed to load blogs");
-      const blogData = await blogRes.json();
-      setBlogs(blogData.blog);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-  useEffect(() => {
-    getLatestBlogs();
-  }, []);
+interface PopularProps {
+  data: any;
+  loading: boolean;
+}
+const Popular = ({ data: blogs, loading }: PopularProps) => {
   return (
     <div className='px-4 border border-gray-200 rounded-xl'>
       <div className='mt-4 flex flex-col items-center justify-center'>
@@ -48,37 +32,50 @@ const Popular = () => {
         </div>
       </div>
       <div className='mt-4 flex flex-col'>
-        {blogs?.slice(0, 4)?.map((post, index) => (
-          <div
-            key={index}
-            className='flex items-center gap-x-5 border-t border-gray-200/70 py-4'
-          >
-            <div className='w-[65px] h-[65px] rounded-full overflow-hidden relative shrink-0'>
-              <Image
-                src={post?.image}
-                alt={`${post?.title}-img`}
-                fill
-                className='object-cover'
-                fetchPriority='high'
-                priority
-              />
-            </div>
-            <div>
-              <Link
-                href={`/category/${post?.category?.slug}/${post?.subCategory?.slug}/${post?.slug}`}
+        {loading
+          ? Array.from({ length: 4 }).map((_, index) => (
+              <div
+                key={index}
+                className='flex items-center justify-center gap-x-2 mb-4'
               >
-                <h3 className='font-bold'>{post?.title}</h3>
-              </Link>
-              <p className='text-xs text-gray-400 mt-1'>
-                {new Date(post?.createdAt).toLocaleDateString("en-US", {
-                  year: "numeric",
-                  month: "long",
-                  day: "numeric",
-                })}
-              </p>
-            </div>
-          </div>
-        ))}
+                <div className='w-[65px] h-[65px] rounded-full bg-gray-200 animate-pulse'></div>
+                <div className='flex flex-col gap-y-1'>
+                  <div className='w-[250px] h-4 bg-gray-200 animate-pulse rounded'></div>
+                  <div className='w-[180px] h-3 bg-gray-200 animate-pulse rounded'></div>
+                </div>
+              </div>
+            ))
+          : blogs?.slice(0, 4)?.map((post: any, index: number) => (
+              <div
+                key={index}
+                className='flex items-center gap-x-5 border-t border-gray-200/70 py-4'
+              >
+                <div className='w-[65px] h-[65px] rounded-full overflow-hidden relative shrink-0'>
+                  <Image
+                    src={post?.image}
+                    alt={`${post?.title}-img`}
+                    fill
+                    className='object-cover'
+                    fetchPriority='high'
+                    priority
+                  />
+                </div>
+                <div>
+                  <Link
+                    href={`/category/${post?.category?.slug}/${post?.subCategory?.slug}/${post?.slug}`}
+                  >
+                    <h3 className='font-bold'>{post?.title}</h3>
+                  </Link>
+                  <p className='text-xs text-gray-400 mt-1'>
+                    {new Date(post?.createdAt).toLocaleDateString("en-US", {
+                      year: "numeric",
+                      month: "long",
+                      day: "numeric",
+                    })}
+                  </p>
+                </div>
+              </div>
+            ))}
       </div>
     </div>
   );

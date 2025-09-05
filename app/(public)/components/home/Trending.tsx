@@ -1,30 +1,12 @@
+"use client";
 import Image from "next/image";
 import Link from "next/link";
-import React from "react";
 
-const data = [
-  {
-    id: 1,
-    title: "What Can You Do About Fashion Right Now",
-    date: "August 17, 2022",
-  },
-  {
-    id: 2,
-    title: "3 Easy Ways To Make Your iPhone Faster",
-    date: "August 17, 2022",
-  },
-  {
-    id: 3,
-    title: "Facts About Business That Will Help You Success",
-    date: "August 17, 2022",
-  },
-  {
-    id: 4,
-    title: "Your Light Is About To Stop Being Relevant",
-    date: "August 17, 2022",
-  },
-];
-const Trending = () => {
+interface Props {
+  data: any;
+  loading: boolean;
+}
+const Trending = ({ data: blogs, loading }: Props) => {
   return (
     <section className='mt-12'>
       <div className='my-4'>
@@ -51,104 +33,67 @@ const Trending = () => {
       <div className='border border-gray-200/70 rounded-xl'>
         <div className='p-4'>
           <div className='grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-5'>
-            <div className='relative'>
-              <div className='absolute top-4 left-4'>
-                <button className='w-fit py-2 px-4 bg-gradient-to-r from-[#FE4F70] to-[#FFA387] text-white rounded-full text-sm'>
-                  Fashion
-                </button>
-              </div>
-              <div>
-                <Image
-                  src='/banner.webp'
-                  alt='image'
-                  width={300}
-                  height={300}
-                  className='size-full rounded-xl'
-                />
-              </div>
-              <div className='my-3 flex items-center gap-x-5'>
-                <div className='flex items-center gap-x-3'>
-                  <div className='relative w-8 h-8'>
-                    <Image
-                      src='/blog-img.jpg'
-                      alt='profile'
-                      fill
-                      className='object-cover rounded-full'
-                    />
-                  </div>
-                  <p className='text-sm font-semibold'>Hamza Ilyas</p>
+            {blogs?.slice(0, 2)?.map((post: any, index: number) => (
+              <div key={index} className='relative'>
+                <div className='absolute top-4 left-4'>
+                  <button className='w-fit py-2 px-4 bg-gradient-to-r from-[#FE4F70] to-[#FFA387] text-white rounded-full text-sm capitalize'>
+                    {post?.category?.name}
+                  </button>
                 </div>
-                <div className='w-1 h-1 rounded-full bg-[#FE4F70]' />
-                <p className='text-sm'>March 23, 2023</p>
-              </div>
-              <div>
-                <Link href={"/"}>
-                  <h4 className='font-bold text-xl'>
-                    3 Easy Ways To Make Your iPhone Faster
-                  </h4>
-                </Link>
-                <p className='mt-2 text-gray-500'>
-                  The European languages are members of the same family. Their
-                  separate existence is a myth. For science, music, sport,
-                  etc...
-                </p>
-              </div>
-            </div>
-            <div className='relative'>
-              <div className='absolute top-4 left-4'>
-                <button className='w-fit py-2 px-4 bg-gradient-to-r from-[#FE4F70] to-[#FFA387] text-white rounded-full text-sm'>
-                  Fashion
-                </button>
-              </div>
-              <div>
-                <Image
-                  src='/banner.webp'
-                  alt='image'
-                  width={300}
-                  height={300}
-                  className='size-full rounded-xl'
-                />
-              </div>
-              <div className='my-3 flex items-center gap-x-5'>
-                <div className='flex items-center gap-x-3'>
-                  <div className='relative w-8 h-8'>
-                    <Image
-                      src='/blog-img.jpg'
-                      alt='profile'
-                      fill
-                      className='object-cover rounded-full'
-                    />
-                  </div>
-                  <p className='text-sm font-semibold'>Hamza Ilyas</p>
+                <div>
+                  <Image
+                    src={post?.image}
+                    alt={`${post?.title}-img`}
+                    width={300}
+                    height={300}
+                    className='size-full rounded-xl'
+                  />
                 </div>
-                <div className='w-1 h-1 rounded-full bg-[#FE4F70]' />
-                <p className='text-sm'>March 23, 2023</p>
+                <div className='my-3 flex items-center gap-x-5'>
+                  <div className='flex items-center gap-x-3'>
+                    <div className='relative w-8 h-8'>
+                      <Image
+                        src='/blog-img.jpg'
+                        alt='profile'
+                        fill
+                        className='object-cover rounded-full'
+                      />
+                    </div>
+                    <p className='text-sm font-semibold'>{post?.blogWriter}</p>
+                  </div>
+                  <div className='w-1 h-1 rounded-full bg-[#FE4F70]' />
+                  <p className='text-sm'>
+                    {new Date(post?.createdAt).toLocaleDateString("en-US", {
+                      day: "numeric",
+                      month: "long",
+                      year: "numeric",
+                    })}
+                  </p>
+                </div>
+                <div>
+                  <Link
+                    href={`/category/${post?.category?.slug}/${post?.subCategory?.slug}/${post?.slug}`}
+                  >
+                    <h4 className='font-bold text-xl'>{post?.title}</h4>
+                  </Link>
+                  <p className='mt-2 text-gray-500'>
+                    {post?.content?.slice(3, 100)}
+                  </p>
+                </div>
               </div>
-              <div>
-                <Link href={"/"}>
-                  <h4 className='font-bold text-xl'>
-                    3 Easy Ways To Make Your iPhone Faster
-                  </h4>
-                </Link>
-                <p className='mt-2 text-gray-500'>
-                  The European languages are members of the same family. Their
-                  separate existence is a myth. For science, music, sport,
-                  etc...
-                </p>
-              </div>
-            </div>
+            ))}
             <div className='md:col-span-2'>
               <div className='grid grid-cols-1 md:grid-cols-2 gap-x-5'>
-                {data?.map((post) => (
+                {blogs?.slice(2, 6)?.map((post: any, index: number) => (
                   <div
-                    key={post?.id}
+                    key={index}
                     className={`flex items-center gap-x-5 pb-4 pt-4 border-t border-gray-200/70
                     `}
                   >
                     <div className='w-[100px] h-[80px] rounded-md overflow-hidden relative shrink-0'>
                       <Image
-                        src='/blog-img.jpg'
-                        alt='blog-image'
+                        src={post?.image}
+                        alt={`${post?.title}-img`}
                         fill
                         className='object-cover'
                         fetchPriority='high'
@@ -156,10 +101,18 @@ const Trending = () => {
                       />
                     </div>
                     <div>
-                      <Link href='/'>
+                      <Link
+                        href={`/category/${post?.category?.slug}/${post?.subCategory?.slug}/${post?.slug}`}
+                      >
                         <h3 className='font-bold'>{post?.title}</h3>
                       </Link>
-                      <p className='text-xs text-gray-400 mt-1'>{post?.date}</p>
+                      <p className='text-xs text-gray-400 mt-1'>
+                        {new Date(post?.createdAt).toLocaleDateString("en-US", {
+                          year: "numeric",
+                          month: "long",
+                          day: "numeric",
+                        })}
+                      </p>
                     </div>
                   </div>
                 ))}

@@ -10,8 +10,10 @@ interface IBlog extends Document {
   metaTitle: string;
   metaDescription: string;
   blogWriter: string;
+  postViews: number;
   image: string;
   isEditorPick: boolean;
+  viewedBy: string[];
 }
 
 export const blogSchema = new Schema<IBlog>(
@@ -70,6 +72,11 @@ export const blogSchema = new Schema<IBlog>(
       type: Boolean,
       default: false,
     },
+    postViews: {
+      type: Number,
+      default: 0,
+    },
+    viewedBy: { type: [String], default: [] },
   },
   {
     timestamps: true,

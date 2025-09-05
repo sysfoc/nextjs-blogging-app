@@ -1,33 +1,46 @@
 import Detail from "@/app/(public)/pages/Detail";
 import { Metadata } from "next";
+import { cookies } from "next/headers";
 
 type Props = {
-  params: Promise<{
-    slug: string;
-  }>;
+  params: { slug: string };
 };
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { slug } = await params;
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/blog/get-by-slug/${slug}`,
-    { cache: "no-store" }
-  );
-  if (!res.ok) {
-    return {
-      title: "Slug does not exist",
-      description: "Slug does not exist",
-    };
+
+async function getBlogData(slug: string, type: string) {
+  if (type === "server") {
+    const cookieStore = await cookies();
+    return fetch(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/blog/get-by-slug/${slug}`,
+      {
+        cache: "no-store",
+        headers: {
+          Cookie: cookieStore.toString(),
+        },
+      }
+    ).then((res) => (res.ok ? res.json() : null));
+  } else {
+    return fetch(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/blog/get-by-slug/${slug}`,
+      {
+        cache: "no-store",
+      }
+    ).then((res) => (res.ok ? res.json() : null));
   }
-  const data = await res.json();
+}
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const data = await getBlogData(params.slug, "server");
+
   return {
     title: data?.blog?.metaTitle || "Slug does not exist",
     description: data?.blog?.metaDescription || "Slug does not exist",
   };
 }
-export default function DetailPage() {
+
+export default async function DetailPage({ params }: Props) {
+  const data = await getBlogData(params.slug, "client");
+
   return (
-    <main>
-      <Detail />
-    </main>
+    <main>{data ? <Detail blog={data.blog} /> : <p>Blog not found</p>}</main>
   );
 }

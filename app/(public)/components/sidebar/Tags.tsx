@@ -1,25 +1,8 @@
-"use client";
-import React, { useEffect, useState } from "react";
-
-const Tags = () => {
-  const [tags, setTags] = useState<any[]>([]);
-
-  const getTags = async () => {
-    try {
-      const topicRes = await fetch(`/api/v1/blog/get/topics`, {
-        method: "GET",
-        credentials: "include",
-      });
-      if (!topicRes.ok) throw new Error("Failed to load topics");
-      const topicData = await topicRes.json();
-      setTags(topicData.topics);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-  useEffect(() => {
-    getTags();
-  }, []);
+interface Props {
+  data: any;
+  loading: boolean;
+}
+const Tags = ({ data: tags, loading }: Props) => {
   return (
     <div className='px-4 border border-gray-200 rounded-xl'>
       <div className='mt-4 flex flex-col items-center justify-center'>
@@ -57,14 +40,21 @@ const Tags = () => {
       </div>
       <div className='my-6'>
         <div className='flex flex-wrap gap-3'>
-          {tags?.map((tag, index) => (
-            <p
-              key={index}
-              className='text-xs text-gray-400 px-2 py-1 border-gray-400 border-1 w-fit rounded-full'
-            >
-              #{tag?.subCategoryName}
-            </p>
-          ))}
+          {loading
+            ? Array.from({ length: 5 }).map((_, index) => (
+                <div
+                  key={index}
+                  className='h-6 w-16 bg-gray-200 animate-pulse rounded-full'
+                />
+              ))
+            : tags?.map((tag: any, index: number) => (
+                <p
+                  key={index}
+                  className='text-xs text-gray-400 px-2 py-1 border-gray-400 border w-fit rounded-full'
+                >
+                  #{tag?.subCategoryName}
+                </p>
+              ))}
         </div>
       </div>
     </div>

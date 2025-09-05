@@ -15,17 +15,17 @@ const HeroSection = ({ blog }: Props) => {
         <button className='w-fit py-2 px-4 bg-gradient-to-r from-[#FE4F70] to-[#FFA387] text-white rounded-full text-sm capitalize'>
           {blog?.category?.name}
         </button>
-        <div className='flex items-center gap-x-2'>
+        <div className='flex items-center flex-wrap gap-x-2'>
           <Link href='/'>
-            <span className='text-sm'>Home / </span>
+            <span className='text-sm whitespace-nowrap'>Home / </span>
           </Link>
           <Link href={`/category/${blog?.category?.name}`}>
-            <span className='text-sm'>{blog?.category?.name} / </span>
+            <span className='text-sm whitespace-nowrap'>{blog?.category?.name} / </span>
           </Link>
           <Link
             href={`/category/${blog?.category?.name}/${blog?.subCategory?.name}`}
           >
-            <span className='text-sm'>{blog?.subCategory?.name} / </span>
+            <span className='text-sm whitespace-nowrap'>{blog?.subCategory?.name} / </span>
           </Link>
           <span className='text-sm '>{blog?.slug}</span>
         </div>
@@ -39,6 +39,10 @@ const HeroSection = ({ blog }: Props) => {
               month: "long",
               year: "numeric",
             })}
+          </p>
+          <div className='w-1 h-1 rounded-full bg-white' />
+          <p className='text-sm'>
+            {blog?.postViews} {blog?.postViews > 1 ? "views" : "view"}
           </p>
         </div>
       </div>
