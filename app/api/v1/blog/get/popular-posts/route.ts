@@ -7,7 +7,7 @@ export async function GET(req: Request) {
   try {
     const blog = await Blog.find({ postViews: { $gt: 0 } })
       .sort({ postViews: -1 })
-      .limit(5)
+      .limit(4)
       .populate({ path: "category", select: "name slug" })
       .populate({ path: "subCategory", select: "name slug" })
       .select("-__v -userId -metaTitle -metaDescription");

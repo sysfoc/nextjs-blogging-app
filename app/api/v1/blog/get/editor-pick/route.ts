@@ -7,7 +7,7 @@ export async function GET(req: Request) {
   try {
     const blog = await Blog.find({isEditorPick: true})
       .sort({ createdAt: -1 })
-      .limit(6)
+      .limit(4)
       .populate({ path: "category", select: "name slug" })
       .populate({ path: "subCategory", select: "name slug" })
       .select("-__v -userId -metaTitle -metaDescription");
