@@ -22,11 +22,13 @@ import {
 } from "@/components/ui/alert-dialog";
 import Link from "next/link";
 import { Pen, Trash2 } from "lucide-react";
+import { Input } from "@/components/ui/input";
 const Table = () => {
   const [formData, setFormData] = React.useState([]);
   const [loading, setLoading] = React.useState(false);
+  const [searchTerm, setSearchTerm] = React.useState("");
 
-  const getAllUsers = async () => {
+  const getAllCategories = async () => {
     setLoading(true);
     const res = await fetch("/api/v1/category/get-all", {
       method: "GET",
@@ -40,10 +42,44 @@ const Table = () => {
     setFormData(data.categories);
   };
   React.useEffect(() => {
-    getAllUsers();
+    getAllCategories();
   }, []);
+
+  const filteredCategory = searchTerm
+    ? formData.filter((category: any) => {
+        const lowerSearch = searchTerm.toLowerCase().trim();
+        return (
+          category?._id?.toString().toLowerCase().includes(lowerSearch) ||
+          category?.name?.toLowerCase().includes(lowerSearch) ||
+          category?.h1Title?.toLowerCase().includes(lowerSearch)
+        );
+      })
+    : formData;
+  const handleDeleteCategory = async (id: string) => {
+    try {
+      const res = await fetch(`/api/v1/category/delete/${id}`, {
+        method: "DELETE",
+        credentials: "include",
+      });
+      await res.json();
+      getAllCategories();
+    } catch (error) {
+      alert("Something went wrong");
+    }
+  };
   return (
     <div>
+      <div className='mb-2 flex items-end justify-end'>
+        <Input
+          type='search'
+          id='search'
+          name='search'
+          placeholder='Start typing to search'
+          className='w-[300px] bg-transparent border border-[#fe4f70] focus-visible:ring-0'
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
+      </div>
       <TableWrapper>
         <TableCaption>A list of your recently created categories.</TableCaption>
         <TableHeader className='!bg-[#fe4f70]/70 hover:!bg-[#fe4f70]'>
@@ -62,11 +98,11 @@ const Table = () => {
               </TableCell>
             </TableRow>
           )}
-          {formData?.length > 0 ? (
-            formData.map((category: any) => (
+          {filteredCategory?.length > 0 ? (
+            filteredCategory.map((category: any) => (
               <TableRow key={category._id}>
                 <TableCell>{category._id.slice(0, 13)}...</TableCell>
-                <TableCell>{category.name}</TableCell>
+                <TableCell className='capitalize'>{category.name}</TableCell>
                 <TableCell>{category.h1Title}</TableCell>
                 <TableCell>
                   <div className='flex gap-x-2 items-center'>
@@ -87,13 +123,17 @@ const Table = () => {
                           </AlertDialogTitle>
                           <AlertDialogDescription>
                             This action cannot be undone. This will permanently
-                            delete the category and remove all of it data
-                            from our servers.
+                            delete the category and remove all of it data from
+                            our servers.
                           </AlertDialogDescription>
                         </AlertDialogHeader>
                         <AlertDialogFooter>
                           <AlertDialogCancel>Cancel</AlertDialogCancel>
-                          <AlertDialogAction>Continue</AlertDialogAction>
+                          <AlertDialogAction
+                            onClick={() => handleDeleteCategory(category._id)}
+                          >
+                            Continue
+                          </AlertDialogAction>
                         </AlertDialogFooter>
                       </AlertDialogContent>
                     </AlertDialog>

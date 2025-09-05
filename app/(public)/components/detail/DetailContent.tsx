@@ -6,7 +6,7 @@ interface Props {
 const DetailContent = ({ blogDetail }: Props) => {
   return (
     <div>
-      <div dangerouslySetInnerHTML={{ __html: blogDetail }} />
+      <div className='prose dark:prose-invert post-content' dangerouslySetInnerHTML={{ __html: blogDetail }} />
     </div>
   )
 }

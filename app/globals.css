@@ -5,6 +5,25 @@
   background-image: linear-gradient(to right, #fe4f70, #ffa387) !important;
 }
 
+.post-content {
+  font-family: "Montserrat", sans-serif !important;
+}
+.post-content p {
+  margin: 10px 0px !important;
+}
+.post-content a {
+  color: #fe4f70 !important;
+}
+.post-content ul li {
+  list-style-type: disc !important;
+  list-style-position: inside !important;
+  margin-left: 1rem !important;
+}
+.post-content ol li {
+  list-style-type: decimal !important;
+  list-style-position: inside !important;
+  margin-left: 1rem !important;
+}
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {

@@ -1,16 +1,16 @@
 import Blog from "@/app/model/Blog.model";
+import Category from "@/app/model/Category.model";
 import SubCategory from "@/app/model/SubCategory.model";
 import { connectToDatabase } from "@/app/utils/db";
+import { unlink } from "fs/promises";
 import { NextResponse } from "next/server";
 import path from "path";
-import { unlink } from "fs/promises";
 
 export async function DELETE(req: Request, context: any) {
   const { id } = context.params;
-  await connectToDatabase();
-
+  connectToDatabase();
   try {
-    const blogs = await Blog.find({ subCategory: id });
+    const blogs = await Blog.find({ category: id });
     for (const blog of blogs) {
       if (blog.image) {
         const imagePath = path.join(process.cwd(), "public", blog.image);
@@ -22,11 +22,11 @@ export async function DELETE(req: Request, context: any) {
         }
       }
     }
-    await SubCategory.findByIdAndDelete(id);
-    await Blog.deleteMany({ subCategory: id });
-
+    await Category.findByIdAndDelete(id);
+    await SubCategory.deleteMany({ category: id });
+    await Blog.deleteMany({ category: id });
     return NextResponse.json(
-      { message: "Sub category and related blogs deleted successfully" },
+      { message: "Category deleted successfully" },
       { status: 200 }
     );
   } catch (error: any) {

@@ -22,6 +22,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import Link from "next/link";
 import { Pen, Trash2 } from "lucide-react";
+import { Input } from "@/components/ui/input";
 
 interface MainCategory {
   _id: string;
@@ -33,6 +34,7 @@ const Table = () => {
   const [mainCategories, setMainCategories] = React.useState<MainCategory[]>(
     []
   );
+  const [searchTerm, setSearchTerm] = React.useState("");
 
   const fetchData = async () => {
     try {
@@ -70,6 +72,21 @@ const Table = () => {
     fetchData();
   }, []);
 
+  const filteredCategory = searchTerm
+    ? formData.filter((category: any) => {
+        const lowerSearch = searchTerm.toLowerCase().trim();
+        return (
+          category?._id?.toString().toLowerCase().includes(lowerSearch) ||
+          category?.name?.toLowerCase().includes(lowerSearch) ||
+          category?.h1Title?.toLowerCase().includes(lowerSearch) ||
+          mainCategories
+            .find((cat: any) => cat._id === category.category)
+            ?.name?.toLowerCase()
+            .includes(lowerSearch)
+        );
+      })
+    : formData;
+
   const handleDeleteCategory = async (id: string) => {
     try {
       const res = await fetch(`/api/v1/sub-category/delete/${id}`, {
@@ -84,6 +101,17 @@ const Table = () => {
   };
   return (
     <div>
+      <div className='mb-2 flex items-end justify-end'>
+        <Input
+          type='search'
+          id='search'
+          name='search'
+          placeholder='Start typing to search'
+          className='w-[300px] bg-transparent border border-[#fe4f70] focus-visible:ring-0'
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
+      </div>
       <TableWrapper>
         <TableCaption>
           A list of your recently created sub-categories.
@@ -100,23 +128,23 @@ const Table = () => {
         <TableBody>
           {loading && (
             <TableRow>
-              <TableCell colSpan={4} className='text-center'>
+              <TableCell colSpan={5} className='text-center'>
                 Loading...
               </TableCell>
             </TableRow>
           )}
-          {formData?.length > 0 ? (
-            formData.map((category: any) => (
+          {filteredCategory?.length > 0 ? (
+            filteredCategory.map((category: any) => (
               <TableRow key={category._id}>
                 <TableCell>{category._id.slice(0, 13)}...</TableCell>
-                <TableCell>
+                <TableCell className='capitalize'>
                   {
                     mainCategories.find(
                       (cat: any) => cat._id === category.category
                     )?.name
                   }
                 </TableCell>{" "}
-                <TableCell>{category.name}</TableCell>
+                <TableCell className='capitalize'>{category.name}</TableCell>
                 <TableCell>{category.h1Title}</TableCell>
                 <TableCell>
                   <div className='flex gap-x-2 items-center'>
@@ -157,7 +185,7 @@ const Table = () => {
             ))
           ) : (
             <TableRow>
-              <TableCell colSpan={4} className='text-center'>
+              <TableCell colSpan={5} className='text-center'>
                 No categories found
               </TableCell>
             </TableRow>

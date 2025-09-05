@@ -23,9 +23,11 @@ import {
 import Image from "next/image";
 import Link from "next/link";
 import { Pen, Trash2 } from "lucide-react";
+import { Input } from "@/components/ui/input";
 const Table = () => {
-  const [formData, setFormData] = React.useState([]);
+  const [formData, setFormData] = React.useState<any>([]);
   const [loading, setLoading] = React.useState(false);
+  const [searchTerm, setSearchTerm] = React.useState("");
   const getAllBlogs = async () => {
     setLoading(true);
     const res = await fetch("/api/v1/blog/get-all", {
@@ -55,8 +57,31 @@ const Table = () => {
       alert("Something went wrong, please try again");
     }
   };
+
+  const filteredData = searchTerm
+    ? formData.filter((blog: any) => {
+        const lowerSearch = searchTerm.toLowerCase().trim();
+        return (
+          blog?._id?.toString().toLowerCase().includes(lowerSearch) ||
+          blog?.title?.toLowerCase().includes(lowerSearch) ||
+          blog?.category?.name?.toLowerCase().includes(lowerSearch) ||
+          blog?.subCategory?.name?.toLowerCase().includes(lowerSearch)
+        );
+      })
+    : formData;
   return (
     <div>
+      <div className='mb-2 flex items-end justify-end'>
+        <Input
+          type='search'
+          id='search'
+          name='search'
+          placeholder='Start typing to search'
+          className='w-[300px] bg-transparent border border-[#fe4f70] focus-visible:ring-0'
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
+      </div>
       <TableWrapper>
         <TableCaption>A list of your recently created blogs.</TableCaption>
         <TableHeader className='!bg-[#fe4f70]/70 hover:!bg-[#fe4f70]'>
@@ -65,19 +90,20 @@ const Table = () => {
             <TableHead>Image</TableHead>
             <TableHead>Title</TableHead>
             <TableHead>Category</TableHead>
+            <TableHead>Sub-category</TableHead>
             <TableHead>Actions</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
           {loading && (
             <TableRow>
-              <TableCell colSpan={5} className='text-center'>
+              <TableCell colSpan={6} className='text-center'>
                 Loading...
               </TableCell>
             </TableRow>
           )}
-          {formData?.length > 0 ? (
-            formData?.map((item: any, index) => (
+          {filteredData?.length > 0 ? (
+            filteredData?.map((item: any, index: number) => (
               <TableRow key={index}>
                 <TableCell>{item._id.slice(0, 12)}...</TableCell>
                 <TableCell>
@@ -90,7 +116,12 @@ const Table = () => {
                   />
                 </TableCell>
                 <TableCell>{item?.title.slice(0, 20)}</TableCell>
-                <TableCell>{item?.category}</TableCell>
+                <TableCell className='capitalize'>
+                  {item?.category?.name}
+                </TableCell>
+                <TableCell className='capitalize'>
+                  {item?.subCategory?.name}
+                </TableCell>
                 <TableCell>
                   <div className='flex gap-x-2 items-center'>
                     <Link
@@ -130,7 +161,7 @@ const Table = () => {
             ))
           ) : (
             <TableRow>
-              <TableCell colSpan={5} className='text-center'>
+              <TableCell colSpan={6} className='text-center'>
                 No Data Found
               </TableCell>
             </TableRow>

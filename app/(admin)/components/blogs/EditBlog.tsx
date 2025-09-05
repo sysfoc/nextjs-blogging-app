@@ -43,18 +43,24 @@ const EditBlog = () => {
   }, []);
 
   const config = {
-    readonly: false,
     placeholder: "Start typing...",
     height: 500,
     uploader: {
-      url: "/api/upload",
-      insertImageAsBase64URI: false,
+      insertImageAsBase64URI: true,
     },
-    filebrowser: {
-      ajax: {
-        url: "/api/upload",
+    askBeforePasteHTML: false,
+    askBeforePasteFromWord: false,
+    processPasteHTML: true,
+
+    events: {
+      paste: (event: any) => {
+        console.log("Paste event triggered");
+        return true;
       },
-    },
+      focus: () => {
+        console.log("Editor focused");
+      },
+    } as any,
   };
   const handleContentChange = (newContent: string) => {
     setFormData((prev) => ({

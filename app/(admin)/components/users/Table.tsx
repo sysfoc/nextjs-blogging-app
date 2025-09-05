@@ -22,9 +22,11 @@ import {
 } from "@/components/ui/alert-dialog";
 import Link from "next/link";
 import { Pen, Trash2 } from "lucide-react";
+import { Input } from "@/components/ui/input";
 const Table = () => {
   const [formData, setFormData] = React.useState([]);
   const [loading, setLoading] = React.useState(false);
+  const [searchTerm, setSearchTerm] = React.useState("");
 
   const getAllUsers = async () => {
     setLoading(true);
@@ -55,8 +57,30 @@ const Table = () => {
       alert("Something went wrong");
     }
   };
+
+  const filteredUsers = searchTerm
+    ? formData.filter((user: any) => {
+        const lowerSearch = searchTerm.toLowerCase().trim();
+        return (
+          user?._id?.toString().toLowerCase().includes(lowerSearch) ||
+          user?.name?.toLowerCase().includes(lowerSearch) ||
+          user?.email?.toLowerCase().includes(lowerSearch)
+        );
+      })
+    : formData;
   return (
     <div>
+      <div className='mb-2 flex items-end justify-end'>
+        <Input
+          type='search'
+          id='search'
+          name='search'
+          placeholder='Start typing to search'
+          className='w-[300px] bg-transparent border border-[#fe4f70] focus-visible:ring-0'
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
+      </div>
       <TableWrapper>
         <TableCaption>A list of your recently created users.</TableCaption>
         <TableHeader className='!bg-[#fe4f70]/70 hover:!bg-[#fe4f70]'>
@@ -75,8 +99,8 @@ const Table = () => {
               </TableCell>
             </TableRow>
           )}
-          {formData?.length > 0 ? (
-            formData.map((user: any) => (
+          {filteredUsers?.length > 0 ? (
+            filteredUsers.map((user: any) => (
               <TableRow key={user._id}>
                 <TableCell>{user._id.slice(0, 13)}...</TableCell>
                 <TableCell>{user.name}</TableCell>
