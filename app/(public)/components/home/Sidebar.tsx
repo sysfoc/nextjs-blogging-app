@@ -11,6 +11,9 @@ const URL = [
   "/api/v1/blog/get/editor-pick",
   "/api/v1/blog/get/topics",
 ];
+
+const CACHE_EXPIRY = 3 * 60 * 1000;
+
 const Sidebar = () => {
   const [editorsBlogs, setEditorsBlogs] = useState<any[]>([]);
   const [popularBlogs, setPopularBlogs] = useState<any[]>([]);
@@ -20,6 +23,17 @@ const Sidebar = () => {
   useEffect(() => {
     const fetchAll = async () => {
       try {
+        const cached = localStorage.getItem("sidebarCache");
+        if (cached) {
+          const { data, timestamp } = JSON.parse(cached);
+          if (Date.now() - timestamp < CACHE_EXPIRY) {
+            setPopularBlogs(data.popularBlogs);
+            setEditorsBlogs(data.editorsBlogs);
+            setTopics(data.topics);
+            setLoading(false);
+            return;
+          }
+        }
         const responses = await Promise.all(
           URL.map((url) =>
             fetch(url, { method: "GET", credentials: "include" })
@@ -28,9 +42,20 @@ const Sidebar = () => {
         const [popularRes, editorsPickRes, topicRes] = await Promise.all(
           responses.map((res) => res.json())
         );
-        setPopularBlogs(popularRes.blog);
-        setEditorsBlogs(editorsPickRes.blog);
-        setTopics(topicRes.topics);
+
+        const data = {
+          popularBlogs: popularRes.blog,
+          editorsBlogs: editorsPickRes.blog,
+          topics: topicRes.topics,
+        };
+
+        setPopularBlogs(data.popularBlogs);
+        setEditorsBlogs(data.editorsBlogs);
+        setTopics(data.topics);
+        localStorage.setItem(
+          "sidebarCache",
+          JSON.stringify({ data, timestamp: Date.now() })
+        );
       } catch (error) {
         console.error("API error:", error);
       } finally {
@@ -40,6 +65,7 @@ const Sidebar = () => {
 
     fetchAll();
   }, []);
+
   return (
     <aside className='hidden md:flex md:w-[32%] flex-col gap-y-5'>
       <Popular data={popularBlogs} loading={loading} />

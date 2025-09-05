@@ -5,29 +5,31 @@ type Props = {
     subcategory: string;
   }>;
 };
+
+async function getSubCategoryData(subcategory: string) {
+  return fetch(
+    `${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/sub-category/get-by-name/${subcategory}`,
+    {
+      cache: "no-store",
+    }
+  ).then((res) => (res.ok ? res.json() : null));
+}
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { subcategory } = await params;
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/sub-category/get-by-name/${subcategory}`,
-    { cache: "no-store" }
-  );
-  if (!res.ok) {
-    return {
-      title: "SubCategory does not exist",
-      description: "SubCategory does not exist",
-    };
-  }
-  const data = await res.json();
+  const data = await getSubCategoryData(subcategory);
   return {
     title: data?.subCategory?.metaTitle || "SubCategory does not exist",
     description:
       data?.subCategory?.metaDescription || "SubCategory does not exist",
   };
 }
-export default function SubCategoryPage() {
+export default async function SubCategoryPage({ params }: Props) {
+  const { subcategory } = await params;
+  const data = await getSubCategoryData(subcategory);
   return (
     <main>
-      <SubCategory />
+      <SubCategory subCategoryInfo={data?.subCategory} />
     </main>
   );
 }
