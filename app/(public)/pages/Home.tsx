@@ -20,9 +20,7 @@ export default function BlogPage() {
             fetch(url, { method: "GET", credentials: "include" })
           )
         );
-        const [heroRes] = await Promise.all(
-          responses.map((res) => res.json())
-        );
+        const [heroRes] = await Promise.all(responses.map((res) => res.json()));
         setHeroData(heroRes.blog);
       } catch (error) {
         console.error("API error:", error);

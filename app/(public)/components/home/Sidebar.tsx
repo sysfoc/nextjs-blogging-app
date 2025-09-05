@@ -6,19 +6,38 @@ import Topics from "@/app/(public)/components/sidebar/Topics";
 import Newsletter from "@/app/(public)/components/sidebar/Newsletter";
 import Tags from "@/app/(public)/components/sidebar/Tags";
 
-const URL = [
-  "/api/v1/blog/get/popular-posts",
-  "/api/v1/blog/get/editor-pick",
-  "/api/v1/blog/get/topics",
-];
+const URL = {
+  popular: "/api/v1/blog/get/popular-posts",
+  editors: "/api/v1/blog/get/editor-pick",
+  topics: "/api/v1/blog/get/topics",
+};
 
 const CACHE_EXPIRY = 3 * 60 * 1000;
+const MAX_RETRIES = 3;
+const RETRY_DELAY = 3000;
 
 const Sidebar = () => {
   const [editorsBlogs, setEditorsBlogs] = useState<any[]>([]);
   const [popularBlogs, setPopularBlogs] = useState<any[]>([]);
   const [topics, setTopics] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+
+  const fetchWithRetry = async (
+    url: string,
+    retries = MAX_RETRIES
+  ): Promise<any | null> => {
+    try {
+      const res = await fetch(url, { method: "GET", credentials: "include" });
+      if (!res.ok) throw new Error(`Failed: ${url}`);
+      return await res.json();
+    } catch (error) {
+      if (retries > 0) {
+        await new Promise((resolve) => setTimeout(resolve, RETRY_DELAY));
+        return fetchWithRetry(url, retries - 1);
+      }
+      return null;
+    }
+  };
 
   useEffect(() => {
     const fetchAll = async () => {
@@ -27,37 +46,41 @@ const Sidebar = () => {
         if (cached) {
           const { data, timestamp } = JSON.parse(cached);
           if (Date.now() - timestamp < CACHE_EXPIRY) {
-            setPopularBlogs(data.popularBlogs);
-            setEditorsBlogs(data.editorsBlogs);
-            setTopics(data.topics);
+            setPopularBlogs(data.popularBlogs || []);
+            setEditorsBlogs(data.editorsBlogs || []);
+            setTopics(data.topics || []);
             setLoading(false);
             return;
           }
         }
-        const responses = await Promise.all(
-          URL.map((url) =>
-            fetch(url, { method: "GET", credentials: "include" })
-          )
-        );
-        const [popularRes, editorsPickRes, topicRes] = await Promise.all(
-          responses.map((res) => res.json())
-        );
+        const [popularRes, editorsPickRes, topicRes] = await Promise.all([
+          fetchWithRetry(URL.popular),
+          fetchWithRetry(URL.editors),
+          fetchWithRetry(URL.topics),
+        ]);
 
-        const data = {
-          popularBlogs: popularRes.blog,
-          editorsBlogs: editorsPickRes.blog,
-          topics: topicRes.topics,
-        };
+        let data: any = {};
 
-        setPopularBlogs(data.popularBlogs);
-        setEditorsBlogs(data.editorsBlogs);
-        setTopics(data.topics);
-        localStorage.setItem(
-          "sidebarCache",
-          JSON.stringify({ data, timestamp: Date.now() })
-        );
+        if (popularRes?.blog) {
+          setPopularBlogs(popularRes.blog);
+          data.popularBlogs = popularRes.blog;
+        }
+        if (editorsPickRes?.blog) {
+          setEditorsBlogs(editorsPickRes.blog);
+          data.editorsBlogs = editorsPickRes.blog;
+        }
+        if (topicRes?.topics) {
+          setTopics(topicRes.topics);
+          data.topics = topicRes.topics;
+        }
+        if (Object.keys(data).length > 0) {
+          localStorage.setItem(
+            "sidebarCache",
+            JSON.stringify({ data, timestamp: Date.now() })
+          );
+        }
       } catch (error) {
-        console.error("API error:", error);
+        console.error("Unexpected error:", error);
       } finally {
         setLoading(false);
       }

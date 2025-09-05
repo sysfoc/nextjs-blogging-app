@@ -6,7 +6,7 @@ import MobileNav from "@/app/(public)/components/navbar/MobileNav";
 
 const Header = () => {
   return (
-    <header className='shadow-md'>
+    <header className='shadow-md relative z-99'>
       <div className='flex items-center justify-between mx-4 md:mx-12 py-3'>
         <div className='flex items-center gap-x-3'>
           <Image
