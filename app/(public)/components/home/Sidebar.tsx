@@ -27,7 +27,10 @@ const Sidebar = () => {
     retries = MAX_RETRIES
   ): Promise<any | null> => {
     try {
-      const res = await fetch(url, { method: "GET", credentials: "include" });
+      const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}${url}`, {
+        method: "GET",
+        credentials: "include",
+      });
       if (!res.ok) throw new Error(`Failed: ${url}`);
       return await res.json();
     } catch (error) {

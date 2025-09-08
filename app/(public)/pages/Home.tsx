@@ -21,7 +21,10 @@ export default function BlogPage() {
       try {
         const responses = await Promise.all(
           URLs.map((url) =>
-            fetch(url, { method: "GET", credentials: "include" })
+            fetch(`${process.env.NEXT_PUBLIC_BASE_URL}${url}`, {
+              method: "GET",
+              credentials: "include",
+            })
           )
         );
         const [heroRes, categoryRes] = await Promise.all(
