@@ -101,8 +101,8 @@ const Table = () => {
           )}
           {filteredUsers?.length > 0 ? (
             filteredUsers.map((user: any) => (
-              <TableRow key={user._id}>
-                <TableCell>{user._id.slice(0, 13)}...</TableCell>
+              <TableRow className='relative' key={user._id}>
+                <TableCell>{user._id}</TableCell>
                 <TableCell>{user.name}</TableCell>
                 <TableCell>{user.email}</TableCell>
                 <TableCell>
@@ -139,6 +139,12 @@ const Table = () => {
                       </AlertDialogContent>
                     </AlertDialog>
                   </div>
+
+                  <div
+                    className={`${
+                      user.isEmployee ? "hidden" : "block"
+                    } animate-ping absolute top-1 left-1 w-2 h-2 bg-red-500 rounded-full`}
+                  />
                 </TableCell>
               </TableRow>
             ))

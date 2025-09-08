@@ -1,41 +1,10 @@
 "use client";
 import Link from "next/link";
-import { useEffect, useState } from "react";
 
-const CACHE_EXPIRY = 3 * 60 * 1000;
-const Navlinks = () => {
-  const [navLinks, setNavLinks] = useState<any[]>([]);
-  const getNavLinks = async () => {
-    try {
-      const cached = localStorage.getItem("navLinksCache");
-      if (cached) {
-        const { data, timestamp } = JSON.parse(cached);
-        if (Date.now() - timestamp < CACHE_EXPIRY) {
-          setNavLinks(data);
-          return;
-        }
-      }
-      const res = await fetch("/api/v1/blog/get/nav-links", {
-        method: "GET",
-        credentials: "include",
-      });
-      if (!res.ok) throw new Error("Failed to load navlinks");
-      const data = await res.json();
-      setNavLinks(data.categories);
-      localStorage.setItem(
-        "navLinksCache",
-        JSON.stringify({ data: data.categories, timestamp: Date.now() })
-      );
-    } catch (error) {
-      console.error("Header API error:", error);
-    }
-  };
-  useEffect(() => {
-    getNavLinks();
-  }, []);
+const Navlinks = ({ navLinks }: { navLinks: any }) => {
   return (
     <nav className='hidden md:flex items-center gap-x-8'>
-      {navLinks.map((link, index) => (
+      {navLinks.map((link: any, index: number) => (
         <div key={index} className='relative group'>
           <Link
             href={`/category/${link.categorySlug}`}

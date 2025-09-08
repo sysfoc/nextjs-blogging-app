@@ -1,15 +1,11 @@
 import {
-  Calendar,
   Folder,
-  HandCoins,
   Home,
   Inbox,
   Newspaper,
   Pen,
   Pencil,
   Rss,
-  Search,
-  Settings,
   Tag,
   UserRoundPlus,
 } from "lucide-react";
@@ -67,11 +63,6 @@ const items = [
     title: "News",
     url: "/admin/news",
     icon: Newspaper,
-  },
-  {
-    title: "Settings",
-    url: "/admin/settings",
-    icon: Settings,
   },
 ];
 

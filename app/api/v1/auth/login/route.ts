@@ -49,7 +49,6 @@ export async function POST(req: Request) {
         { status: 400 }
       );
     }
-
     const isPasswordMatch = await comparePassword(
       password,
       isUserExist.password
@@ -60,6 +59,16 @@ export async function POST(req: Request) {
         { status: 400 }
       );
     }
+    const isEmployee = isUserExist.isEmployee;
+    if (isUserExist && isPasswordMatch && !isEmployee) {
+      return NextResponse.json(
+        {
+          message:
+            `Hii ${isUserExist.name}, Since you are no longer a part of SYSFOC family! You are not allowed to login. For more info check email, we just sent to you.`,
+        },
+        { status: 400 }
+      );
+    }
 
     let token: string;
     try {
@@ -67,7 +76,7 @@ export async function POST(req: Request) {
         { id: isUserExist._id.toString() },
         config.jwtSecretKey as string,
         {
-          expiresIn: "7d",
+          expiresIn: "1d",
         }
       );
     } catch (err) {

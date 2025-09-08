@@ -4,6 +4,7 @@ interface IUser extends Document {
   name: string;
   email: string;
   password: string;
+  isEmployee: boolean;
 }
 
 const userSchema = new Schema<IUser>(
@@ -24,7 +25,11 @@ const userSchema = new Schema<IUser>(
       required: true,
       trim: true,
       minlength: 8,
-    }
+    },
+    isEmployee: {
+      type: Boolean,
+      default: true,
+    },
   },
   { timestamps: true }
 );
