@@ -14,7 +14,7 @@ const Trending = ({ data: blogs, loading }: Props) => {
           <h3 className='text-2xl font-bold'>Trending</h3>
         </div>
         <div className='mt-2'>
-          <svg width='33' height='6' xmlns='http://www.w3.org/2000/svg'>
+          <svg width='33' height='6' xmlns='https://www.w3.org/2000/svg'>
             <defs>
               <linearGradient id='gradient' x1='0%' y1='0%' x2='100%' y2='0%'>
                 <stop offset='0%' stopColor='#FE4F70'></stop>

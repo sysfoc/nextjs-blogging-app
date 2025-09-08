@@ -1,7 +1,12 @@
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
-import { FaFacebook, FaGithub, FaInstagram, FaPinterest } from "react-icons/fa";
+import {
+  FaFacebook,
+  FaInstagram,
+  FaPinterest,
+  FaYoutube,
+} from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";
 
 const Footer = () => {
@@ -20,21 +25,27 @@ const Footer = () => {
               priority
             />
           </div>
-          <div className='flex items-center gap-x-6'>
-            <Link href='/' className='text-sm text-gray-500'>
+          <div className='flex flex-wrap items-center gap-x-6'>
+            <Link href='/about-us' className='text-sm text-gray-500'>
               About
             </Link>
-            <Link href='/' className='text-sm text-gray-500'>
-              Contact
+            <Link href='/contact-us' className='text-sm text-gray-500'>
+              Contact us
             </Link>
-            <Link href='/' className='text-sm text-gray-500'>
+            <Link
+              href='/terms-and-conditions'
+              className='text-sm text-gray-500'
+            >
               Terms
             </Link>
-            <Link href='/' className='text-sm text-gray-500'>
+            <Link href='/privacy-policy' className='text-sm text-gray-500'>
               Privacy Policy
             </Link>
-            <Link href='/' className='text-sm text-gray-500'>
-              Cookie Policy
+            <Link href='/disclaimer' className='text-sm text-gray-500'>
+              Disclaimer
+            </Link>
+            <Link href='/advertise-with-us' className='text-sm text-gray-500'>
+              Advertise with us
             </Link>
           </div>
         </div>
@@ -43,35 +54,47 @@ const Footer = () => {
           <div>
             <p className='text-sm text-gray-500'>
               © 2025 All rights reserved. Powered by{" "}
-              <Link href='/' target='_blank'>
+              <Link href='https://www.sysfoc.com' target='_blank'>
                 SYSFOC
               </Link>
             </p>
           </div>
           <div className='flex items-center gap-x-6'>
             <div>
-              <Link href='/' target='_blank'>
+              <Link
+                href='https://www.facebook.com/networthmamadotcom'
+                target='_blank'
+              >
                 <FaFacebook size={20} className='text-gray-500' />
               </Link>
             </div>
             <div>
-              <Link href='/' target='_blank'>
+              <Link
+                href='https://www.instagram.com/nethworthmama/'
+                target='_blank'
+              >
                 <FaInstagram size={20} className='text-gray-500' />
               </Link>
             </div>
             <div>
-              <Link href='/' target='_blank'>
+              <Link href='https://x.com/networthMama' target='_blank'>
                 <FaXTwitter size={20} className='text-gray-500' />
               </Link>
             </div>
             <div>
-              <Link href='/' target='_blank'>
+              <Link
+                href='https://www.pinterest.com/networthmama/'
+                target='_blank'
+              >
                 <FaPinterest size={20} className='text-gray-500' />
               </Link>
             </div>
             <div>
-              <Link href='/' target='_blank'>
-                <FaGithub size={20} className='text-gray-500' />
+              <Link
+                href='https://www.youtube.com/@Networthmama.'
+                target='_blank'
+              >
+                <FaYoutube size={20} className='text-gray-500' />
               </Link>
             </div>
           </div>

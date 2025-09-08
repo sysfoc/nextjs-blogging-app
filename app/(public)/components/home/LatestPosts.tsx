@@ -15,7 +15,7 @@ const LatestPosts = ({ data }: PostProps) => {
               <h3 className='text-2xl font-bold capitalize'>{post.name}</h3>
             </div>
             <div className='mt-2'>
-              <svg width='33' height='6' xmlns='http://www.w3.org/2000/svg'>
+              <svg width='33' height='6' xmlns='https://www.w3.org/2000/svg'>
                 <defs>
                   <linearGradient
                     id='gradient'

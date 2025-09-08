@@ -3,31 +3,31 @@ import Image from "next/image";
 import Link from "next/link";
 import React, { useEffect } from "react";
 
-const NewsPosts = () => {
-  const [newsData, setNewsData] = React.useState([]);
+const BlogPosts = () => {
+  const [blogsData, setBlogsData] = React.useState([]);
 
-  const fetchNewsData = async () => {
+  const fetchBlogsData = async () => {
     try {
-      const newsRes = await fetch("/api/v1/news/get-all", {
+      const blogsRes = await fetch("/api/v1/blog-posts/get-all", {
         method: "GET",
         credentials: "include",
       });
-      if (!newsRes.ok) throw new Error("Failed to load news");
-      const newsData = await newsRes.json();
-      setNewsData(newsData.news);
+      if (!blogsRes.ok) throw new Error("Failed to load blogs");
+      const blogsData = await blogsRes.json();
+      setBlogsData(blogsData.blogs);
     } catch (error) {
       console.log(error);
     }
   };
   useEffect(() => {
-    fetchNewsData();
+    fetchBlogsData();
   }, []);
   return (
     <section className='mt-12'>
       <div>
         <div className='my-4'>
           <div className='flex items-center'>
-            <h3 className='text-2xl font-bold capitalize'>Latest News</h3>
+            <h3 className='text-2xl font-bold capitalize'>Latest Blogs</h3>
           </div>
           <div className='mt-2'>
             <svg width='33' height='6' xmlns='https://www.w3.org/2000/svg'>
@@ -49,7 +49,7 @@ const NewsPosts = () => {
         <div>
           <div>
             <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5'>
-              {newsData?.map((post: any, index: number) => (
+              {blogsData?.map((post: any, index: number) => (
                 <div
                   key={index}
                   className='border border-gray-200/70 rounded-xl overflow-hidden'
@@ -63,7 +63,7 @@ const NewsPosts = () => {
                     />
                   </div>
                   <div className='px-4 py-2'>
-                    <Link href={`/celebrity-news/${post?.slug}`}>
+                    <Link href={`/blog/${post?.slug}`}>
                       <h3 className='font-bold text-lg'>{post?.title}</h3>
                     </Link>
                     <div className='my-3 flex items-center justify-between gap-x-3'>
@@ -88,4 +88,4 @@ const NewsPosts = () => {
   );
 };
 
-export default NewsPosts;
+export default BlogPosts;
