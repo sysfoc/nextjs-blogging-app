@@ -70,6 +70,18 @@ const Navlinks = () => {
           )}
         </div>
       ))}
+      <Link
+        href={`/blogs`}
+        className='text-sm font-medium capitalize hover:text-primary transition-colors'
+      >
+        Blogs
+      </Link>
+      <Link
+        href={`/celebrity-news`}
+        className='text-sm font-medium capitalize hover:text-primary transition-colors'
+      >
+        News
+      </Link>
     </nav>
   );
 };

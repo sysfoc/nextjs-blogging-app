@@ -27,7 +27,7 @@ export default function PrivacyPolicy() {
       <section>
         <div className='mx-4 md:mx-12 my-8 flex flex-wrap md:flex-nowrap justify-between gap-x-6 gap-y-5'>
           <div className='w-full'>
-            <p className='my-2 text-gray-800'>
+            <p className='my-2 text-gray-800 dark:text-white'>
               Our privacy policy page informs you about our policies regarding
               the collection, use, and disclosure of personal data when you use
               our service and the choices you have associated with the data.
@@ -35,7 +35,7 @@ export default function PrivacyPolicy() {
             <h2 className='my-3 font-bold text-2xl'>
               Introduction to Our Policy
             </h2>
-            <p className='my-2 text-gray-800'>
+            <p className='my-2 text-gray-800 dark:text-white'>
               Networthmama.com is a website owned and operated by SYSFOC and
               they are the sole proprietor and operator. Networthmama.com is
               committed to respecting the privacy rights of its visitors and
@@ -47,14 +47,14 @@ export default function PrivacyPolicy() {
             <h3 className='my-3 font-bold text-xl'>
               Information Collection Practices
             </h3>
-            <p className='my-2 text-gray-800'>
+            <p className='my-2 text-gray-800 dark:text-white'>
               The below outlines our practices when it comes to collecting
               information from the users of Networthmama.com:
             </p>
             <h4 className='my-3 font-bold text-xl'>
               What Personally Identifiable Information Do We Collect?
             </h4>
-            <ul className='my-2 ml-4 text-gray-800 list-disc list-inside'>
+            <ul className='my-2 ml-4 text-gray-800 dark:text-white list-disc list-inside'>
               <li>
                 Categories of Personally Identifiable Information: We collect
                 personally identifiable information from you only if you sign up
@@ -85,7 +85,7 @@ export default function PrivacyPolicy() {
                 your personally identifiable information through our website.
               </li>
             </ul>
-            <p className='my-2 text-gray-800'>
+            <p className='my-2 text-gray-800 dark:text-white'>
               Google and other sites listed below can track you through this
               site as we use their services for social media, infrastructure,
               and analytical purposes; so we can optimize the user experience.
@@ -95,17 +95,17 @@ export default function PrivacyPolicy() {
               their privacy policies and how they track individuals across the
               web:
             </p>
-            <ul className='my-2 ml-4 text-gray-800 list-disc list-inside'>
+            <ul className='my-2 ml-4 text-gray-800 dark:text-white list-disc list-inside'>
               <li>Facebook</li>
               <li>LinkedIn</li>
               <li>Twitter</li>
               <li>YouTube</li>
             </ul>
-            <p className='my-2 text-gray-800'>
+            <p className='my-2 text-gray-800 dark:text-white'>
               You can use programs such as Privacy Badger to further control the
               collection of information regarding you online.
             </p>
-            <ul className='my-2 ml-4 text-gray-800 list-disc list-inside'>
+            <ul className='my-2 ml-4 text-gray-800 dark:text-white list-disc list-inside'>
               <li>
                 Automatic collection: Our servers automatically recognize
                 visitors’ domain names and IP addresses (the number assigned to
@@ -124,7 +124,7 @@ export default function PrivacyPolicy() {
               </li>
             </ul>
             <h5 className='my-3 font-bold text-xl'>We use cookies to:</h5>
-            <ul className='my-2 ml-4 text-gray-800 list-disc list-inside'>
+            <ul className='my-2 ml-4 text-gray-800 dark:text-white list-disc list-inside'>
               <li>
                 Identify you as a returning user and to count your visits in our
                 traffic statistics analysis;
@@ -159,14 +159,14 @@ export default function PrivacyPolicy() {
                 other services relating to website activity and internet usage.
               </li>
             </ul>
-            <p className='my-2 text-gray-800'>
+            <p className='my-2 text-gray-800 dark:text-white'>
               Google may also transfer this information to third parties where
               required to do so by law, or where such third parties process the
               information on Google’s behalf. Google undertakes not to associate
               your IP address with any other data held by Google.
             </p>
             <h5 className='my-3 font-bold text-xl'>Third-Party Advertising</h5>
-            <p className='my-2 text-gray-800'>
+            <p className='my-2 text-gray-800 dark:text-white'>
               We may have third-party advertising companies serving ads to you
               when you visit our website. These companies may store information
               about your visits to our website and to other websites in order to
@@ -174,7 +174,7 @@ export default function PrivacyPolicy() {
               These companies may employ cookies and other identifiers to gather
               information that measures advertising effectiveness.
             </p>
-            <p className='my-2 text-gray-800'>
+            <p className='my-2 text-gray-800 dark:text-white'>
               The information is generally not personally identifiable unless,
               for example, you provide personally identifiable information to
               them through an ad or an e-mail message.
@@ -182,7 +182,7 @@ export default function PrivacyPolicy() {
             <h6 className='my-3 font-bold text-xl'>
               Information About Cookies
             </h6>
-            <p className='my-2 text-gray-800'>
+            <p className='my-2 text-gray-800 dark:text-white'>
               First party cookies are created by the website that you are
               visiting. A third-party cookie is frequently used in behavioral
               advertising and analytics and is created by a domain other than
@@ -200,24 +200,24 @@ export default function PrivacyPolicy() {
               Cookies.
             </p>
             <h6 className='my-3 font-bold text-xl'>Indemnity and Release</h6>
-            <p className='my-2 text-gray-800'>
+            <p className='my-2 text-gray-800 dark:text-white'>
               You agree to indemnify and hold Networthmama.com and its
               affiliates harmless from any claims, damages, liabilities, costs,
               or expenses arising from your use of our service or any violation
               of these terms and conditions.
             </p>
-            <p className='my-2 text-gray-800'>
+            <p className='my-2 text-gray-800 dark:text-white'>
               Without cookies, you may not be able to take full advantage of the
               Website content and features. Please note that rejecting cookies
               does not mean that you will no longer see ads when you visit our
               Site. In the event you opt out, you will still see
               non-personalized advertisements on the Website.
             </p>
-            <p className='my-2 text-gray-800'>
+            <p className='my-2 text-gray-800 dark:text-white'>
               The Website collects the following data using a cookie when
               serving personalized ads:
             </p>
-            <ul className='my-2 ml-4 text-gray-800 list-disc list-inside'>
+            <ul className='my-2 ml-4 text-gray-800 dark:text-white list-disc list-inside'>
               <li>IP Address</li>
               <li>Operating System type</li>
               <li>Operating System version</li>
@@ -226,7 +226,7 @@ export default function PrivacyPolicy() {
               <li>Web browser type</li>
               <li>Email (in hashed form)</li>
             </ul>
-            <p className='my-2 text-gray-800'>
+            <p className='my-2 text-gray-800 dark:text-white'>
               If you would like more information about this practice and to know
               your choices to opt-in or opt-out of this data collection, please
               visit the National Advertising Initiative opt-out page. You may
@@ -240,7 +240,7 @@ export default function PrivacyPolicy() {
             <h6 className='my-3 font-bold text-xl'>
               Information Gathered by Third Party Advertisers
             </h6>
-            <p className='my-2 text-gray-800'>
+            <p className='my-2 text-gray-800 dark:text-white'>
               Cookies enable advertisers to learn about what ads you see, what
               ads you click, and other actions you take on our site and other
               sites. This allows advertisers to provide you with more useful and
@@ -248,13 +248,13 @@ export default function PrivacyPolicy() {
               while visiting our site; they can be careful not to show you the
               same ones repeatedly.
             </p>
-            <p className='my-2 text-gray-800'>
+            <p className='my-2 text-gray-800 dark:text-white'>
               They do not associate your interaction with unaffiliated sites
               with your identity in providing you with interest-based ads. We do
               not provide any personal information to advertisers or to third
               party sites.
             </p>
-            <p className='my-2 text-gray-800'>
+            <p className='my-2 text-gray-800 dark:text-white'>
               Advertisers and other third parties (including the ad networks,
               ad-serving companies, and other service providers they may use)
               may assume that users who interact with or click on a personalized
@@ -262,18 +262,18 @@ export default function PrivacyPolicy() {
               directed towards (for example, readers in the Pacific Northwest
               who read certain types of articles).
             </p>
-            <p className='my-2 text-gray-800'>
+            <p className='my-2 text-gray-800 dark:text-white'>
               Also, some third-party cookies may provide them with information
               about you (such as the sites where you have been shown ads or
               demographic information) from offline and online sources that they
               may use to provide you more relevant and useful advertising.
             </p>
-            <p className='my-2 text-gray-800'>
+            <p className='my-2 text-gray-800 dark:text-white'>
               If you would like to learn more about what options you have about
               limiting the gathering of information by third-party ad networks,
               you can consult the website of the Network Advertising Initiative.
             </p>
-            <p className='my-2 text-gray-800'>
+            <p className='my-2 text-gray-800 dark:text-white'>
               You can opt out of participating in interest-based advertising
               networks but opting out does not mean you will no longer receive
               online advertising. It does mean that the companies from which you
@@ -283,7 +283,7 @@ export default function PrivacyPolicy() {
             <h6 className='my-3 font-bold text-xl'>
               What Do We Do With Information We Collect?
             </h6>
-            <ul className='my-2 ml-4 text-gray-800 list-disc list-inside'>
+            <ul className='my-2 ml-4 text-gray-800 dark:text-white list-disc list-inside'>
               <li>
                 <strong>Personal information:</strong> We will not share your
                 personal information with any third parties without your
@@ -315,7 +315,7 @@ export default function PrivacyPolicy() {
                 <strong>Disclosure of personal information:</strong> We may
                 disclose personal information if required to do so by law or in
                 the good-faith belief that such action is necessary to:
-                <ul className='my-2 ml-4 text-gray-800 list-[arrow] list-inside'>
+                <ul className='my-2 ml-4 text-gray-800 dark:text-white list-[arrow] list-inside'>
                   <li>
                     Conform to the edicts of the law or comply with the legal
                     process served on Networth Mama
@@ -370,7 +370,7 @@ export default function PrivacyPolicy() {
               </li>
             </ul>
             <h6 className='my-3 font-bold text-xl'>Security</h6>
-            <p className='my-2 text-gray-800'>
+            <p className='my-2 text-gray-800 dark:text-white'>
               Networthmama.com has reasonable security measures in place such as
               Secure Sockets Layer protocols to prevent the loss, misuse, and
               alteration of the information that we obtain from you; but we make
@@ -379,7 +379,7 @@ export default function PrivacyPolicy() {
               misuse, or alteration.
             </p>
             <h6 className='my-3 font-bold text-xl'>Third Party Websites</h6>
-            <p className='my-2 text-gray-800'>
+            <p className='my-2 text-gray-800 dark:text-white'>
               Our website contains links to and interfaces with third party
               websites and online platforms. These websites and online platforms
               have established their own terms of use and privacy policies. You
@@ -391,7 +391,7 @@ export default function PrivacyPolicy() {
               {" "}
               How to Opt Out of Interest-Based Advertising
             </h6>
-            <p className='my-2 text-gray-800'>
+            <p className='my-2 text-gray-800 dark:text-white'>
               This website may permit third parties to collect information on
               its Site and combine that information with other information
               collected on non-affiliated websites or applications over time.
@@ -401,7 +401,7 @@ export default function PrivacyPolicy() {
               customize content or advertising on this website or other sites,
               or to help us operate and improve the website.
             </p>
-            <p className='my-2 text-gray-800'>
+            <p className='my-2 text-gray-800 dark:text-white'>
               To find out more about interest-based advertising in the web
               environment, and how to opt-out of information collection for this
               purpose by companies that participate in the Network Advertising
@@ -423,7 +423,7 @@ export default function PrivacyPolicy() {
             <h6 className='my-3 font-bold text-xl'>
               Rights Related to Your Personal Information
             </h6>
-            <ul className='my-2 ml-4 text-gray-800 list-disc list-inside'>
+            <ul className='my-2 ml-4 text-gray-800 dark:text-white list-disc list-inside'>
               <li>
                 <strong>Opt-out:</strong> You may opt out of future email
                 communications by following the unsubscribe links in our emails.
@@ -446,7 +446,7 @@ export default function PrivacyPolicy() {
                 request to contact@networthmama.com.
               </li>
             </ul>
-            <p className='my-2 text-gray-800'>
+            <p className='my-2 text-gray-800 dark:text-white'>
               Please note that we may need to retain certain information for
               record-keeping purposes to complete transactions, or when required
               by law.
@@ -454,7 +454,7 @@ export default function PrivacyPolicy() {
             <h6 className='my-3 font-bold text-xl'>
               Sensitive Personal Information
             </h6>
-            <p className='my-2 text-gray-800'>
+            <p className='my-2 text-gray-800 dark:text-white'>
               At no time should you submit sensitive personal information to the
               Website. This includes your social security number, information
               regarding race or ethnic origin, political opinions, religious
@@ -463,7 +463,7 @@ export default function PrivacyPolicy() {
               will be subject to this Privacy Policy.
             </p>
             <h6 className='my-3 font-bold text-xl'>Children’s Information</h6>
-            <p className='my-2 text-gray-800'>
+            <p className='my-2 text-gray-800 dark:text-white'>
               The Website does not knowingly collect any personally identifiable
               information from children under the age of 16. If a parent or
               guardian believes that the Website has personally identifiable
@@ -473,7 +473,7 @@ export default function PrivacyPolicy() {
               our records.
             </p>
             <h6 className='my-3 font-bold text-xl'>Contact Information</h6>
-            <p className='my-2 text-gray-800'>
+            <p className='my-2 text-gray-800 dark:text-white'>
               If you have any questions about this policy or our practices
               related to this website; please email us at
               contact@networthmama.com.

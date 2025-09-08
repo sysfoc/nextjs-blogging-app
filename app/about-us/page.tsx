@@ -30,14 +30,14 @@ export default function AboutUs() {
             <h2 className='mb-3 font-bold text-2xl'>
               The Professional Publishing Platform
             </h2>
-            <p className='my-2 text-gray-800'>
+            <p className='my-2 text-gray-800 dark:text-white'>
               At some point in our lives, we all have wondered just how much our
               favorite stars are earning and what is the total worth of those
               living in the glitzy world of fame. If you were ever curious about
               the jaw dropping net worth of athletes, politicians, actors, or
               even royals. Well, you've landed in the right spot.
             </p>
-            <p className='my-2 text-gray-800'>
+            <p className='my-2 text-gray-800 dark:text-white'>
               At networthmama.com, we aim to become your go-to source for all
               wealth-related information for the rich and famous. Not only will
               you be able to get the straight answer of their total worth, but
@@ -45,20 +45,20 @@ export default function AboutUs() {
               show their humble beginnings, mega successes, and everything in
               between.
             </p>
-            <p className='my-2 text-gray-800'>
+            <p className='my-2 text-gray-800 dark:text-white'>
               We understand and associate with your insatiable curiosity about
               those who grace your TV screens, sports arenas, and political
               stages. No matter if you are looking for your favorite actor, the
               most aspiring politician in your country, or the athlete with
               superhuman abilities and net worth, we got you covered.
             </p>
-            <p className='my-2 text-gray-800'>
+            <p className='my-2 text-gray-800 dark:text-white'>
               We also ensure that we do not just spill the beans on what they
               are worth but we also take you on a detailed tour of their whole
               career. We not only share their high points but we also take you
               for a spin through their struggles and setbacks too.
             </p>
-            <p className='my-2 text-gray-800'>
+            <p className='my-2 text-gray-800 dark:text-white'>
               Our major goal is to not just show you how wealthy those rich and
               famous people are but to give you a detailed tour of their
               lifestyle, struggles, and successes to inspire you while

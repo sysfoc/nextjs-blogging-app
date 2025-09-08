@@ -2,6 +2,7 @@
 import { usePathname } from "next/navigation";
 import Header from "@/app/(public)/components/Header";
 import Footer from "@/app/(public)/components/Footer";
+import ScrollToTop from "@/app/(public)/components/ScrollToTop";
 
 export default function LayoutWrapper({
   children,
@@ -15,6 +16,7 @@ export default function LayoutWrapper({
     <>
       {!isDashboard && <Header />}
       {children}
+      {!isDashboard && <ScrollToTop />}
       {!isDashboard && <Footer />}
     </>
   );

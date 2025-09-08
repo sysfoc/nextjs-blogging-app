@@ -27,7 +27,7 @@ export default function TermsAndConditions() {
       <section>
         <div className='mx-4 md:mx-12 my-8 flex flex-wrap md:flex-nowrap justify-between gap-x-6 gap-y-5'>
           <div className='w-full'>
-            <p className='my-2 text-gray-800'>
+            <p className='my-2 text-gray-800 dark:text-white'>
               Welcome to Networthmama.com. These terms and conditions govern
               your use of our website, online services, and software provided by
               Networthmama. By accessing or using our service, you agree to
@@ -36,14 +36,14 @@ export default function TermsAndConditions() {
               service.
             </p>
             <h2 className='my-3 font-bold text-2xl'>Acceptance of Terms</h2>
-            <p className='my-2 text-gray-800'>
+            <p className='my-2 text-gray-800 dark:text-white'>
               By accessing or using Networthmama.com's services, you acknowledge
               that you have read, understood, and agree to be bound by these
               terms and conditions, as well as our Privacy Policy. These terms
               and conditions apply to all users of our service.
             </p>
             <h3 className='my-3 font-bold text-xl'>Use of Content</h3>
-            <p className='my-2 text-gray-800'>
+            <p className='my-2 text-gray-800 dark:text-white'>
               The content provided on Networthmama.com is for general
               information purposes only. We do not guarantee the accuracy,
               completeness, or reliability of this information. Your use of any
@@ -52,7 +52,7 @@ export default function TermsAndConditions() {
             <h4 className='my-3 font-bold text-xl'>
               Intellectual Property Rights
             </h4>
-            <p className='my-2 text-gray-800'>
+            <p className='my-2 text-gray-800 dark:text-white'>
               All content on Networthmama.com, including but not limited to
               design, layout, graphics, and trademarks, is owned by
               Networthmama.com or licensed to us. Unauthorized use of this
@@ -62,40 +62,40 @@ export default function TermsAndConditions() {
             <h5 className='my-3 font-bold text-xl'>
               Links to Third-Party Websites
             </h5>
-            <p className='my-2 text-gray-800'>
+            <p className='my-2 text-gray-800 dark:text-white'>
               From time to time, Networthmama.com may contain links to
               third-party websites for your convenience. We do not endorse or
               control these websites and are not responsible for their content.
               Your use of third-party websites is at your own risk.
             </p>
             <h5 className='my-3 font-bold text-xl'>Commercial Use</h5>
-            <p className='my-2 text-gray-800'>
+            <p className='my-2 text-gray-800 dark:text-white'>
               You may not use Networthmama.com's services for any commercial
               purposes without our express written consent. This includes but is
               not limited to displaying, distributing, or selling any portion of
               our service.
             </p>
             <h6 className='my-3 font-bold text-xl'>Artificial Intelligence</h6>
-            <p className='my-2 text-gray-800'>
+            <p className='my-2 text-gray-800 dark:text-white'>
               You are prohibited from using the content on Networthmama.com for
               the development, training, or operation of artificial intelligence
               or other machine learning systems without our written consent.
             </p>
             <h6 className='my-3 font-bold text-xl'>Indemnity and Release</h6>
-            <p className='my-2 text-gray-800'>
+            <p className='my-2 text-gray-800 dark:text-white'>
               You agree to indemnify and hold Networthmama.com and its
               affiliates harmless from any claims, damages, liabilities, costs,
               or expenses arising from your use of our service or any violation
               of these terms and conditions.
             </p>
             <h6 className='my-3 font-bold text-xl'>Modification of Terms</h6>
-            <p className='my-2 text-gray-800'>
+            <p className='my-2 text-gray-800 dark:text-white'>
               Networthmama.com reserves the right to modify or update these
               terms and conditions at any time without prior notice. Your
               continued use of our service after any changes indicates your
               acceptance of the modified terms.
             </p>
-            <p className='my-2 text-gray-800'>
+            <p className='my-2 text-gray-800 dark:text-white'>
               If you have any questions or concerns about these terms and
               conditions, please contact us at{" "}
               <strong>advertise@networthmama.com</strong>. Thank you for using{" "}

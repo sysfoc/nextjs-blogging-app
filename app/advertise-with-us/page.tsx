@@ -26,7 +26,7 @@ export default function AdvertiseWithUs() {
             <h2 className='mb-3 font-bold text-2xl'>
               Advertise With Us and Reach Your Audience
             </h2>
-            <p className='my-2 text-gray-800'>
+            <p className='my-2 text-gray-800 dark:text-white'>
               We provide you the exciting opportunity to connect with an engaged
               audience actively seeking celebrity net worth information on
               Networthmama.com. Undivided attention from our visitors ensures
@@ -34,7 +34,7 @@ export default function AdvertiseWithUs() {
               enhance your product’s visibility, lead generation, and conversion
               rates.
             </p>
-            <p className='my-2 text-gray-800'>
+            <p className='my-2 text-gray-800 dark:text-white'>
               You can choose from flexible advertising options like banner ads
               or sponsored content which is crafted to align seamlessly with
               your brand message and budget. You can reach out to our

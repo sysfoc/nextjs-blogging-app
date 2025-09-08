@@ -27,7 +27,7 @@ export default function Disclaimer() {
       <section>
         <div className='mx-4 md:mx-12 my-8 flex flex-wrap md:flex-nowrap justify-between gap-x-6 gap-y-5'>
           <div className='w-full'>
-            <p className='my-2 text-gray-800'>
+            <p className='my-2 text-gray-800 dark:text-white'>
               Welcome to Networthmama.com, your go-to source for acquiring
               information on the net worth of various celebrities and rich and
               famous from all walks of life. Before you go ahead and explore our
@@ -36,7 +36,7 @@ export default function Disclaimer() {
             <h2 className='my-3 font-bold text-2xl'>
               Accuracy of Information:
             </h2>
-            <p className='my-2 text-gray-800'>
+            <p className='my-2 text-gray-800 dark:text-white'>
               While we do our absolute best to provide accurate and up to date
               information all the time, the net worth figures presented on
               Networthmama.com are based on publicly available information,
@@ -49,7 +49,7 @@ export default function Disclaimer() {
             <h3 className='my-3 font-bold text-xl'>
               Entertainment and Informational Purposes Only:
             </h3>
-            <p className='my-2 text-gray-800'>
+            <p className='my-2 text-gray-800 dark:text-white'>
               Whatever is published on Networthmama.com is intended for
               entertainment and informational purposes only. It is not intended
               to serve as financial or investment advice. Users should not make
@@ -61,7 +61,7 @@ export default function Disclaimer() {
             <h4 className='my-3 font-bold text-xl'>
               Reliance on Third-Party Sources:
             </h4>
-            <p className='my-2 text-gray-800'>
+            <p className='my-2 text-gray-800 dark:text-white'>
               We mostly rely on third-party sources, including but not limited
               to public records, financial disclosures, interviews, and
               reputable media outlets, to gather information about celebrities'
@@ -71,7 +71,7 @@ export default function Disclaimer() {
             <h5 className='my-3 font-bold text-xl'>
               Zero Endorsements or Affiliations:
             </h5>
-            <p className='my-2 text-gray-800'>
+            <p className='my-2 text-gray-800 dark:text-white'>
               The inclusion of any celebrity on Networthmama.com does not imply
               endorsement or affiliation with our website. Our mission is to
               provide unbiased information about celebrities' net worth and we
@@ -79,14 +79,14 @@ export default function Disclaimer() {
               featured on our platform.
             </p>
             <h5 className='my-3 font-bold text-xl'>Changes to Disclaimer:</h5>
-            <p className='my-2 text-gray-800'>
+            <p className='my-2 text-gray-800 dark:text-white'>
               Networthmama.com reserves the right to update, modify, or revise
               this disclaimer at any time without prior notice. It is your
               responsibility to review this disclaimer periodically to stay
               informed of any changes.
             </p>
             <h6 className='my-3 font-bold text-xl'>Limitation of Liability:</h6>
-            <p className='my-2 text-gray-800'>
+            <p className='my-2 text-gray-800 dark:text-white'>
               In no event shall Networthmama.com, its affiliates, partners,
               contributors, or employees be liable for any direct, indirect,
               incidental, special, or consequential damages arising out of or in
@@ -94,12 +94,12 @@ export default function Disclaimer() {
               the information provided, even if advised of the possibility of
               such damages.
             </p>
-            <p className='my-2 text-gray-800'>
+            <p className='my-2 text-gray-800 dark:text-white'>
               By accessing or using Networthmama.com, you agree to abide by this
               disclaimer. If you do not agree with any part of this disclaimer,
               you must refrain from using our website.
             </p>
-            <p className='my-2 text-gray-800'>
+            <p className='my-2 text-gray-800 dark:text-white'>
               If you have any questions or concerns regarding this disclaimer,
               please contact us at sysfoc@gmail.com. Thank you for choosing
               Networthmama.com for your celebrity net worth information needs.
