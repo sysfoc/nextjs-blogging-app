@@ -30,7 +30,7 @@ const Table = () => {
   const [searchTerm, setSearchTerm] = React.useState("");
   const getAllBlogs = async () => {
     setLoading(true);
-    const res = await fetch("/api/v1/blog/get-all", {
+    const res = await fetch("/api/v1/blog-posts/get-all", {
       method: "GET",
       credentials: "include",
       headers: {
@@ -47,7 +47,7 @@ const Table = () => {
 
   const handleDeleteBlog = async (id: string) => {
     try {
-      const res = await fetch(`/api/v1/blog/delete/${id}`, {
+      const res = await fetch(`/api/v1/blog-posts/delete/${id}`, {
         method: "DELETE",
         credentials: "include",
       });
@@ -89,8 +89,7 @@ const Table = () => {
             <TableHead className='w-[100px]'>ID</TableHead>
             <TableHead>Image</TableHead>
             <TableHead>Title</TableHead>
-            <TableHead>Category</TableHead>
-            <TableHead>Sub-category</TableHead>
+            <TableHead>Slug</TableHead>
             <TableHead>Actions</TableHead>
           </TableRow>
         </TableHeader>
@@ -117,15 +116,12 @@ const Table = () => {
                 </TableCell>
                 <TableCell>{item?.title.slice(0, 20)}</TableCell>
                 <TableCell className='capitalize'>
-                  {item?.category?.name}
-                </TableCell>
-                <TableCell className='capitalize'>
-                  {item?.subCategory?.name}
+                  {item?.slug}
                 </TableCell>
                 <TableCell>
                   <div className='flex gap-x-2 items-center'>
                     <Link
-                      href={`/admin/blogs/edit/${item._id}`}
+                      href={`/admin/blog-posts/edit/${item.slug}`}
                       className='bg-green-500 text-white px-2 py-2 rounded'
                     >
                       <Pen size={12} />

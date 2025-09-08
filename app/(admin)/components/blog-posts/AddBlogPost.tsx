@@ -1,27 +1,15 @@
 "use client";
 import dynamic from "next/dynamic";
-import React, { Suspense, useEffect, useState } from "react";
+import React, { Suspense, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Checkbox } from "@/components/ui/checkbox";
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { useRouter } from "next/navigation";
 const LazyJoditEditor = dynamic(() => import("jodit-react"), { ssr: false });
 
-const AddBlog = () => {
+const AddBlogPost = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
-  const [mainCategories, setMainCategories] = useState([]);
-  const [subCategories, setSubCategories] = useState([]);
   const router = useRouter();
   const [formData, setFormData] = useState({
     title: "",
@@ -31,9 +19,6 @@ const AddBlog = () => {
     metaDescription: "",
     writer: "",
     content: "",
-    category: "",
-    subCategory: "",
-    isEditorPick: false,
   });
 
   const config = {
@@ -55,43 +40,6 @@ const AddBlog = () => {
         console.log("Editor focused");
       },
     } as any,
-  };
-
-  const getCategories = async () => {
-    try {
-      const res = await fetch("/api/v1/category/get-all", {
-        method: "GET",
-        credentials: "include",
-      });
-      const data = await res.json();
-      setMainCategories(data.categories);
-    } catch (error) {
-      setError(true);
-      setErrorMessage("Something went wrong");
-    }
-  };
-
-  useEffect(() => {
-    getCategories();
-  }, []);
-
-  const handleChangeCategory = async (categoryId: string) => {
-    setFormData((prev) => ({ ...prev, category: categoryId, subCategory: "" }));
-    try {
-      const res = await fetch(
-        `/api/v1/sub-category/get-by-main-category/${categoryId}`,
-        {
-          method: "GET",
-          credentials: "include",
-        }
-      );
-      if (!res.ok) throw new Error("Failed to load sub-categories");
-      const data = await res.json();
-      setSubCategories(data.subCategory ?? []);
-    } catch (error) {
-      setError(true);
-      setErrorMessage("Something went wrong");
-    }
   };
   const handleContentChange = (newContent: string) => {
     setFormData((prev) => ({
@@ -134,14 +82,10 @@ const AddBlog = () => {
       const form = new FormData();
 
       Object.entries(formData).forEach(([key, value]) => {
-        if (typeof value === "boolean") {
-          form.append(key, value ? "true" : "false");
-        } else {
-          form.append(key, value as any);
-        }
+        form.append(key, value as any);
       });
 
-      const res = await fetch("/api/v1/blog/add", {
+      const res = await fetch("/api/v1/blog-posts/add", {
         method: "POST",
         body: form,
       });
@@ -149,7 +93,7 @@ const AddBlog = () => {
       const data = await res.json();
       setLoading(false);
       if (res.ok) {
-        router.push("/admin/blogs");
+        router.push("/admin/blog-posts");
         setFormData({
           title: "",
           image: "",
@@ -158,9 +102,6 @@ const AddBlog = () => {
           metaDescription: "",
           writer: "",
           content: "",
-          category: "",
-          subCategory: "",
-          isEditorPick: false,
         });
       } else {
         setError(true);
@@ -173,9 +114,6 @@ const AddBlog = () => {
           metaDescription: "",
           writer: "",
           content: "",
-          category: "",
-          subCategory: "",
-          isEditorPick: false,
         });
         setLoading(false);
       }
@@ -259,65 +197,6 @@ const AddBlog = () => {
             onChange={handleChange}
           />
         </div>
-        <div className='flex items-center col-span-2 gap-4'>
-          <div className='flex flex-1 flex-col gap-2'>
-            <Label htmlFor='category'>Category</Label>
-            <Select
-              name='category'
-              value={formData.category}
-              onValueChange={handleChangeCategory}
-            >
-              <SelectTrigger className='w-full border border-black'>
-                <SelectValue placeholder='Select main category' />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectGroup>
-                  <SelectLabel>Main Categories</SelectLabel>
-                  {mainCategories.map((category: any) => (
-                    <SelectItem key={category?._id} value={category?._id}>
-                      {category?.name}
-                    </SelectItem>
-                  ))}
-                </SelectGroup>
-              </SelectContent>
-            </Select>
-          </div>
-          <div className='flex flex-1 flex-col gap-2'>
-            <Label htmlFor='category'>Sub Category</Label>
-            <Select
-              name='subCategory'
-              value={formData.subCategory}
-              onValueChange={(e) =>
-                setFormData({ ...formData, subCategory: e })
-              }
-            >
-              <SelectTrigger className='w-full border border-black'>
-                <SelectValue placeholder='Select sub category' />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectGroup>
-                  <SelectLabel>Sub Categories</SelectLabel>
-                  {subCategories.map((category: any) => (
-                    <SelectItem key={category?._id} value={category?._id}>
-                      {category?.name}
-                    </SelectItem>
-                  ))}
-                </SelectGroup>
-              </SelectContent>
-            </Select>
-          </div>
-        </div>
-        <div className='flex flex-row col-span-2 gap-2'>
-          <Checkbox
-            id='isEditorPick'
-            className='border border-black'
-            checked={formData.isEditorPick}
-            onCheckedChange={(checked) =>
-              setFormData({ ...formData, isEditorPick: checked === true })
-            }
-          />
-          <Label htmlFor='isEditorPick'>Mark as editor pick</Label>
-        </div>
         <div className='flex flex-col col-span-2 gap-2'>
           <Label htmlFor='image'>Select image</Label>
           <Input
@@ -354,4 +233,4 @@ const AddBlog = () => {
   );
 };
 
-export default AddBlog;
+export default AddBlogPost;

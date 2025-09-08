@@ -3,38 +3,41 @@ import dynamic from "next/dynamic";
 import React, { Suspense, useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Checkbox } from "@/components/ui/checkbox";
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 const LazyJoditEditor = dynamic(() => import("jodit-react"), { ssr: false });
 
-const AddBlog = () => {
+const EditBlogPost = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
-  const [mainCategories, setMainCategories] = useState([]);
-  const [subCategories, setSubCategories] = useState([]);
   const router = useRouter();
+  const params = useParams();
   const [formData, setFormData] = useState({
     title: "",
+    description: "",
     image: "",
     slug: "",
     metaTitle: "",
     metaDescription: "",
     writer: "",
     content: "",
-    category: "",
-    subCategory: "",
-    isEditorPick: false,
   });
+  const getBlogById = async () => {
+    setLoading(true);
+    const res = await fetch(`/api/v1/blog-posts/get-single-post/${params.id}`, {
+      method: "GET",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    const data = await res.json();
+    setLoading(false);
+    setFormData(data.blog);
+  };
+  useEffect(() => {
+    getBlogById();
+  }, []);
 
   const config = {
     placeholder: "Start typing...",
@@ -55,43 +58,6 @@ const AddBlog = () => {
         console.log("Editor focused");
       },
     } as any,
-  };
-
-  const getCategories = async () => {
-    try {
-      const res = await fetch("/api/v1/category/get-all", {
-        method: "GET",
-        credentials: "include",
-      });
-      const data = await res.json();
-      setMainCategories(data.categories);
-    } catch (error) {
-      setError(true);
-      setErrorMessage("Something went wrong");
-    }
-  };
-
-  useEffect(() => {
-    getCategories();
-  }, []);
-
-  const handleChangeCategory = async (categoryId: string) => {
-    setFormData((prev) => ({ ...prev, category: categoryId, subCategory: "" }));
-    try {
-      const res = await fetch(
-        `/api/v1/sub-category/get-by-main-category/${categoryId}`,
-        {
-          method: "GET",
-          credentials: "include",
-        }
-      );
-      if (!res.ok) throw new Error("Failed to load sub-categories");
-      const data = await res.json();
-      setSubCategories(data.subCategory ?? []);
-    } catch (error) {
-      setError(true);
-      setErrorMessage("Something went wrong");
-    }
   };
   const handleContentChange = (newContent: string) => {
     setFormData((prev) => ({
@@ -134,48 +100,40 @@ const AddBlog = () => {
       const form = new FormData();
 
       Object.entries(formData).forEach(([key, value]) => {
-        if (typeof value === "boolean") {
-          form.append(key, value ? "true" : "false");
-        } else {
-          form.append(key, value as any);
-        }
+        form.append(key, value as any);
       });
 
-      const res = await fetch("/api/v1/blog/add", {
-        method: "POST",
+      const res = await fetch(`/api/v1/blog-posts/update/${params.id}`, {
+        method: "PATCH",
         body: form,
       });
 
       const data = await res.json();
       setLoading(false);
       if (res.ok) {
-        router.push("/admin/blogs");
+        router.push("/admin/blog-posts");
         setFormData({
           title: "",
+          description: "",
           image: "",
           slug: "",
           metaTitle: "",
           metaDescription: "",
           writer: "",
           content: "",
-          category: "",
-          subCategory: "",
-          isEditorPick: false,
         });
       } else {
         setError(true);
         setErrorMessage(data.message);
         setFormData({
           title: "",
+          description: "",
           image: "",
           slug: "",
           metaTitle: "",
           metaDescription: "",
           writer: "",
           content: "",
-          category: "",
-          subCategory: "",
-          isEditorPick: false,
         });
         setLoading(false);
       }
@@ -185,7 +143,6 @@ const AddBlog = () => {
       setLoading(false);
     }
   };
-
   return (
     <form onSubmit={handleFormData} encType='multipart/form-data'>
       {error && (
@@ -202,8 +159,7 @@ const AddBlog = () => {
             name='metaTitle'
             placeholder='Meta Title'
             className='border border-black placeholder:text-black'
-            required
-            value={formData.metaTitle || ""}
+            value={formData?.metaTitle || ""}
             onChange={handleChange}
           />
         </div>
@@ -215,8 +171,7 @@ const AddBlog = () => {
             name='metaDescription'
             placeholder='Meta Description'
             className='border border-black placeholder:text-black'
-            required
-            value={formData.metaDescription || ""}
+            value={formData?.metaDescription || ""}
             onChange={handleChange}
           />
         </div>
@@ -228,8 +183,7 @@ const AddBlog = () => {
             name='title'
             placeholder='Title'
             className='border border-black placeholder:text-black'
-            required
-            value={formData.title || ""}
+            value={formData?.title || ""}
             onChange={handleChange}
           />
         </div>
@@ -241,9 +195,8 @@ const AddBlog = () => {
             name='slug'
             placeholder='Slug'
             className='border border-black placeholder:text-black'
-            required
             readOnly
-            value={formData.slug || ""}
+            value={formData?.slug || ""}
           />
         </div>
         <div className='flex flex-col gap-2'>
@@ -254,69 +207,9 @@ const AddBlog = () => {
             name='writer'
             placeholder='Writer name'
             className='border border-black placeholder:text-black'
-            required
-            value={formData.writer || ""}
+            value={formData?.writer || ""}
             onChange={handleChange}
           />
-        </div>
-        <div className='flex items-center col-span-2 gap-4'>
-          <div className='flex flex-1 flex-col gap-2'>
-            <Label htmlFor='category'>Category</Label>
-            <Select
-              name='category'
-              value={formData.category}
-              onValueChange={handleChangeCategory}
-            >
-              <SelectTrigger className='w-full border border-black'>
-                <SelectValue placeholder='Select main category' />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectGroup>
-                  <SelectLabel>Main Categories</SelectLabel>
-                  {mainCategories.map((category: any) => (
-                    <SelectItem key={category?._id} value={category?._id}>
-                      {category?.name}
-                    </SelectItem>
-                  ))}
-                </SelectGroup>
-              </SelectContent>
-            </Select>
-          </div>
-          <div className='flex flex-1 flex-col gap-2'>
-            <Label htmlFor='category'>Sub Category</Label>
-            <Select
-              name='subCategory'
-              value={formData.subCategory}
-              onValueChange={(e) =>
-                setFormData({ ...formData, subCategory: e })
-              }
-            >
-              <SelectTrigger className='w-full border border-black'>
-                <SelectValue placeholder='Select sub category' />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectGroup>
-                  <SelectLabel>Sub Categories</SelectLabel>
-                  {subCategories.map((category: any) => (
-                    <SelectItem key={category?._id} value={category?._id}>
-                      {category?.name}
-                    </SelectItem>
-                  ))}
-                </SelectGroup>
-              </SelectContent>
-            </Select>
-          </div>
-        </div>
-        <div className='flex flex-row col-span-2 gap-2'>
-          <Checkbox
-            id='isEditorPick'
-            className='border border-black'
-            checked={formData.isEditorPick}
-            onCheckedChange={(checked) =>
-              setFormData({ ...formData, isEditorPick: checked === true })
-            }
-          />
-          <Label htmlFor='isEditorPick'>Mark as editor pick</Label>
         </div>
         <div className='flex flex-col col-span-2 gap-2'>
           <Label htmlFor='image'>Select image</Label>
@@ -326,14 +219,13 @@ const AddBlog = () => {
             name='image'
             className='border border-black placeholder:text-black'
             onChange={handleImageChange}
-            required
           />
         </div>
         <div className='flex flex-col col-span-2 gap-2'>
           <p className='text-sm font-semibold'>Write Content:</p>
           <Suspense fallback={<p>Loading editor...</p>}>
             <LazyJoditEditor
-              value={formData.content}
+              value={formData?.content}
               config={config}
               tabIndex={1}
               onBlur={handleContentChange}
@@ -347,11 +239,11 @@ const AddBlog = () => {
           type='submit'
           className='w-full py-3 px-4 bg-gradient-to-r from-[#FE4F70] to-[#FFA387] cursor-pointer text-white rounded-full text-sm'
         >
-          Create
+          Update Blog
         </button>
       </div>
     </form>
   );
 };
 
-export default AddBlog;
+export default EditBlogPost;

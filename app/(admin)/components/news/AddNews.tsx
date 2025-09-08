@@ -124,7 +124,6 @@ const AddNews = () => {
     }
   };
 
-  console.log(formData);
   return (
     <form onSubmit={handleFormData} encType='multipart/form-data'>
       {error && (
