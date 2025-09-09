@@ -15,31 +15,31 @@ const Ui = () => {
   const dashboardStatistics = [
     {
       title: "Users",
-      counts: data.users,
+      counts: data?.users || 0,
     },
     {
       title: "Blogs",
-      counts: data.blogs,
+      counts: data?.blogs || 0,
     },
     {
       title: "News",
-      counts: data.news,
+      counts: data?.news || 0,
     },
     {
       title: "Posts",
-      counts: data.posts,
+      counts: data?.posts || 0,
     },
     {
       title: "Categories",
-      counts: data.categories,
+      counts: data?.categories || 0,
     },
     {
       title: "SubCategories",
-      counts: data.subCategories,
+      counts: data?.subCategories || 0,
     },
     {
       title: "Comments",
-      counts: data.comments,
+      counts: data?.comments || 0,
     },
   ];
   const fetchData = async () => {
