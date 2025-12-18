@@ -1,3 +1,4 @@
+// app/(public)/components/home/Sidebar.tsx
 "use client";
 import React, { useEffect, useState } from "react";
 import Popular from "@/app/(public)/components/sidebar/Popular";
@@ -8,7 +9,7 @@ import Tags from "@/app/(public)/components/sidebar/Tags";
 
 const URL = {
   popular: "/api/v1/blog/get/popular-posts",
-  editors: "/api/v1/blog/get/editor-pick",
+  recent: "/api/v1/blog/get/get-recent",
   topics: "/api/v1/blog/get/topics",
 };
 
@@ -56,22 +57,22 @@ const Sidebar = () => {
             return;
           }
         }
-        const [popularRes, editorsPickRes, topicRes] = await Promise.all([
+        const [popularRes, recentRes, topicRes] = await Promise.all([
           fetchWithRetry(URL.popular),
-          fetchWithRetry(URL.editors),
+          fetchWithRetry(URL.recent),
           fetchWithRetry(URL.topics),
         ]);
 
         let data: any = {};
 
-        if (popularRes?.blog) {
-          setPopularBlogs(popularRes.blog);
-          data.popularBlogs = popularRes.blog;
+        if (popularRes?.posts) {
+          setPopularBlogs(popularRes.posts);
+          data.popularBlogs = popularRes.posts;
         }
-        if (editorsPickRes?.blog) {
-          setEditorsBlogs(editorsPickRes.blog);
-          data.editorsBlogs = editorsPickRes.blog;
-        }
+        if (recentRes?.posts) {
+  setEditorsBlogs(recentRes.posts);
+  data.editorsBlogs = recentRes.posts;
+}
         if (topicRes?.topics) {
           setTopics(topicRes.topics);
           data.topics = topicRes.topics;
@@ -93,7 +94,7 @@ const Sidebar = () => {
   }, []);
 
   return (
-    <aside className='flex md:w-[32%] flex-col gap-y-5'>
+    <aside className="flex md:w-[32%] flex-col gap-y-5">
       <Popular data={popularBlogs} loading={loading} />
       <Recent data={editorsBlogs} loading={loading} />
       <Topics data={topics} loading={loading} />

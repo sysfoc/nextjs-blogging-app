@@ -1,3 +1,4 @@
+// app/utils/env-config.ts
 const _config = {
   mongoDb: process.env.MONGODB_URI,
   dbName: process.env.DATABASE,

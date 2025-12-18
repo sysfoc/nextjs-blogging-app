@@ -16,7 +16,7 @@ const Footer = () => {
         <div className='flex items-center justify-between flex-wrap gap-x-6 gap-y-5 py-6'>
           <div>
             <Image
-              src='/logo.png'
+              src='/logo-no-background.png'
               alt='logo'
               width={80}
               height={50}

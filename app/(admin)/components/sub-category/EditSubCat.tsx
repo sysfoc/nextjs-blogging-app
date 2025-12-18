@@ -1,3 +1,4 @@
+// app/(admin)/components/sub-category/EditSubCat.tsx
 "use client";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -19,12 +20,13 @@ const EditSubCat = () => {
   const [errorMessage, setErrorMessage] = React.useState("");
   const [mainCategories, setMainCategories] = React.useState([]);
   const [formData, setFormData] = React.useState({
-    _id: "",
     name: "",
-    metaTitle: "",
-    metaDescription: "",
-    h1Title: "",
-    category: "",
+    metatitle: "",
+    metadesc: "",
+    h1: "",
+    canonical: "",
+    image: "",
+    main_category_id: "",
   });
   const router = useRouter();
   const params = useParams();
@@ -39,12 +41,23 @@ const EditSubCat = () => {
         }
       );
       const data = await res.json();
-      setFormData(data.subCategory);
+      const subCat = data.subCategory;
+      
+      setFormData({
+        name: subCat.name || "",
+        metatitle: subCat.metatitle || "",
+        metadesc: subCat.metadesc || "",
+        h1: subCat.h1 || "",
+        canonical: subCat.canonical || "",
+        image: subCat.image || "",
+        main_category_id: subCat.main_category_id?._id || subCat.main_category_id || "",
+      });
     } catch (error) {
       setError(true);
       setErrorMessage("Something went wrong");
     }
   };
+
   const getCategories = async () => {
     try {
       const res = await fetch("/api/v1/category/get-all", {
@@ -58,18 +71,21 @@ const EditSubCat = () => {
       setErrorMessage("Something went wrong");
     }
   };
+
   useEffect(() => {
     getSubCategoryById();
     getCategories();
   }, []);
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
+
   const handleFormData = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
     try {
-      const res = await fetch(`/api/v1/sub-category/update/${formData._id}`, {
+      const res = await fetch(`/api/v1/sub-category/update/${params.id}`, {
         method: "PATCH",
         credentials: "include",
         headers: {
@@ -102,11 +118,11 @@ const EditSubCat = () => {
       )}
       <div className='grid grid-cols-1 gap-4'>
         <div className='flex flex-col gap-2'>
-          <Label htmlFor='category'>Category</Label>
+          <Label htmlFor='main_category_id'>Category</Label>
           <Select
-            name='category'
-            value={formData.category}
-            onValueChange={(e) => setFormData({ ...formData, category: e })}
+            name='main_category_id'
+            value={formData.main_category_id}
+            onValueChange={(e) => setFormData({ ...formData, main_category_id: e })}
           >
             <SelectTrigger className='w-full border border-black'>
               <SelectValue placeholder='Select main category' />
@@ -138,44 +154,67 @@ const EditSubCat = () => {
           />
         </div>
         <div className='flex flex-col gap-2'>
-          <Label htmlFor='metaTitle'>Meta Title</Label>
+          <Label htmlFor='metatitle'>Meta Title</Label>
           <Input
             type='text'
-            id='metaTitle'
-            name='metaTitle'
+            id='metatitle'
+            name='metatitle'
             placeholder='Enter Meta Title'
             className='border border-black placeholder:text-black'
-            required
             autoComplete='off'
-            value={formData.metaTitle}
+            value={formData.metatitle}
             onChange={handleChange}
           />
         </div>
         <div className='flex flex-col gap-2'>
-          <Label htmlFor='metaDescription'>Meta Description</Label>
+          <Label htmlFor='metadesc'>Meta Description</Label>
           <Input
             type='text'
-            id='metaDescription'
-            name='metaDescription'
+            id='metadesc'
+            name='metadesc'
             placeholder='Enter Meta Description'
             className='border border-black placeholder:text-black'
-            required
             autoComplete='off'
-            value={formData.metaDescription}
+            value={formData.metadesc}
             onChange={handleChange}
           />
         </div>
         <div className='flex flex-col gap-2'>
-          <Label htmlFor='h1Title'>H1 Title</Label>
+          <Label htmlFor='h1'>H1 Title</Label>
           <Input
             type='text'
-            id='h1Title'
-            name='h1Title'
+            id='h1'
+            name='h1'
             placeholder='Enter H1 Title'
             className='border border-black placeholder:text-black'
-            required
             autoComplete='off'
-            value={formData.h1Title}
+            value={formData.h1}
+            onChange={handleChange}
+          />
+        </div>
+        <div className='flex flex-col gap-2'>
+          <Label htmlFor='canonical'>Canonical URL</Label>
+          <Input
+            type='text'
+            id='canonical'
+            name='canonical'
+            placeholder='Enter Canonical URL'
+            className='border border-black placeholder:text-black'
+            autoComplete='off'
+            value={formData.canonical}
+            onChange={handleChange}
+          />
+        </div>
+        <div className='flex flex-col gap-2'>
+          <Label htmlFor='image'>Image URL</Label>
+          <Input
+            type='text'
+            id='image'
+            name='image'
+            placeholder='Enter Image URL'
+            className='border border-black placeholder:text-black'
+            autoComplete='off'
+            value={formData.image}
             onChange={handleChange}
           />
         </div>

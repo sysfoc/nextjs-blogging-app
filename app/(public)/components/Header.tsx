@@ -1,3 +1,5 @@
+// app/(public)/components/Header.tsx
+"use client"
 import Image from "next/image";
 import React from "react";
 import Navlinks from "@/app/(public)/components/navbar/Navlinks";
@@ -41,10 +43,10 @@ const Header = () => {
       <div className='flex items-center justify-between mx-4 md:mx-12 py-3'>
         <div className='flex items-center gap-x-3'>
           <Image
-            src='/logo.png'
+            src='/logo-no-background.png'
             alt='logo'
-            width={80}
-            height={50}
+            width={50}
+            height={30}
             className='size-auto'
             fetchPriority='high'
             priority

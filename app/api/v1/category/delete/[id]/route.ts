@@ -1,35 +1,41 @@
-import Blog from "@/app/model/Blog.model";
-import Category from "@/app/model/Category.model";
+// app/api/v1/category/delete/[id]/route.ts
+import MainCategory from "@/app/model/MainCategory.model";
 import SubCategory from "@/app/model/SubCategory.model";
 import { connectToDatabase } from "@/app/utils/db";
-import { unlink } from "fs/promises";
 import { NextResponse } from "next/server";
-import path from "path";
 
-export async function DELETE(req: Request, context: any) {
-  const { id } = context.params;
-  connectToDatabase();
+export async function DELETE(
+  request: Request,
+  { params }: { params: Promise<{ id: string }> }
+) {
   try {
-    const blogs = await Blog.find({ category: id });
-    for (const blog of blogs) {
-      if (blog.image) {
-        const imagePath = path.join(process.cwd(), "public", blog.image);
-        try {
-          await unlink(imagePath);
-          console.log(`Deleted file: ${imagePath}`);
-        } catch (err: any) {
-          console.warn(`Failed to delete image: ${imagePath}`, err.message);
-        }
-      }
+    await connectToDatabase();
+    const { id } = await params;
+    
+    // Check if category exists
+    const category = await MainCategory.findById(id);
+    if (!category) {
+      return NextResponse.json(
+        { message: "Category not found" },
+        { status: 404 }
+      );
     }
-    await Category.findByIdAndDelete(id);
-    await SubCategory.deleteMany({ category: id });
-    await Blog.deleteMany({ category: id });
+    
+    // Delete all subcategories associated with this main category
+    await SubCategory.deleteMany({ main_category_id: id });
+    
+    // Delete the main category
+    await MainCategory.findByIdAndDelete(id);
+    
     return NextResponse.json(
-      { message: "Category deleted successfully" },
+      { message: "Category and associated subcategories deleted successfully" },
       { status: 200 }
     );
   } catch (error: any) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    console.error("Delete category error:", error);
+    return NextResponse.json(
+      { error: error.message || "Failed to delete category" },
+      { status: 500 }
+    );
   }
 }

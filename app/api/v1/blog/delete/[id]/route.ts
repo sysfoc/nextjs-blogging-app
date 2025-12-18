@@ -1,3 +1,5 @@
+
+// app/api/v1/blog/delete/[id]/route.ts
 import { NextResponse } from "next/server";
 import path from "path";
 import { unlink } from "fs/promises";
@@ -6,16 +8,17 @@ import { connectToDatabase } from "@/app/utils/db";
 
 export async function DELETE(
   req: Request,
-  context: any
+  context: { params: Promise<{ id: string }> }
 ) {
   await connectToDatabase();
-  const { id } = context.params;
+  const { id } = await context.params;
 
   try {
-    const blog = await Blog.findById(id);
+    const blog = await Blog.findOne({ id });
     if (!blog) {
       return NextResponse.json({ message: "Blog not found" }, { status: 404 });
     }
+    
     if (blog.image) {
       const imagePath = path.join(process.cwd(), "public", blog.image);
       try {
@@ -25,7 +28,8 @@ export async function DELETE(
         console.warn(`Failed to delete image: ${imagePath}`, err.message);
       }
     }
-    await Blog.findByIdAndDelete(id);
+    
+    await Blog.deleteOne({ id });
 
     return NextResponse.json(
       { message: "Blog and associated image deleted successfully" },

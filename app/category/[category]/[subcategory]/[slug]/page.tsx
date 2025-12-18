@@ -14,7 +14,7 @@ const getBlogData = cache(async (slug: string) => {
   return fetch(
     `${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/blog/get-by-slug/${slug}`,
     {
-      next: { revalidate: 3600 },
+      next: { revalidate: 0 },
       headers: {
         Cookie: cookieStore.toString(),
       },
@@ -24,10 +24,12 @@ const getBlogData = cache(async (slug: string) => {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
+  console.log(slug)
   const data = await getBlogData(slug);
+  console.log("here is data",data)
   return {
-    title: data?.blog?.metaTitle || "Slug does not exist",
-    description: data?.blog?.metaDescription || "Slug does not exist",
+    title: data?.blog?.metatitle || "Slug does not exist",
+    description: data?.blog?.metadesc || "Slug does not exist",
   };
 }
 

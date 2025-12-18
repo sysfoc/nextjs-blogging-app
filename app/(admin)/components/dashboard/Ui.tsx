@@ -1,3 +1,4 @@
+// app/(admin)/components/dashboard/Ui.tsx
 "use client";
 import React, { useEffect } from "react";
 
@@ -7,6 +8,7 @@ const Ui = () => {
     blogs: 0,
     news: 0,
     posts: 0,
+    generalBlogs: 0,
     categories: 0,
     subCategories: 0,
     comments: 0,
@@ -22,11 +24,15 @@ const Ui = () => {
       counts: data?.blogs || 0,
     },
     {
-      title: "News",
+      title: "News-Blogs",
       counts: data?.news || 0,
     },
     {
-      title: "Posts",
+      title: "General-Blogs",
+      counts: data?.generalBlogs || 0,
+    },
+    {
+      title: "Celebrity-Posts",
       counts: data?.posts || 0,
     },
     {

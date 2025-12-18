@@ -1,3 +1,4 @@
+// app/(public)/components/home/HeroSection.tsx
 "use client";
 import Image from "next/image";
 import Link from "next/link";
@@ -29,7 +30,7 @@ const HeroSection = ({ data: blogs, loading }: Props) => {
             className='relative w-full h-[400px] md:h-[500px] overflow-hidden rounded-xl group'
           >
             <Image
-              src={blog?.image}
+              src={`/posts/images/${blog?.image}`}
               alt={`${blog?.title}-img`}
               fill
               className='object-cover rounded-xl group-hover:scale-105 transition-all duration-500 ease-in-out'
@@ -47,15 +48,17 @@ const HeroSection = ({ data: blogs, loading }: Props) => {
                 <h1 className='font-bold text-2xl'>{blog?.title}</h1>
               </Link>
               <div className='flex items-center gap-x-5'>
-                <p className='text-sm'>{blog?.blogWriter}</p>
+                <p className='text-sm'>{blog?.uploaded_by}</p>
                 <div className='w-1 h-1 rounded-full bg-white' />
-                <p className='text-sm'>
-                  {new Date(blog?.createdAt).toLocaleDateString("en-US", {
-                    day: "numeric",
-                    month: "long",
-                    year: "numeric",
-                  })}
-                </p>
+                <p className="text-sm">
+                    {new Date(
+                      blog?.created_at.replace(" ", "T")
+                    ).toLocaleDateString("en-US", {
+                      year: "numeric",
+                      month: "long",
+                      day: "numeric",
+                    })}
+                  </p>
               </div>
             </div>
           </div>

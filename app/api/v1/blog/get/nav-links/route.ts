@@ -1,6 +1,7 @@
+// app/api/v1/blog/get/nav-links/route.ts
 import { NextResponse } from "next/server";
 import { connectToDatabase } from "@/app/utils/db";
-import Category from "@/app/model/Category.model";
+import Category from "@/app/model/MainCategory.model";
 import SubCategory from "@/app/model/SubCategory.model";
 
 export async function GET() {
@@ -11,7 +12,7 @@ export async function GET() {
     const result = await Promise.all(
       categories.map(async (cat) => {
         const subcategories = await SubCategory.find(
-          { category: cat._id },
+          { main_category_id: cat._id },
           "name slug"
         ).lean();
 

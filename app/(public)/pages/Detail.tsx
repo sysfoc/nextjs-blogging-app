@@ -14,7 +14,7 @@ const Detail = ({blog}: Props) => {
       <section className='mx-4 md:mx-12 my-8 flex flex-wrap md:flex-nowrap justify-between gap-x-6 gap-y-5'>
         <div className='w-full md:w-[68%]'>
           <DetailContent blogDetail={blog?.content} />
-          <CommentSection blogId={blog?._id} />
+          <CommentSection postId={blog?._id} />
         </div>
         <Sidebar />
       </section>

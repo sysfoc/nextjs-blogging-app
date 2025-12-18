@@ -1,40 +1,94 @@
+// app/(admin)/components/blog-posts/EditBlogPost.tsx
 "use client";
 import dynamic from "next/dynamic";
 import React, { Suspense, useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { useParams, useRouter } from "next/navigation";
+import Image from "next/image";
+
 const LazyJoditEditor = dynamic(() => import("jodit-react"), { ssr: false });
+
+interface FormData {
+  title: string;
+  description: string;
+  image: File | string;
+  slug: string;
+  metatitle: string;
+  metadesc: string;
+  author: string;
+  type: string;
+  status: string;
+}
 
 const EditBlogPost = () => {
   const [loading, setLoading] = useState(false);
+  const [fetchLoading, setFetchLoading] = useState(true);
   const [error, setError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const router = useRouter();
   const params = useParams();
-  const [formData, setFormData] = useState({
+  
+  const [formData, setFormData] = useState<FormData>({
     title: "",
     description: "",
     image: "",
     slug: "",
-    metaTitle: "",
-    metaDescription: "",
-    writer: "",
-    content: "",
+    metatitle: "",
+    metadesc: "",
+    author: "",
+    type: "1",
+    status: "draft",
   });
+  
+  const [currentImage, setCurrentImage] = useState<string>("");
+
   const getBlogById = async () => {
-    setLoading(true);
-    const res = await fetch(`/api/v1/blog-posts/get-single-post/${params.id}`, {
-      method: "GET",
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-    const data = await res.json();
-    setLoading(false);
-    setFormData(data.blog);
+    setFetchLoading(true);
+    try {
+      const res = await fetch(`/api/v1/blog/get-single-blog/${params.id}`, {
+        method: "GET",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      
+      if (!res.ok) {
+        throw new Error("Failed to fetch blog");
+      }
+
+      const data = await res.json();
+      const blog = data.blog;
+
+      setFormData({
+        title: blog.title || "",
+        description: blog.description || "",
+        image: blog.image || "",
+        slug: blog.slug || "",
+        metatitle: blog.metatitle || "",
+        metadesc: blog.metadesc || "",
+        author: blog.author || "",
+        type: blog.type || "1",
+        status: blog.status || "draft",
+      });
+      
+      setCurrentImage(blog.image || "");
+    } catch (error: any) {
+      setError(true);
+      setErrorMessage(error.message || "Failed to load blog");
+    } finally {
+      setFetchLoading(false);
+    }
   };
+
   useEffect(() => {
     getBlogById();
   }, []);
@@ -48,7 +102,6 @@ const EditBlogPost = () => {
     askBeforePasteHTML: false,
     askBeforePasteFromWord: false,
     processPasteHTML: true,
-
     events: {
       paste: (event: any) => {
         console.log("Paste event triggered");
@@ -59,19 +112,22 @@ const EditBlogPost = () => {
       },
     } as any,
   };
+
   const handleContentChange = (newContent: string) => {
     setFormData((prev) => ({
       ...prev,
-      content: newContent,
+      description: newContent,
     }));
   };
+
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0] || null;
-
-    setFormData((prev: any) => ({
-      ...prev,
-      image: file,
-    }));
+    if (file) {
+      setFormData((prev) => ({
+        ...prev,
+        image: file,
+      }));
+    }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -93,139 +149,206 @@ const EditBlogPost = () => {
       return updated;
     });
   };
+
+  const handleTypeChange = (value: string) => {
+    setFormData((prev) => ({
+      ...prev,
+      type: value,
+    }));
+  };
+
+  const handleStatusChange = (value: string) => {
+    setFormData((prev) => ({
+      ...prev,
+      status: value,
+    }));
+  };
+
   const handleFormData = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
+    setError(false);
+    setErrorMessage("");
+
     try {
       const form = new FormData();
+      form.append("title", formData.title);
+      form.append("description", formData.description);
+      form.append("metatitle", formData.metatitle);
+      form.append("metadesc", formData.metadesc);
+      form.append("slug", formData.slug);
+      form.append("author", formData.author);
+      form.append("type", formData.type);
+      form.append("status", formData.status);
 
-      Object.entries(formData).forEach(([key, value]) => {
-        form.append(key, value as any);
-      });
+      if (formData.image instanceof File) {
+        form.append("image", formData.image);
+      }
 
-      const res = await fetch(`/api/v1/blog-posts/update/${params.id}`, {
+      const res = await fetch(`/api/v1/blog/update/${params.id}`, {
         method: "PATCH",
         body: form,
       });
 
       const data = await res.json();
-      setLoading(false);
+
       if (res.ok) {
         router.push("/admin/blog-posts");
-        setFormData({
-          title: "",
-          description: "",
-          image: "",
-          slug: "",
-          metaTitle: "",
-          metaDescription: "",
-          writer: "",
-          content: "",
-        });
       } else {
         setError(true);
-        setErrorMessage(data.message);
-        setFormData({
-          title: "",
-          description: "",
-          image: "",
-          slug: "",
-          metaTitle: "",
-          metaDescription: "",
-          writer: "",
-          content: "",
-        });
-        setLoading(false);
+        setErrorMessage(data.message || "Failed to update blog");
       }
     } catch (error: any) {
       setError(true);
-      setErrorMessage(error.message);
+      setErrorMessage(error.message || "An error occurred");
+    } finally {
       setLoading(false);
     }
   };
+
+  if (fetchLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-[400px]">
+        <p className="text-lg">Loading blog data...</p>
+      </div>
+    );
+  }
+
   return (
-    <form onSubmit={handleFormData} encType='multipart/form-data'>
+    <form onSubmit={handleFormData} encType="multipart/form-data">
       {error && (
-        <div className='mb-3 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative'>
-          <span className='block sm:inline text-sm'>{errorMessage}</span>
+        <div className="mb-4 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative">
+          <span className="block sm:inline text-sm">{errorMessage}</span>
         </div>
       )}
-      <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
-        <div className='flex flex-col gap-2'>
-          <Label htmlFor='metaTitle'>Meta Title</Label>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="flex flex-col gap-2">
+          <Label htmlFor="metatitle">Meta Title</Label>
           <Input
-            type='text'
-            id='metaTitle'
-            name='metaTitle'
-            placeholder='Meta Title'
-            className='border border-black placeholder:text-black'
-            value={formData?.metaTitle || ""}
+            type="text"
+            id="metatitle"
+            name="metatitle"
+            placeholder="Meta Title"
+            className="border border-black placeholder:text-black"
+            required
+            value={formData.metatitle}
             onChange={handleChange}
           />
         </div>
-        <div className='flex flex-col gap-2'>
-          <Label htmlFor='metaDescription'>Meta Description</Label>
+
+        <div className="flex flex-col gap-2">
+          <Label htmlFor="metadesc">Meta Description</Label>
           <Input
-            type='text'
-            id='metaDescription'
-            name='metaDescription'
-            placeholder='Meta Description'
-            className='border border-black placeholder:text-black'
-            value={formData?.metaDescription || ""}
+            type="text"
+            id="metadesc"
+            name="metadesc"
+            placeholder="Meta Description"
+            className="border border-black placeholder:text-black"
+            required
+            value={formData.metadesc}
             onChange={handleChange}
           />
         </div>
-        <div className='flex flex-col gap-2'>
-          <Label htmlFor='title'>Title</Label>
+
+        <div className="flex flex-col gap-2">
+          <Label htmlFor="title">Title</Label>
           <Input
-            type='text'
-            id='title'
-            name='title'
-            placeholder='Title'
-            className='border border-black placeholder:text-black'
-            value={formData?.title || ""}
+            type="text"
+            id="title"
+            name="title"
+            placeholder="Blog Title"
+            className="border border-black placeholder:text-black"
+            required
+            value={formData.title}
             onChange={handleChange}
           />
         </div>
-        <div className='flex flex-col gap-2'>
-          <Label htmlFor='slug'>Slug</Label>
+
+        <div className="flex flex-col gap-2">
+          <Label htmlFor="slug">Slug</Label>
           <Input
-            type='text'
-            id='slug'
-            name='slug'
-            placeholder='Slug'
-            className='border border-black placeholder:text-black'
+            type="text"
+            id="slug"
+            name="slug"
+            placeholder="Slug (auto-generated)"
+            className="border border-black placeholder:text-black bg-gray-50"
+            required
             readOnly
-            value={formData?.slug || ""}
+            value={formData.slug}
           />
         </div>
-        <div className='flex flex-col gap-2'>
-          <Label htmlFor='writer'>Writer</Label>
+
+        <div className="flex flex-col gap-2">
+          <Label htmlFor="author">Author</Label>
           <Input
-            type='text'
-            id='writer'
-            name='writer'
-            placeholder='Writer name'
-            className='border border-black placeholder:text-black'
-            value={formData?.writer || ""}
+            type="text"
+            id="author"
+            name="author"
+            placeholder="Author name"
+            className="border border-black placeholder:text-black"
+            required
+            value={formData.author}
             onChange={handleChange}
           />
         </div>
-        <div className='flex flex-col col-span-2 gap-2'>
-          <Label htmlFor='image'>Select image</Label>
+
+        <div className="flex flex-col gap-2">
+          <Label htmlFor="type">Blog Type</Label>
+          <Select value={formData.type} onValueChange={handleTypeChange}>
+            <SelectTrigger className="border border-black">
+              <SelectValue placeholder="Select blog type" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="1">General Blog</SelectItem>
+              <SelectItem value="0">News Blog</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+
+        <div className="flex flex-col gap-2">
+          <Label htmlFor="status">Status</Label>
+          <Select value={formData.status} onValueChange={handleStatusChange}>
+            <SelectTrigger className="border border-black">
+              <SelectValue placeholder="Select status" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="draft">Draft</SelectItem>
+              <SelectItem value="published">Published</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+
+        <div className="flex flex-col gap-2">
+          <Label htmlFor="image">Featured Image</Label>
           <Input
-            type='file'
-            id='image'
-            name='image'
-            className='border border-black placeholder:text-black'
+            type="file"
+            id="image"
+            name="image"
+            accept="image/*"
+            className="border border-black placeholder:text-black"
             onChange={handleImageChange}
           />
+          <p className="text-xs text-gray-700">(Leave it as it is to keep current image)</p>
+          {/* {currentImage && (
+            <div className="mt-2">
+              <p className="text-sm text-gray-600 mb-2">Current Image:</p>
+              <Image
+                src={currentImage}
+                alt="Current blog image"
+                width={150}
+                height={150}
+                className="rounded border object-cover"
+              />
+            </div>
+          )} */}
         </div>
-        <div className='flex flex-col col-span-2 gap-2'>
-          <p className='text-sm font-semibold'>Write Content:</p>
+
+        <div className="flex flex-col col-span-2 gap-2">
+          <Label>Blog Content</Label>
           <Suspense fallback={<p>Loading editor...</p>}>
             <LazyJoditEditor
-              value={formData?.content}
+              value={formData.description}
               config={config}
               tabIndex={1}
               onBlur={handleContentChange}
@@ -233,13 +356,14 @@ const EditBlogPost = () => {
           </Suspense>
         </div>
       </div>
-      <div className='mt-6'>
+
+      <div className="mt-6">
         <button
           disabled={loading}
-          type='submit'
-          className='w-full py-3 px-4 bg-gradient-to-r from-[#FE4F70] to-[#FFA387] cursor-pointer text-white rounded-full text-sm'
+          type="submit"
+          className="w-full py-3 px-4 bg-gradient-to-r from-[#FE4F70] to-[#FFA387] cursor-pointer text-white rounded-full text-sm font-medium hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          Update Blog
+          {loading ? "Updating..." : "Update Blog Post"}
         </button>
       </div>
     </form>

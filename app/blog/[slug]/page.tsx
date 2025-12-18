@@ -12,9 +12,9 @@ type Props = {
 const getBlogData = cache(async (slug: string) => {
   const cookieStore = await cookies();
   return fetch(
-    `${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/blog-posts/get-by-slug/${slug}`,
+    `${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/blog/by-slug/${slug}`,
     {
-      next: { revalidate: 3600 },
+      next: { revalidate: 0 },
       headers: {
         Cookie: cookieStore.toString(),
       },
@@ -25,9 +25,10 @@ const getBlogData = cache(async (slug: string) => {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const data = await getBlogData(slug);
+  console.log(data)
   return {
-    title: data?.blogs?.metaTitle || "Slug does not exist",
-    description: data?.blogs?.metaDescription || "Slug does not exist",
+    title: data?.blog?.metatitle || "Slug does not exist",
+    description: data?.blog?.metadesc || "Slug does not exist",
   };
 }
 
@@ -35,6 +36,6 @@ export default async function DetailPage({ params }: Props) {
   const { slug } = await params;
   const data = await getBlogData(slug);
   return (
-    <main>{data ? <Detail blogs={data.blogs} /> : <p>Blogs not found</p>}</main>
+    <main>{data ? <Detail blogs={data.blog} /> : <p>Blogs not found</p>}</main>
   );
 }

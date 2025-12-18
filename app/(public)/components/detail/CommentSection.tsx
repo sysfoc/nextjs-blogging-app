@@ -4,9 +4,10 @@ import { Textarea } from "@/components/ui/textarea";
 import React from "react";
 
 interface CommentSectionProps {
-  blogId: string;
+  postId: string; // Changed from blogId to postId
 }
-const CommentSection = ({ blogId }: CommentSectionProps) => {
+
+const CommentSection = ({ postId }: CommentSectionProps) => {
   const [loading, setLoading] = React.useState(false);
   const [comments, setComments] = React.useState([]);
   const [formData, setFormData] = React.useState({
@@ -16,24 +17,25 @@ const CommentSection = ({ blogId }: CommentSectionProps) => {
   });
 
   const getComments = async () => {
-    if (!blogId) return;
+    if (!postId) return;
     try {
       setLoading(true);
-      const res = await fetch(`/api/v1/comment/get/${blogId}`);
+      const res = await fetch(`/api/v1/comment/get/${postId}`);
       const data = await res.json();
-      setComments(data.comment);
+      setComments(data.comment || []);
     } catch (error) {
-      console.error(error);
+      console.error("Error fetching comments:", error);
     } finally {
       setLoading(false);
     }
   };
 
   React.useEffect(() => {
-    if (blogId) {
+    if (postId) {
       getComments();
     }
-  }, [blogId]);
+  }, [postId]);
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
       ...formData,
@@ -44,6 +46,7 @@ const CommentSection = ({ blogId }: CommentSectionProps) => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
+    
     try {
       const res = await fetch("/api/v1/comment/add", {
         method: "POST",
@@ -51,12 +54,12 @@ const CommentSection = ({ blogId }: CommentSectionProps) => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ ...formData, blogId }),
+        body: JSON.stringify({ ...formData, postId }), // Changed blogId to postId
       });
-      await res.json();
-      setLoading(false);
+      
+      const data = await res.json();
+      
       if (res.ok) {
-        setLoading(false);
         setFormData({
           name: "",
           email: "",
@@ -64,14 +67,16 @@ const CommentSection = ({ blogId }: CommentSectionProps) => {
         });
         getComments();
       } else {
-        alert("Something went wrong");
-        setLoading(false);
+        alert(data.message || "Something went wrong");
       }
     } catch (error) {
+      console.error("Error submitting comment:", error);
       alert("Something went wrong");
+    } finally {
       setLoading(false);
     }
   };
+
   return (
     <section className='mt-12'>
       <div className='my-4'>
@@ -140,9 +145,9 @@ const CommentSection = ({ blogId }: CommentSectionProps) => {
           <button
             disabled={loading}
             type='submit'
-            className='cursor-pointer w-fit py-3 px-4 bg-gradient-to-r from-[#FE4F70] to-[#FFA387] text-white rounded-full text-sm'
+            className='cursor-pointer w-fit py-3 px-4 bg-gradient-to-r from-[#FE4F70] to-[#FFA387] text-white rounded-full text-sm disabled:opacity-50'
           >
-            Post Comment
+            {loading ? "Posting..." : "Post Comment"}
           </button>
         </div>
       </form>
@@ -167,7 +172,9 @@ const CommentSection = ({ blogId }: CommentSectionProps) => {
           </svg>
         </div>
         <div className='mt-4 flex flex-col gap-y-4'>
-          {comments?.length > 0 ? (
+          {loading && !comments.length ? (
+            <p className='text-sm text-gray-500'>Loading comments...</p>
+          ) : comments?.length > 0 ? (
             comments.map((comment: any) => (
               <div
                 key={comment._id}
@@ -185,7 +192,7 @@ const CommentSection = ({ blogId }: CommentSectionProps) => {
                     )
                   </span>
                 </div>
-                <p className='text-sm'>{comment.comment}</p>
+                <p className='text-sm mt-2'>{comment.comment}</p>
               </div>
             ))
           ) : (

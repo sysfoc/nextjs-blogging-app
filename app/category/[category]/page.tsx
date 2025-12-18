@@ -1,3 +1,4 @@
+// app/category/[category]/page.tsx
 import { cache } from "react";
 import Category from "@/app/(public)/pages/Category";
 import { Metadata } from "next";
@@ -10,9 +11,9 @@ type Props = {
 
 const getCategoryData = cache(async (category: string) => {
   return fetch(
-    `${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/category/get-by-category/${category}`,
+   `${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/category/get-by-category/${category}`,
     {
-      next: { revalidate: 3600 },
+      next: { revalidate: 0 },
     }
   ).then((res) => (res.ok ? res.json() : null));
 });
@@ -26,6 +27,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 export default async function CategoryPage({ params }: Props) {
   const { category } = await params;
+  console.log("this is the category", category)
   const data = await getCategoryData(category);
   return (
     <main>

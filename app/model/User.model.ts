@@ -1,38 +1,29 @@
-import mongoose, { Schema, Document } from "mongoose";
+// app/model/User.model.ts
+import { Schema, model, models, Document } from "mongoose";
 
-interface IUser extends Document {
+export interface IUser extends Document {
+  user_id: string;
   name: string;
   email: string;
+  email_verified_at?: Date | null;
   password: string;
-  isEmployee: boolean;
+  remember_token?: string | null;
+  image?: string | null;
+  role: string | null;
 }
 
-const userSchema = new Schema<IUser>(
+const UserSchema = new Schema<IUser>(
   {
-    name: {
-      type: String,
-      trim: true,
-      minlength: 3,
-    },
-    email: {
-      type: String,
-      trim: true,
-      unique: true,
-      lowercase: true,
-    },
-    password: {
-      type: String,
-      required: true,
-      trim: true,
-      minlength: 8,
-    },
-    isEmployee: {
-      type: Boolean,
-      default: true,
-    },
+    user_id: { type: String, unique: true },
+    name: { type: String, required: true, trim: true },
+    email: { type: String, required: true, unique: true, lowercase: true, trim: true },
+    email_verified_at: { type: Date, default: null },
+    password: { type: String, required: true },
+    remember_token: { type: String, default: null },
+    image: { type: String, default: null },
+    role: { type: String, default: "user" },
   },
   { timestamps: true }
 );
 
-const User = mongoose.models.User || mongoose.model<IUser>("User", userSchema);
-export default User;
+export default models.User || model<IUser>("User", UserSchema);

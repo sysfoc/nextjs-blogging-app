@@ -8,7 +8,7 @@ const HeroSection = ({ news }: Props) => {
   return (
     <div
       className='relative w-full min-h-screen bg-fixed bg-center bg-cover'
-      style={{ backgroundImage: `url(${news?.image})` }}
+      style={{ backgroundImage: `url(/posts/images/${news?.image})` }}
     >
       <div className='absolute inset-0 bg-black/50' />
       <div className='absolute inset-0 w-full md:w-[70%] flex flex-col gap-y-5 justify-end p-5 md:p-16 text-white'>
@@ -28,13 +28,15 @@ const HeroSection = ({ news }: Props) => {
         <div className='flex items-center gap-x-5'>
           <p className='text-sm'>{news?.blogWriter}</p>
           <div className='w-1 h-1 rounded-full bg-white' />
-          <p className='text-sm'>
-            {new Date(news?.createdAt).toLocaleDateString("en-US", {
-              day: "numeric",
-              month: "long",
-              year: "numeric",
-            })}
-          </p>
+          <p className="text-sm">
+                    {new Date(
+                      news?.created_at.replace(" ", "T")
+                    ).toLocaleDateString("en-US", {
+                      year: "numeric",
+                      month: "long",
+                      day: "numeric",
+                    })}
+                  </p>
           <div className='w-1 h-1 rounded-full bg-white' />
           <p className='text-sm'>
             {news?.postViews} {news?.postViews > 1 ? "views" : "view"}

@@ -1,3 +1,4 @@
+// app/(public)/pages/SubCategory.tsx
 "use client";
 import React, { useEffect } from "react";
 import HeroSection from "@/app/(public)/components/subcategory/HeroSection";
@@ -15,7 +16,7 @@ const SubCategory = ({ subCategoryInfo }: Props) => {
   const fetchBlogs = async () => {
     try {
       const blogRes = await fetch(
-        `/api/v1/blog/get-by-subcategory/${subCategoryInfo._id}`,
+        `/api/v1/blog/get-by-subcategory/${subCategoryInfo.id}`,
         { method: "GET", credentials: "include" }
       );
       if (!blogRes.ok) throw new Error("Failed to load blogs");
@@ -35,9 +36,13 @@ const SubCategory = ({ subCategoryInfo }: Props) => {
         parentCategory={params.category as string}
         categoryInfo={subCategoryInfo}
       />
-      <section className='mx-4 md:mx-12 my-8 flex flex-wrap md:flex-nowrap justify-between gap-x-6 gap-y-5'>
-        <div className='w-full md:w-[68%]'>
-          <SubCatPosts blogs={blogs} />
+      <section className="mx-4 md:mx-12 my-8 flex flex-wrap md:flex-nowrap justify-between gap-x-6 gap-y-5">
+        <div className="w-full md:w-[68%]">
+          <SubCatPosts
+            blogs={blogs}
+            categorySlug={subCategoryInfo?.main_category_id?.slug}
+            subCategorySlug={subCategoryInfo?.slug}
+          />
         </div>
         <Sidebar />
       </section>

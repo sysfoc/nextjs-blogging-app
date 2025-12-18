@@ -1,3 +1,4 @@
+// app/(public)/components/sidebar/Topics.tsx
 import Link from "next/link";
 import { FaFireFlameCurved } from "react-icons/fa6";
 import { IoIosArrowForward } from "react-icons/io";
@@ -48,7 +49,7 @@ const Topics = ({ data: topics, loading }: Props) => {
             ))}
           </div>
         ) : (
-          topics?.map((topic: any, index: number) => (
+          topics?.slice(0, 12).map((topic: any, index: number) => (
             <Link
               href={`/category/${topic?.parentCategorySlug}/${topic?.subCategorySlug}`}
               key={index}

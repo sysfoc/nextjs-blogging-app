@@ -11,11 +11,12 @@ const EditUser = () => {
   const params = useParams();
   const router = useRouter();
   const [formData, setFormData] = React.useState({
-    _id: "",
+    user_id: "",
     name: "",
     email: "",
     password: "",
   });
+  const [isDataLoaded, setIsDataLoaded] = React.useState(false);
   const getUserById = async () => {
     try {
       const res = await fetch(`/api/v1/user/get-single-user/${params.id}`, {
@@ -23,7 +24,13 @@ const EditUser = () => {
         credentials: "include",
       });
       const data = await res.json();
-      setFormData(data.user);
+      setFormData({
+        user_id: data.user.user_id || "",
+        name: data.user.name || "",
+        email: data.user.email || "",
+        password: "",
+      });
+      setIsDataLoaded(true);
     } catch (error) {
       setError(true);
       setErrorMessage("Something went wrong");
@@ -40,13 +47,22 @@ const EditUser = () => {
     e.preventDefault();
     setLoading(true);
     try {
-      const res = await fetch(`/api/v1/user/update/${formData._id}`, {
+      const payload: any = {
+        name: formData.name,
+        email: formData.email,
+      };
+      
+      if (formData.password && formData.password.trim() !== "") {
+        payload.password = formData.password;
+      }
+      
+      const res = await fetch(`/api/v1/user/update/${formData.user_id}`, {
         method: "PATCH",
         credentials: "include",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(payload),
       });
       const data = await res.json();
       setLoading(false);
@@ -65,11 +81,15 @@ const EditUser = () => {
   };
   return (
     <form onSubmit={handleFormData}>
-      {error && (
-        <div className='mb-4 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative'>
-          <span className='block sm:inline text-sm'>{errorMessage}</span>
-        </div>
-      )}
+      {!isDataLoaded ? (
+        <div className='text-center py-8'>Loading...</div>
+      ) : (
+        <>
+          {error && (
+            <div className='mb-4 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative'>
+              <span className='block sm:inline text-sm'>{errorMessage}</span>
+            </div>
+          )}
       <div className='grid grid-cols-1 gap-4'>
         <div className='flex flex-col gap-2'>
           <Label htmlFor='name'>Name</Label>
@@ -100,7 +120,7 @@ const EditUser = () => {
           />
         </div>
         <div className='flex flex-col gap-2'>
-          <Label htmlFor='password'>Password</Label>
+          <Label htmlFor='password'>Password (leave blank to keep current)</Label>
           <Input
             type='password'
             id='password'
@@ -122,6 +142,8 @@ const EditUser = () => {
           Update User
         </button>
       </div>
+        </>
+      )}
     </form>
   );
 };

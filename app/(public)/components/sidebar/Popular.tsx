@@ -52,7 +52,7 @@ const Popular = ({ data: blogs, loading }: PopularProps) => {
               >
                 <div className='w-[65px] h-[65px] rounded-full overflow-hidden relative shrink-0'>
                   <Image
-                    src={post?.image}
+                    src={`/posts/images/${post?.image}`}
                     alt={`${post?.title}-img`}
                     fill
                     className='object-cover'
@@ -67,7 +67,9 @@ const Popular = ({ data: blogs, loading }: PopularProps) => {
                     <h3 className='font-bold'>{post?.title}</h3>
                   </Link>
                   <p className='text-xs text-gray-400 mt-1'>
-                    {new Date(post?.createdAt).toLocaleDateString("en-US", {
+                    {new Date(
+                      post?.created_at.replace(" ", "T")
+                    ).toLocaleDateString("en-US", {
                       year: "numeric",
                       month: "long",
                       day: "numeric",

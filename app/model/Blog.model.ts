@@ -1,87 +1,51 @@
-import mongoose, { Schema, Document } from "mongoose";
+// app/model/Blog.model.ts
+import { Schema, model, models, Document } from "mongoose";
 
-interface IBlog extends Document {
-  userId: mongoose.Schema.Types.ObjectId;
-  category: mongoose.Schema.Types.ObjectId;
-  subCategory: mongoose.Schema.Types.ObjectId;
+export interface IBlog extends Document {
+  id: string;
   title: string;
-  content: string;
   slug: string;
-  metaTitle: string;
-  metaDescription: string;
-  blogWriter: string;
-  postViews: number;
+  type?: string | null;
+  description: string;
   image: string;
-  isEditorPick: boolean;
-  viewedBy: string[];
+  author: string;
+  timestamp?: Date | null;
+  status: string;
+  metatitle: string;
+  metadesc: string;
+  views?: string | null;
+  user_id?: string | null;
+  created_at?: string;
+  updated_at?: string;
 }
 
-export const blogSchema = new Schema<IBlog>(
+const BlogSchema = new Schema<IBlog>(
   {
-    userId: {
-      type: mongoose.Schema.Types.ObjectId,
-      required: true,
-      ref: "User",
-    },
-    category: {
-      type: mongoose.Schema.Types.ObjectId,
-      required: true,
-      ref: "Category",
-    },
-    subCategory: {
-      type: mongoose.Schema.Types.ObjectId,
-      required: true,
-      ref: "SubCategory",
-    },
-    title: {
-      type: String,
-      required: true,
-      trim: true,
-    },
-    content: {
-      type: String,
-      required: true,
-      trim: true,
-    },
-    slug: {
-      type: String,
-      required: true,
-      trim: true,
-    },
-    metaTitle: {
-      type: String,
-      required: true,
-      trim: true,
-    },
-    metaDescription: {
-      type: String,
-      required: true,
-      trim: true,
-    },
-    blogWriter: {
-      type: String,
-      required: true,
-      trim: true,
-    },
-    image: {
-      type: String,
-      required: true,
-      trim: true,
-    },
-    isEditorPick: {
-      type: Boolean,
-      default: false,
-    },
-    postViews: {
-      type: Number,
-      default: 0,
-    },
-    viewedBy: { type: [String], default: [] },
+    id: { type: String, unique: true},
+    title: { type: String, required: true, trim: true },
+    slug: { type: String, required: true, unique: true, trim: true },
+
+    type: { type: String, default: null },
+
+    description: { type: String, required: true },
+    image: { type: String, required: true },
+    author: { type: String, required: true },
+
+    timestamp: { type: Date, default: null },
+
+    status: { type: String, default: "draft" },
+
+    metatitle: { type: String, default: "This is Title" },
+    metadesc: { type: String, default: "desc" },
+
+    views: { type: String, default: null },
+
+    created_at: { type: String },
+    updated_at: { type: String },
+
+    user_id: { type: String, default: null },
   },
-  {
-    timestamps: true,
-  }
+  { timestamps: false }
 );
 
-const Blog = mongoose.models.Blog || mongoose.model<IBlog>("Blog", blogSchema);
-export default Blog;
+export default models.Blog || model<IBlog>("Blog", BlogSchema);

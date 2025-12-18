@@ -1,3 +1,4 @@
+// app/(public)/pages/Category.tsx
 "use client";
 import React, { useEffect } from "react";
 import HeroSection from "@/app/(public)/components/category/HeroSection";

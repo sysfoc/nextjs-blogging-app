@@ -5,8 +5,8 @@ interface UserState {
   name: string;
   email: string;
   isAuthenticated: boolean;
-  createdAt: Date | null;
-  updatedAt: Date | null;
+  createdAt: string | null;
+  updatedAt: string | null;
 }
 
 const initialState: UserState = {

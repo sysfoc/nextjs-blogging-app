@@ -1,7 +1,7 @@
 import mongoose, { Schema, Document } from "mongoose";
 
 interface IComment extends Document {
-  blogId: mongoose.Schema.Types.ObjectId;
+  postId: string;
   name: string;
   email: string;
   comment: string;
@@ -24,10 +24,9 @@ const commentSchema = new Schema<IComment>(
       required: true,
       trim: true,
     },
-    blogId: {
-      type: mongoose.Schema.Types.ObjectId,
+    postId: {
+      type: String,
       required: true,
-      ref: "Blog",
     },
   },
   { timestamps: true }

@@ -1,3 +1,4 @@
+// app/(admin)/pages/BlogPosts.tsx
 import React from "react";
 import Table from "@/app/(admin)/components/blog-posts/Table";
 import Link from "next/link";

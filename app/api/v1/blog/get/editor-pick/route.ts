@@ -1,14 +1,14 @@
 import Blog from "@/app/model/Blog.model";
 import { connectToDatabase } from "@/app/utils/db";
 import { NextResponse } from "next/server";
-import "@/app/model/Category.model";
+import "@/app/model/MainCategory.model";
 import "@/app/model/SubCategory.model";
 
 export async function GET(req: Request) {
   connectToDatabase();
   try {
     const blog = await Blog.find({isEditorPick: true})
-      .sort({ createdAt: -1 })
+      .sort({ created_at: -1 })
       .limit(4)
       .populate({ path: "category", select: "name slug" })
       .populate({ path: "subCategory", select: "name slug" })

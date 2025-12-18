@@ -10,7 +10,7 @@ const NewsDetail = ({ blogs }: Props) => {
     <section>
       <HeroSection blogs={blogs} />
       <section className='mx-4 md:mx-12 my-8'>
-        <DetailContent blogsDetail={blogs?.content} />
+        <DetailContent blogsDetail={blogs?.description} />
       </section>
     </section>
   );

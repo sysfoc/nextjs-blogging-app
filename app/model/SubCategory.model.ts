@@ -1,53 +1,39 @@
-import mongoose, { Schema, Document } from "mongoose";
+// app/model/SubCategory.model.ts
+import { Schema, model, models, Document, Types } from "mongoose";
+import "./MainCategory.model";
 
-interface ISubCategory extends Document {
+export interface ISubCategory extends Document {
+  id: string;
+  canonical?: string;
+  metatitle?: string;
+  metadesc?: string;
+  h1?: string;
+  main_category_id: Types.ObjectId;
   name: string;
   slug: string;
-  metaTitle: string;
-  metaDescription: string;
-  h1Title: string;
-  category: mongoose.Schema.Types.ObjectId;
+  image?: string | null;
 }
-export const subCategorySchema = new Schema<ISubCategory>(
+
+const SubCategorySchema = new Schema<ISubCategory>(
   {
-    name: {
-      type: String,
+    canonical: { type: String, trim: true },
+    metatitle: { type: String, trim: true },
+    metadesc: { type: String, trim: true },
+    h1: { type: String, trim: true },
+    id: { type: String, required: true, unique: true },
+
+    main_category_id: {
+      type: Schema.Types.ObjectId,
+      ref: "MainCategory",
       required: true,
-      trim: true,
     },
-    slug: {
-      type: String,
-      required: true,
-      trim: true,
-      unique: true,
-    },
-    metaTitle: {
-      type: String,
-      required: true,
-      trim: true,
-    },
-    metaDescription: {
-      type: String,
-      required: true,
-      trim: true,
-    },
-    h1Title: {
-      type: String,
-      required: true,
-      trim: true,
-    },
-    category: {
-      type: mongoose.Schema.Types.ObjectId,
-      required: true,
-      ref: "Category",
-    },
+
+    name: { type: String, required: true, unique: true, trim: true },
+    slug: { type: String, required: true, unique: true, trim: true },
+    image: { type: String, default: null },
   },
-  {
-    timestamps: true,
-  }
+  { timestamps: true }
 );
 
-const SubCategory =
-  mongoose.models.SubCategory ||
-  mongoose.model<ISubCategory>("SubCategory", subCategorySchema);
-export default SubCategory;
+export default models.SubCategory ||
+  model<ISubCategory>("SubCategory", SubCategorySchema);

@@ -1,3 +1,4 @@
+// app/blogs/page.tsx
 import { Metadata } from "next";
 import React from "react";
 import Blog from "@/app/(public)/pages/Blogs";

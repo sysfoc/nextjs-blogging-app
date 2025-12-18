@@ -1,3 +1,4 @@
+// app/utils/hashing.ts
 import bcrypt from "bcrypt";
 import { config } from "@/app/utils/env-config";
 

@@ -1,40 +1,42 @@
+// app/api/v1/blog/update/[id]/route.ts
 import { NextResponse } from "next/server";
 import path from "path";
 import { writeFile, unlink } from "fs/promises";
 import Blog from "@/app/model/Blog.model";
+import User from "@/app/model/User.model";
 import { connectToDatabase } from "@/app/utils/db";
 
-export async function PATCH(req: Request, context: any) {
+export async function PATCH(
+  req: Request,
+  context: { params: Promise<{ id: string }> }
+) {
   await connectToDatabase();
-  const { id } = context.params;
+  const { id } = await context.params;
   const formData = await req.formData();
 
   const title = formData.get("title") as string | null;
-  const content = formData.get("content") as string | null;
-  const metaTitle = formData.get("metaTitle") as string | null;
-  const metaDescription = formData.get("metaDescription") as string | null;
+  const description = formData.get("description") as string | null;
+  const metatitle = formData.get("metatitle") as string | null;
+  const metadesc = formData.get("metadesc") as string | null;
   const slug = formData.get("slug") as string | null;
-  const writer = formData.get("writer") as string | null;
-  const category = formData.get("category") as string | null;
-
-  const isEditorPick =
-    formData.get("isEditorPick")?.toString() === "true" ? true : false;
-
+  const author = formData.get("author") as string | null;
+  const type = formData.get("type") as string | null;
+  const status = formData.get("status") as string | null;
   const image = formData.get("image");
 
   try {
-    const blog = await Blog.findById(id);
-    if (!blog) {
+    const blogDoc = await Blog.findOne({ id });
+    if (!blogDoc) {
       return NextResponse.json({ message: "Blog not found" }, { status: 404 });
     }
 
-    let imagePath = blog.image;
+    let imagePath = blogDoc.image;
 
     if (image instanceof File && image.size > 0) {
       const buffer = Buffer.from(await image.arrayBuffer());
 
-      if (blog.image) {
-        const oldPath = path.join(process.cwd(), "public", blog.image);
+      if (blogDoc.image) {
+        const oldPath = path.join(process.cwd(), "public", blogDoc.image);
         try {
           await unlink(oldPath);
         } catch (err: any) {
@@ -43,29 +45,47 @@ export async function PATCH(req: Request, context: any) {
       }
 
       const filename = `${Date.now()}-${image.name}`;
-      const fullPath = path.join(process.cwd(), "public", "blog", filename);
+      const fullPath = path.join(process.cwd(), "public", "posts", "images", filename);
       await writeFile(fullPath, buffer);
-
-      imagePath = `/blog/${filename}`;
+      imagePath = filename;
     }
 
-    const updatedBlog = await Blog.findOneAndUpdate(
-      { _id: id },
+    const updatedBlogDoc = await Blog.findOneAndUpdate(
+      { id },
       {
         title,
-        content,
-        metaTitle,
-        metaDescription,
+        description,
+        metatitle,
+        metadesc,
         image: imagePath,
         slug,
-        blogWriter: writer,
-        category,
-        isEditorPick,
+        author,
+        type: type || null,
+        status,
+        updated_at: new Date().toISOString().slice(0, 19).replace('T', ' '),
       },
-      { new: true }
+      { new: true, runValidators: true }
     );
 
-    return NextResponse.json({ blog: updatedBlog }, { status: 200 });
+    if (!updatedBlogDoc) {
+      return NextResponse.json({ message: "Failed to update blog" }, { status: 500 });
+    }
+
+    const updatedBlog = updatedBlogDoc.toObject();
+
+    // Fetch user manually if user_id exists - FIXED: Query by user_id field
+    let user_id = null;
+    if (updatedBlog.user_id) {
+      const userDoc = await User.findOne({ user_id: updatedBlog.user_id }).select("name email");
+      user_id = userDoc ? { name: userDoc.name, email: userDoc.email } : null;
+    }
+
+    const finalBlog = {
+      ...updatedBlog,
+      user_id,
+    };
+
+    return NextResponse.json({ blog: finalBlog }, { status: 200 });
   } catch (error: any) {
     console.error(error);
     return NextResponse.json({ message: error.message }, { status: 500 });

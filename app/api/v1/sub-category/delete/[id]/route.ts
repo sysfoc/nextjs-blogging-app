@@ -1,35 +1,37 @@
-import Blog from "@/app/model/Blog.model";
+// app/api/v1/sub-category/delete/[id]/route.ts
 import SubCategory from "@/app/model/SubCategory.model";
+import MainCategory from "@/app/model/MainCategory.model";
 import { connectToDatabase } from "@/app/utils/db";
 import { NextResponse } from "next/server";
-import path from "path";
-import { unlink } from "fs/promises";
 
-export async function DELETE(req: Request, context: any) {
-  const { id } = context.params;
-  await connectToDatabase();
-
+export async function DELETE(
+  request: Request,
+  { params }: { params: Promise<{ id: string }> }
+) {
   try {
-    const blogs = await Blog.find({ subCategory: id });
-    for (const blog of blogs) {
-      if (blog.image) {
-        const imagePath = path.join(process.cwd(), "public", blog.image);
-        try {
-          await unlink(imagePath);
-          console.log(`Deleted file: ${imagePath}`);
-        } catch (err: any) {
-          console.warn(`Failed to delete image: ${imagePath}`, err.message);
-        }
-      }
+    await connectToDatabase();
+    const { id } = await params;
+    
+    // Check if subcategory exists
+    const subCategory = await SubCategory.findById(id);
+    if (!subCategory) {
+      return NextResponse.json(
+        { message: "Subcategory not found" },
+        { status: 404 }
+      );
     }
+    
     await SubCategory.findByIdAndDelete(id);
-    await Blog.deleteMany({ subCategory: id });
-
+    
     return NextResponse.json(
-      { message: "Sub category and related blogs deleted successfully" },
+      { message: "Subcategory deleted successfully" },
       { status: 200 }
     );
   } catch (error: any) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    console.error("Delete subcategory error:", error);
+    return NextResponse.json(
+      { error: error.message || "Failed to delete subcategory" },
+      { status: 500 }
+    );
   }
 }

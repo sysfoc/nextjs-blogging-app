@@ -51,19 +51,14 @@ const items = [
   },
   {
     title: "Posts",
-    url: "/admin/blogs",
+    url: "/admin/posts",
     icon: Pencil,
   },
   {
     title: "Blogs",
     url: "/admin/blog-posts",
     icon: Rss,
-  },
-  {
-    title: "News",
-    url: "/admin/news",
-    icon: Newspaper,
-  },
+  }
 ];
 
 export function AppSidebar() {

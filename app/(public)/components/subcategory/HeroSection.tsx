@@ -1,3 +1,4 @@
+// app/(public)/components/subcategory/HeroSection.tsx
 import Link from "next/link";
 import React from "react";
 

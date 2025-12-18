@@ -1,3 +1,4 @@
+// app/(admin)/pages/Users.tsx
 import React from "react";
 import Table from "../components/users/Table";
 import Link from "next/link";

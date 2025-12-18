@@ -1,3 +1,4 @@
+// app/utils/db.ts
 import mongoose from "mongoose";
 import { config } from "@/app/utils/env-config";
 
