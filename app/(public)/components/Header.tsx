@@ -6,6 +6,7 @@ import Navlinks from "@/app/(public)/components/navbar/Navlinks";
 import Darkmode from "@/app/(public)/components/navbar/Darkmode";
 import MobileNav from "@/app/(public)/components/navbar/MobileNav";
 import { useEffect, useState } from "react";
+import Link from "next/link";
 
 const CACHE_EXPIRY = 3 * 60 * 1000;
 const Header = () => {
@@ -42,6 +43,7 @@ const Header = () => {
     <header className='shadow-md relative z-99'>
       <div className='flex items-center justify-between mx-4 md:mx-12 py-3'>
         <div className='flex items-center gap-x-3'>
+          <Link href="/">
           <Image
             src='/logo-no-background.png'
             alt='logo'
@@ -50,7 +52,8 @@ const Header = () => {
             className='size-auto'
             fetchPriority='high'
             priority
-          />
+            />
+            </Link>
         </div>
         <Navlinks navLinks={navLinks} />
         <div className='flex items-center gap-x-3'>

@@ -5,7 +5,7 @@ import AddSubCat from "@/app/(admin)/components/sub-category/AddSubCat";
 const CreateSubCat = () => {
   return (
     <section className='my-8'>
-      <div className='flex items-center justify-between mb-6'>
+      <div className='flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6 gap-2'>
         <div>
           <h1 className='font-bold text-2xl text-gray-800'>Create new Sub Category</h1>
         </div>

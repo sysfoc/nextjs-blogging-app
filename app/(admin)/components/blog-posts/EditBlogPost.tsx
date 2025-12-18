@@ -35,7 +35,7 @@ const EditBlogPost = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const router = useRouter();
   const params = useParams();
-  
+
   const [formData, setFormData] = useState<FormData>({
     title: "",
     description: "",
@@ -47,7 +47,7 @@ const EditBlogPost = () => {
     type: "1",
     status: "draft",
   });
-  
+
   const [currentImage, setCurrentImage] = useState<string>("");
 
   const getBlogById = async () => {
@@ -60,7 +60,7 @@ const EditBlogPost = () => {
           "Content-Type": "application/json",
         },
       });
-      
+
       if (!res.ok) {
         throw new Error("Failed to fetch blog");
       }
@@ -79,7 +79,7 @@ const EditBlogPost = () => {
         type: blog.type || "1",
         status: blog.status || "draft",
       });
-      
+
       setCurrentImage(blog.image || "");
     } catch (error: any) {
       setError(true);
@@ -215,14 +215,18 @@ const EditBlogPost = () => {
   }
 
   return (
-    <form onSubmit={handleFormData} encType="multipart/form-data">
+    <form
+      onSubmit={handleFormData}
+      encType="multipart/form-data"
+      className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"
+    >
       {error && (
         <div className="mb-4 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative">
           <span className="block sm:inline text-sm">{errorMessage}</span>
         </div>
       )}
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4">
         <div className="flex flex-col gap-2">
           <Label htmlFor="metatitle">Meta Title</Label>
           <Input
@@ -293,30 +297,32 @@ const EditBlogPost = () => {
           />
         </div>
 
-        <div className="flex flex-col gap-2">
-          <Label htmlFor="type">Blog Type</Label>
-          <Select value={formData.type} onValueChange={handleTypeChange}>
-            <SelectTrigger className="border border-black">
-              <SelectValue placeholder="Select blog type" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="1">General Blog</SelectItem>
-              <SelectItem value="0">News Blog</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
+        <div className="flex flex-col sm:flex-row">
+          <div className="flex flex-col gap-2 flex-1">
+            <Label htmlFor="type">Blog Type</Label>
+            <Select value={formData.type} onValueChange={handleTypeChange}>
+              <SelectTrigger className="border border-black">
+                <SelectValue placeholder="Select blog type" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="1">General Blog</SelectItem>
+                <SelectItem value="0">News Blog</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
 
-        <div className="flex flex-col gap-2">
-          <Label htmlFor="status">Status</Label>
-          <Select value={formData.status} onValueChange={handleStatusChange}>
-            <SelectTrigger className="border border-black">
-              <SelectValue placeholder="Select status" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="draft">Draft</SelectItem>
-              <SelectItem value="published">Published</SelectItem>
-            </SelectContent>
-          </Select>
+          <div className="flex flex-col gap-2 flex-1">
+            <Label htmlFor="status">Status</Label>
+            <Select value={formData.status} onValueChange={handleStatusChange}>
+              <SelectTrigger className="border border-black">
+                <SelectValue placeholder="Select status" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="draft">Draft</SelectItem>
+                <SelectItem value="published">Published</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
         </div>
 
         <div className="flex flex-col gap-2">
@@ -329,22 +335,25 @@ const EditBlogPost = () => {
             className="border border-black placeholder:text-black"
             onChange={handleImageChange}
           />
-          <p className="text-xs text-gray-700">(Leave it as it is to keep current image)</p>
-          {/* {currentImage && (
-            <div className="mt-2">
-              <p className="text-sm text-gray-600 mb-2">Current Image:</p>
-              <Image
-                src={currentImage}
-                alt="Current blog image"
-                width={150}
-                height={150}
-                className="rounded border object-cover"
-              />
-            </div>
-          )} */}
+          <p className="text-xs text-gray-700">
+            (Leave it as it is to keep current image)
+          </p>
         </div>
 
-        <div className="flex flex-col col-span-2 gap-2">
+        {currentImage && (
+          <div className="mt-2">
+            <p className="text-sm text-gray-600 mb-2">Current Image:</p>
+            <Image
+              src={`/posts/images/${currentImage}`}
+              alt="Current blog image"
+              width={150}
+              height={150}
+              className="rounded border object-cover"
+            />
+          </div>
+        )}
+
+        <div className="flex flex-col col-span-1 sm:col-span-2 gap-2">
           <Label>Blog Content</Label>
           <Suspense fallback={<p>Loading editor...</p>}>
             <LazyJoditEditor

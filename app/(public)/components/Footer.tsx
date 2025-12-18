@@ -14,7 +14,7 @@ const Footer = () => {
     <footer className='shadow-sm'>
       <div className='mx-4 md:mx-12'>
         <div className='flex items-center justify-between flex-wrap gap-x-6 gap-y-5 py-6'>
-          <div>
+          <Link href="/">
             <Image
               src='/logo-no-background.png'
               alt='logo'
@@ -24,7 +24,7 @@ const Footer = () => {
               fetchPriority='high'
               priority
             />
-          </div>
+          </Link>
           <div className='flex flex-wrap items-center gap-x-6'>
             <Link href='/about-us' className='text-sm text-gray-500'>
               About

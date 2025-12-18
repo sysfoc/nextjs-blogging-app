@@ -15,7 +15,7 @@ const BlogPosts = () => {
       });
       if (!blogsRes.ok) throw new Error("Failed to load blogs");
       const blogsData = await blogsRes.json();
-      console.log(blogsData)
+      console.log(blogsData);
       setBlogsData(blogsData.blogs);
     } catch (error) {
       console.log(error);
@@ -68,18 +68,22 @@ const BlogPosts = () => {
                     <Link href={`/blog/${post?.slug}`}>
                       <h3 className="font-bold text-lg">{post?.title}</h3>
                     </Link>
-                    <div className="my-3 flex items-center justify-between gap-x-3">
+                    <div className="my-3 flex items-center justify-between">
                       <p className="text-sm">By {post?.author}</p>
-                      <div className="w-1 h-1 rounded-full bg-[#FE4F70]" />
-                       <p className='text-sm'>
-                        {post?.created_at
-                          ? new Date(post?.created_at.replace(' ', 'T')).toLocaleDateString("en-US", {
-                              day: "numeric",
-                              month: "short",
-                              year: "numeric",
-                            })
-                          : ""}
-                      </p>
+                      <div className="flex items-center gap-x-3">
+                        <div className="w-1 h-1 rounded-full bg-[#FE4F70]" />
+                        <p className="text-sm">
+                          {post?.created_at
+                            ? new Date(
+                                post?.created_at.replace(" ", "T")
+                              ).toLocaleDateString("en-US", {
+                                day: "numeric",
+                                month: "short",
+                                year: "numeric",
+                              })
+                            : ""}
+                        </p>
+                      </div>
                     </div>
                   </div>
                 </div>

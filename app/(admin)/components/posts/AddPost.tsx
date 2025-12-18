@@ -179,13 +179,13 @@ const AddPost = () => {
   };
 
   return (
-    <form onSubmit={handleFormData} encType='multipart/form-data'>
+    <form onSubmit={handleFormData} encType='multipart/form-data' className='w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
       {error && (
         <div className='mb-3 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative'>
           <span className='block sm:inline text-sm'>{errorMessage}</span>
         </div>
       )}
-      <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
+      <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4'>
         <div className='flex flex-col gap-2'>
           <Label htmlFor='name'>Name *</Label>
           <Input
@@ -427,7 +427,7 @@ const AddPost = () => {
           />
           <Label htmlFor='is_trending'>Mark as trending</Label>
         </div>
-        <div className='flex flex-col col-span-2 gap-2'>
+        <div className='flex flex-col col-span-1 sm:col-span-2 gap-2'>
           <Label htmlFor='image'>Select image</Label>
           <Input
             type='file'
@@ -437,7 +437,7 @@ const AddPost = () => {
             onChange={handleImageChange}
           />
         </div>
-        <div className='flex flex-col col-span-2 gap-2'>
+        <div className='flex flex-col col-span-1 sm:col-span-2 gap-2'>
           <p className='text-sm font-semibold'>Write Content:</p>
           <Suspense fallback={<p>Loading editor...</p>}>
             <LazyJoditEditor

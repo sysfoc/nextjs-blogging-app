@@ -15,6 +15,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useParams, useRouter } from "next/navigation";
+import Image from "next/image";
 const LazyJoditEditor = dynamic(() => import("jodit-react"), { ssr: false });
 
 const EditPosts = () => {
@@ -33,7 +34,7 @@ const EditPosts = () => {
     title: "",
     content: "",
     slug: "",
-    image: null as File | null,
+    image: "" as string | File,
     networth: "",
     networth_23: "",
     networth_24: "",
@@ -47,6 +48,8 @@ const EditPosts = () => {
     afiliateLinkData: "",
     uploaded_by: "",
   });
+
+  const [currentImage, setCurrentImage] = useState<string>("");
 
   const config = {
     placeholder: "Start typing...",
@@ -89,7 +92,7 @@ const EditPosts = () => {
           title: data.post.title || "",
           content: data.post.content || "",
           slug: data.post.slug || "",
-          image: null,
+          image: data.post.image || "",
           networth: data.post.networth || "",
           networth_23: data.post.networth_23 || "",
           networth_24: data.post.networth_24 || "",
@@ -103,6 +106,7 @@ const EditPosts = () => {
           afiliateLinkData: data.post.afiliateLinkData || "",
           uploaded_by: data.post.uploaded_by || "",
         });
+        setCurrentImage(data.post.image || "");
       }
     } catch (error) {
       setError(true);
@@ -139,12 +143,13 @@ const EditPosts = () => {
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0] || null;
-    setFormData((prev) => ({
-      ...prev,
-      image: file,
-    }));
+    if (file) {
+      setFormData((prev) => ({
+        ...prev,
+        image: file,
+      }));
+    }
   };
-
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => {
@@ -198,86 +203,90 @@ const EditPosts = () => {
   };
 
   return (
-    <form onSubmit={handleFormData} encType='multipart/form-data'>
+    <form
+      onSubmit={handleFormData}
+      encType="multipart/form-data"
+      className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"
+    >
       {error && (
-        <div className='mb-3 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative'>
-          <span className='block sm:inline text-sm'>{errorMessage}</span>
+        <div className="mb-3 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative">
+          <span className="block sm:inline text-sm">{errorMessage}</span>
         </div>
       )}
-      <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
-        <div className='flex flex-col gap-2'>
-          <Label htmlFor='name'>Name *</Label>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4">
+        <div className="flex flex-col gap-2">
+          <Label htmlFor="name">Name *</Label>
           <Input
-            type='text'
-            id='name'
-            name='name'
-            placeholder='Name'
-            className='border border-black placeholder:text-black'
+            type="text"
+            id="name"
+            name="name"
+            placeholder="Name"
+            className="border border-black placeholder:text-black"
             required
             value={formData.name}
             onChange={handleChange}
           />
         </div>
-        <div className='flex flex-col gap-2'>
-          <Label htmlFor='slug'>Slug (Auto-generated)</Label>
+        <div className="flex flex-col gap-2">
+          <Label htmlFor="slug">Slug (Auto-generated)</Label>
           <Input
-            type='text'
-            id='slug'
-            name='slug'
-            placeholder='Slug'
-            className='border border-black placeholder:text-black'
+            type="text"
+            id="slug"
+            name="slug"
+            placeholder="Slug"
+            className="border border-black placeholder:text-black"
             required
             readOnly
             value={formData.slug}
           />
         </div>
-        <div className='flex flex-col gap-2'>
-          <Label htmlFor='metatitle'>Meta Title</Label>
+        <div className="flex flex-col gap-2">
+          <Label htmlFor="metatitle">Meta Title</Label>
           <Input
-            type='text'
-            id='metatitle'
-            name='metatitle'
-            placeholder='Meta Title'
-            className='border border-black placeholder:text-black'
+            type="text"
+            id="metatitle"
+            name="metatitle"
+            placeholder="Meta Title"
+            className="border border-black placeholder:text-black"
             value={formData.metatitle}
             onChange={handleChange}
           />
         </div>
-        <div className='flex flex-col gap-2'>
-          <Label htmlFor='metadesc'>Meta Description</Label>
+        <div className="flex flex-col gap-2">
+          <Label htmlFor="metadesc">Meta Description</Label>
           <Input
-            type='text'
-            id='metadesc'
-            name='metadesc'
-            placeholder='Meta Description'
-            className='border border-black placeholder:text-black'
+            type="text"
+            id="metadesc"
+            name="metadesc"
+            placeholder="Meta Description"
+            className="border border-black placeholder:text-black"
             value={formData.metadesc}
             onChange={handleChange}
           />
         </div>
-        <div className='flex flex-col gap-2'>
-          <Label htmlFor='title'>Title</Label>
+        <div className="flex flex-col gap-2">
+          <Label htmlFor="title">Title</Label>
           <Input
-            type='text'
-            id='title'
-            name='title'
-            placeholder='Title'
-            className='border border-black placeholder:text-black'
+            type="text"
+            id="title"
+            name="title"
+            placeholder="Title"
+            className="border border-black placeholder:text-black"
             value={formData.title}
             onChange={handleChange}
           />
         </div>
-        <div className='flex flex-col gap-2'>
-          <Label htmlFor='sub_category_id'>Sub Category *</Label>
+        <div className="flex flex-col gap-2">
+          <Label htmlFor="sub_category_id">Sub Category *</Label>
           <Select
-            name='sub_category_id'
+            name="sub_category_id"
             value={formData.sub_category_id}
             onValueChange={(e) =>
               setFormData({ ...formData, sub_category_id: e })
             }
           >
-            <SelectTrigger className='w-full border border-black'>
-              <SelectValue placeholder='Select sub category' />
+            <SelectTrigger className="w-full border border-black">
+              <SelectValue placeholder="Select sub category" />
             </SelectTrigger>
             <SelectContent>
               <SelectGroup>
@@ -291,174 +300,188 @@ const EditPosts = () => {
             </SelectContent>
           </Select>
         </div>
-        <div className='flex flex-col gap-2'>
-          <Label htmlFor='uploaded_by'>Uploaded By</Label>
+        <div className="flex flex-col gap-2">
+          <Label htmlFor="uploaded_by">Uploaded By</Label>
           <Input
-            type='text'
-            id='uploaded_by'
-            name='uploaded_by'
-            placeholder='Uploader name'
-            className='border border-black placeholder:text-black'
+            type="text"
+            id="uploaded_by"
+            name="uploaded_by"
+            placeholder="Uploader name"
+            className="border border-black placeholder:text-black"
             value={formData.uploaded_by}
             onChange={handleChange}
           />
         </div>
-        <div className='flex flex-col gap-2'>
-          <Label htmlFor='profession'>Profession</Label>
+        <div className="flex flex-col gap-2">
+          <Label htmlFor="profession">Profession</Label>
           <Input
-            type='text'
-            id='profession'
-            name='profession'
-            placeholder='Profession'
-            className='border border-black placeholder:text-black'
+            type="text"
+            id="profession"
+            name="profession"
+            placeholder="Profession"
+            className="border border-black placeholder:text-black"
             value={formData.profession}
             onChange={handleChange}
           />
         </div>
-        <div className='flex flex-col gap-2'>
-          <Label htmlFor='nationality'>Nationality</Label>
+        <div className="flex flex-col gap-2">
+          <Label htmlFor="nationality">Nationality</Label>
           <Input
-            type='text'
-            id='nationality'
-            name='nationality'
-            placeholder='Nationality'
-            className='border border-black placeholder:text-black'
+            type="text"
+            id="nationality"
+            name="nationality"
+            placeholder="Nationality"
+            className="border border-black placeholder:text-black"
             value={formData.nationality}
             onChange={handleChange}
           />
         </div>
-        <div className='flex flex-col gap-2'>
-          <Label htmlFor='gender'>Gender</Label>
+        <div className="flex flex-col gap-2">
+          <Label htmlFor="gender">Gender</Label>
           <Input
-            type='text'
-            id='gender'
-            name='gender'
-            placeholder='Gender'
-            className='border border-black placeholder:text-black'
+            type="text"
+            id="gender"
+            name="gender"
+            placeholder="Gender"
+            className="border border-black placeholder:text-black"
             value={formData.gender}
             onChange={handleChange}
           />
         </div>
-        <div className='flex flex-col gap-2'>
-          <Label htmlFor='bd'>Birth Date</Label>
+        <div className="flex flex-col gap-2">
+          <Label htmlFor="bd">Birth Date</Label>
           <Input
-            type='text'
-            id='bd'
-            name='bd'
-            placeholder='Birth Date'
-            className='border border-black placeholder:text-black'
+            type="text"
+            id="bd"
+            name="bd"
+            placeholder="Birth Date"
+            className="border border-black placeholder:text-black"
             value={formData.bd}
             onChange={handleChange}
           />
         </div>
-        <div className='flex flex-col gap-2'>
-          <Label htmlFor='bp'>Birth Place</Label>
+        <div className="flex flex-col gap-2">
+          <Label htmlFor="bp">Birth Place</Label>
           <Input
-            type='text'
-            id='bp'
-            name='bp'
-            placeholder='Birth Place'
-            className='border border-black placeholder:text-black'
+            type="text"
+            id="bp"
+            name="bp"
+            placeholder="Birth Place"
+            className="border border-black placeholder:text-black"
             value={formData.bp}
             onChange={handleChange}
           />
         </div>
-        <div className='flex flex-col gap-2'>
-          <Label htmlFor='height'>Height</Label>
+        <div className="flex flex-col gap-2">
+          <Label htmlFor="height">Height</Label>
           <Input
-            type='text'
-            id='height'
-            name='height'
-            placeholder='Height'
-            className='border border-black placeholder:text-black'
+            type="text"
+            id="height"
+            name="height"
+            placeholder="Height"
+            className="border border-black placeholder:text-black"
             value={formData.height}
             onChange={handleChange}
           />
         </div>
-        <div className='flex flex-col gap-2'>
-          <Label htmlFor='networth'>Net Worth</Label>
+        <div className="flex flex-col gap-2">
+          <Label htmlFor="networth">Net Worth</Label>
           <Input
-            type='text'
-            id='networth'
-            name='networth'
-            placeholder='Net Worth'
-            className='border border-black placeholder:text-black'
+            type="text"
+            id="networth"
+            name="networth"
+            placeholder="Net Worth"
+            className="border border-black placeholder:text-black"
             value={formData.networth}
             onChange={handleChange}
           />
         </div>
-        <div className='flex flex-col gap-2'>
-          <Label htmlFor='networth_23'>Net Worth 2023</Label>
+        <div className="flex flex-col gap-2">
+          <Label htmlFor="networth_23">Net Worth 2023</Label>
           <Input
-            type='text'
-            id='networth_23'
-            name='networth_23'
-            placeholder='Net Worth 2023'
-            className='border border-black placeholder:text-black'
+            type="text"
+            id="networth_23"
+            name="networth_23"
+            placeholder="Net Worth 2023"
+            className="border border-black placeholder:text-black"
             value={formData.networth_23}
             onChange={handleChange}
           />
         </div>
-        <div className='flex flex-col gap-2'>
-          <Label htmlFor='networth_24'>Net Worth 2024</Label>
+        <div className="flex flex-col gap-2">
+          <Label htmlFor="networth_24">Net Worth 2024</Label>
           <Input
-            type='text'
-            id='networth_24'
-            name='networth_24'
-            placeholder='Net Worth 2024'
-            className='border border-black placeholder:text-black'
+            type="text"
+            id="networth_24"
+            name="networth_24"
+            placeholder="Net Worth 2024"
+            className="border border-black placeholder:text-black"
             value={formData.networth_24}
             onChange={handleChange}
           />
         </div>
-        <div className='flex flex-col gap-2'>
-          <Label htmlFor='networth_25'>Net Worth 2025</Label>
+        <div className="flex flex-col gap-2">
+          <Label htmlFor="networth_25">Net Worth 2025</Label>
           <Input
-            type='text'
-            id='networth_25'
-            name='networth_25'
-            placeholder='Net Worth 2025'
-            className='border border-black placeholder:text-black'
+            type="text"
+            id="networth_25"
+            name="networth_25"
+            placeholder="Net Worth 2025"
+            className="border border-black placeholder:text-black"
             value={formData.networth_25}
             onChange={handleChange}
           />
         </div>
-        <div className='flex flex-col gap-2'>
-          <Label htmlFor='afiliateLinkData'>Affiliate Link Data</Label>
+        <div className="flex flex-col gap-2">
+          <Label htmlFor="afiliateLinkData">Affiliate Link Data</Label>
           <Input
-            type='text'
-            id='afiliateLinkData'
-            name='afiliateLinkData'
-            placeholder='Affiliate Link Data'
-            className='border border-black placeholder:text-black'
+            type="text"
+            id="afiliateLinkData"
+            name="afiliateLinkData"
+            placeholder="Affiliate Link Data"
+            className="border border-black placeholder:text-black"
             value={formData.afiliateLinkData}
             onChange={handleChange}
           />
         </div>
-        <div className='flex flex-row gap-2 items-center'>
+        <div className="flex flex-row gap-2 items-center">
           <Checkbox
-            id='is_trending'
-            className='border border-black'
+            id="is_trending"
+            className="border border-black"
             checked={formData.is_trending === "1"}
             onCheckedChange={(checked) =>
               setFormData({ ...formData, is_trending: checked ? "1" : "0" })
             }
           />
-          <Label htmlFor='is_trending'>Mark as trending</Label>
+          <Label htmlFor="is_trending">Mark as trending</Label>
         </div>
-        <div className='flex flex-col col-span-2 gap-2'>
-          <Label htmlFor='image'>Select new image (optional)</Label>
+        <div className="flex flex-col col-span-1 sm:col-span-2 gap-2">
+          <Label htmlFor="image">Select new image (optional)</Label>
+          {currentImage && (
+            <div className="mt-2">
+              <p className="text-sm text-gray-600 mb-2">Current Image:</p>
+              <Image
+                src={`/posts/images/${currentImage}`}
+                alt="Current blog image"
+                width={150}
+                height={150}
+                className="rounded border object-cover"
+              />
+            </div>
+          )}
           <Input
-            type='file'
-            id='image'
-            name='image'
-            className='border border-black placeholder:text-black'
+            type="file"
+            id="image"
+            name="image"
+            className="border border-black placeholder:text-black"
             onChange={handleImageChange}
           />
-          <span className='text-xs text-gray-500'>Leave empty to keep existing image</span>
+          <span className="text-xs text-gray-500">
+            Leave empty to keep existing image
+          </span>
         </div>
-        <div className='flex flex-col col-span-2 gap-2'>
-          <p className='text-sm font-semibold'>Write Content:</p>
+        <div className="flex flex-col col-span-1 sm:col-span-2 gap-2">
+          <p className="text-sm font-semibold">Write Content:</p>
           <Suspense fallback={<p>Loading editor...</p>}>
             <LazyJoditEditor
               value={formData.content}
@@ -469,11 +492,11 @@ const EditPosts = () => {
           </Suspense>
         </div>
       </div>
-      <div className='mt-6'>
+      <div className="mt-6">
         <button
           disabled={loading}
-          type='submit'
-          className='w-full py-3 px-4 bg-gradient-to-r from-[#FE4F70] to-[#FFA387] cursor-pointer text-white rounded-full text-sm disabled:opacity-50'
+          type="submit"
+          className="w-full py-3 px-4 bg-gradient-to-r from-[#FE4F70] to-[#FFA387] cursor-pointer text-white rounded-full text-sm disabled:opacity-50"
         >
           {loading ? "Updating..." : "Update Post"}
         </button>

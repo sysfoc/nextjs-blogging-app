@@ -49,9 +49,11 @@ const SubCatPosts = ({ blogs: data, categorySlug, subCategorySlug }: Props) => {
                     priority
                   />
                   <div className="absolute top-4 left-4">
-                    <button className="w-fit text-xs py-2 px-4 bg-gradient-to-r from-[#FE4F70] to-[#FFA387] text-white rounded-full capitalize">
-                      {post?.nationality}
-                    </button>
+                    {post?.nationality && (
+                      <button className="w-fit text-xs py-2 px-4 bg-gradient-to-r from-[#FE4F70] to-[#FFA387] text-white rounded-full capitalize">
+                        {post?.nationality}
+                      </button>
+                    )}
                   </div>
                 </div>
                 <div>
@@ -65,7 +67,9 @@ const SubCatPosts = ({ blogs: data, categorySlug, subCategorySlug }: Props) => {
                           className="object-cover rounded-full"
                         />
                       </div>
-                      <p className="text-sm font-semibold">{post?.uploaded_by}</p>
+                      <p className="text-sm font-semibold">
+                        {post?.uploaded_by}
+                      </p>
                     </div>
                     <div className="w-1 h-1 rounded-full bg-[#FE4F70]" />
                     <p className="text-sm">
