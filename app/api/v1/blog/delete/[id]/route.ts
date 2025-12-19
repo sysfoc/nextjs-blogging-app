@@ -20,7 +20,7 @@ export async function DELETE(
     }
     
     if (blog.image) {
-      const imagePath = path.join(process.cwd(), "public", blog.image);
+      const imagePath = path.join(process.cwd(), "public", "posts", "images", blog.image); 
       try {
         await unlink(imagePath);
         console.log(`Deleted file: ${imagePath}`);
