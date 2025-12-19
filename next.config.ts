@@ -1,43 +1,28 @@
-// import type { NextConfig } from "next";
-
-// const nextConfig: NextConfig = {
-// };
-
-// export default nextConfig;
-
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  // Choose the appropriate output based on your hosting:
-  // For most platforms (Vercel, standalone servers):
-  // output: 'standalone',
+  // Output configuration - based on your hosting
+  // output: 'standalone', // For custom servers
+  // output: 'export',     // For static export
   
-  // For static export (if generating static HTML):
-  // output: 'export',
-  
-  // React strict mode
   reactStrictMode: true,
   
-  // Image configuration - CRITICAL for your image issues
+  // Image configuration
   images: {
-    // For external images when using next/image
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: '**', // Allows all HTTPS domains
+        hostname: '**',
       },
     ],
-    // Uncomment if you're having persistent image optimization issues
+    // Try enabling this if images still don't show immediately
     // unoptimized: true,
   },
   
-  // Experimental features
-  experimental: {
-    // Essential for Mongoose in serverless/API routes
-    serverComponentsExternalPackages: ['mongoose'],
-  },
+  // CORRECTED: This key has been moved out of 'experimental' in Next.js 16
+  serverExternalPackages: ['mongoose'],
   
-  // Custom headers for static files - improves caching
+  // Custom headers for static files
   async headers() {
     return [
       {
@@ -52,12 +37,14 @@ const nextConfig: NextConfig = {
     ];
   },
   
-  // Optional: Webpack configuration if needed
+  // Optional: Add if you're using webpack custom config
   // webpack: (config, { isServer }) => {
   //   if (!isServer) {
   //     config.resolve.fallback = {
   //       ...config.resolve.fallback,
   //       fs: false,
+  //       net: false,
+  //       tls: false,
   //     };
   //   }
   //   return config;
