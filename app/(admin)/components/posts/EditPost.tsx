@@ -460,18 +460,11 @@ const EditPosts = () => {
           {currentImage && (
             <div className="mt-2">
               <p className="text-sm text-gray-600 mb-2">Current Image:</p>
-              {/* <Image
+              <Image
                 src={`/posts/images/${currentImage}`}
                 alt="Current blog image"
                 width={150}
                 height={150}
-                className="rounded border object-cover"
-              /> */}
-              <img
-                src={`/posts/images/${currentImage}`}
-                alt="Current blog image"
-                width="150"
-                height="150"
                 className="rounded border object-cover"
               />
             </div>

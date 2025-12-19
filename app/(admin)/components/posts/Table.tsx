@@ -131,18 +131,11 @@ const Table = () => {
                   <TableCell>{item.id}</TableCell>
                   <TableCell>
                     {item.image ? (
-                      // <Image
-                      //   src={`/posts/images/${item.image}`}
-                      //   alt={`${item.name}-image`}
-                      //   width={30}
-                      //   height={30}
-                      //   className="size-auto object-cover w-[30px] h-[30px] rounded-full"
-                      // />
-                      <img
+                      <Image
                         src={`/posts/images/${item.image}`}
                         alt={`${item.name}-image`}
-                        width="30"
-                        height="30"
+                        width={30}
+                        height={30}
                         className="size-auto object-cover w-[30px] h-[30px] rounded-full"
                       />
                     ) : (

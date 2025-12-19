@@ -178,18 +178,11 @@ const Table = () => {
                 <TableRow key={blog._id}>
                   <TableCell className="font-medium">{blog.id}</TableCell>
                   <TableCell>
-                    {/* <Image
+                    <Image
                       src={`/posts/images/${blog?.image}`}
                       alt={blog.title}
                       width={50}
                       height={50}
-                      className="size-[50px] object-cover rounded"
-                    /> */}
-                    <img
-                      src={`/posts/images/${blog?.image}`}
-                      alt={blog.title}
-                      width="50"
-                      height="50"
                       className="size-[50px] object-cover rounded"
                     />
                   </TableCell>
