@@ -122,7 +122,11 @@ const Table = () => {
   const paginatedBlogs = filteredBlogs.slice(startIndex, endIndex);
 
   const getBlogTypeLabel = (type: string) => {
-    return type === "0" ? "News Blog" : type === "1" ? "General Blog" : "Unknown";
+    return type === "0"
+      ? "News Blog"
+      : type === "1"
+      ? "General Blog"
+      : "Unknown";
   };
 
   const getBlogTypeVariant = (type: string) => {
@@ -174,11 +178,18 @@ const Table = () => {
                 <TableRow key={blog._id}>
                   <TableCell className="font-medium">{blog.id}</TableCell>
                   <TableCell>
-                    <Image
+                    {/* <Image
                       src={`/posts/images/${blog?.image}`}
                       alt={blog.title}
                       width={50}
                       height={50}
+                      className="size-[50px] object-cover rounded"
+                    /> */}
+                    <img
+                      src={`/posts/images/${blog?.image}`}
+                      alt={blog.title}
+                      width="50"
+                      height="50"
                       className="size-[50px] object-cover rounded"
                     />
                   </TableCell>
@@ -217,9 +228,10 @@ const Table = () => {
                               Are you absolutely sure?
                             </AlertDialogTitle>
                             <AlertDialogDescription>
-                              This action cannot be undone. This will permanently
-                              delete the blog post "{blog.title}" and remove it
-                              from the database along with its associated image.
+                              This action cannot be undone. This will
+                              permanently delete the blog post "{blog.title}"
+                              and remove it from the database along with its
+                              associated image.
                             </AlertDialogDescription>
                           </AlertDialogHeader>
                           <AlertDialogFooter>

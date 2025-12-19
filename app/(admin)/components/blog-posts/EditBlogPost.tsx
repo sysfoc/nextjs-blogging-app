@@ -340,7 +340,7 @@ const EditBlogPost = () => {
           </p>
         </div>
 
-        {currentImage && (
+        {/* {currentImage && (
           <div className="mt-2">
             <p className="text-sm text-gray-600 mb-2">Current Image:</p>
             <Image
@@ -351,7 +351,20 @@ const EditBlogPost = () => {
               className="rounded border object-cover"
             />
           </div>
-        )}
+        )} */}
+
+        {currentImage && (
+  <div className="mt-2">
+    <p className="text-sm text-gray-600 mb-2">Current Image:</p>
+    <img
+      src={`/posts/images/${currentImage}`}
+      alt="Current blog image"
+      width="150"
+      height="150"
+      className="rounded border object-cover"
+    />
+  </div>
+)}
 
         <div className="flex flex-col col-span-1 sm:col-span-2 gap-2">
           <Label>Blog Content</Label>
