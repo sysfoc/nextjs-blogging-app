@@ -24,7 +24,7 @@ const RebuildButton = () => {
         // Build complete check - 3 minutes wait
         setTimeout(() => {
           alert("✅ Build completed successfully!");
-        }, 180000); // 3 minutes
+        }, 60000); // 1 minutes
       } else {
         setBuildStatus(null);
         alert("❌ " + data.message);
@@ -35,7 +35,7 @@ const RebuildButton = () => {
     } finally {
       setTimeout(() => {
         setBuildLoading(false);
-      }, 180000); // 3 minutes
+      }, 60000); // 1 minute
     }
   };
 
@@ -45,12 +45,12 @@ const RebuildButton = () => {
         onClick={handleBuild}
         type="button"
         disabled={buildLoading}
-        className='w-fit py-3 px-4 bg-blue-600 text-white rounded-full text-sm hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed'
+        className='w-fit py-3 px-4 bg-gradient-to-r from-[#FE4F70] to-[#FFA387] text-white rounded-full text-sm transition-colors disabled:opacity-50 disabled:cursor-not-allowed'
       >
         {buildLoading ? "Building..." : "Rebuild Site"}
       </button>
       {buildStatus && (
-        <p className="text-sm text-blue-600 mt-2">{buildStatus}</p>
+        <p className="text-sm text-[#FE4F70] mt-2">{buildStatus}</p>
       )}
     </div>
   );
