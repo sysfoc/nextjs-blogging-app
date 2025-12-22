@@ -98,7 +98,7 @@ const Sidebar = () => {
       <Popular data={popularBlogs} loading={loading} />
       <Recent data={editorsBlogs} loading={loading} />
       <Topics data={topics} loading={loading} />
-      <Newsletter />
+      {/* <Newsletter /> */}
       <Tags data={topics} loading={loading} />
     </aside>
   );
