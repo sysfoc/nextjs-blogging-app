@@ -7,6 +7,7 @@ import Darkmode from "@/app/(public)/components/navbar/Darkmode";
 import MobileNav from "@/app/(public)/components/navbar/MobileNav";
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import SearchBar from "./navbar/SearchBar";
 
 const CACHE_EXPIRY = 3 * 60 * 1000;
 const Header = () => {
@@ -39,6 +40,7 @@ const Header = () => {
   useEffect(() => {
     getNavLinks();
   }, []);
+  
   return (
     <header className='shadow-md relative z-99'>
       <div className='flex items-center justify-between mx-4 md:mx-12 py-3'>
@@ -57,6 +59,7 @@ const Header = () => {
         </div>
         <Navlinks navLinks={navLinks} />
         <div className='flex items-center gap-x-3'>
+          <SearchBar />
           <Darkmode />
           <div className='md:hidden'>
             <MobileNav navLinks={navLinks} />

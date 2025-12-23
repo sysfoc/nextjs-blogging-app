@@ -4,8 +4,8 @@ import Link from "next/link";
 
 const Navlinks = ({ navLinks }: { navLinks: any }) => {
   return (
-    <nav className='hidden md:flex items-center gap-x-8'>
-      {navLinks.map((link: any, index: number) => (
+    <nav className='hidden md:flex items-center gap-x-4 lg:gap-x-8'>
+      {navLinks.slice(0, 5).map((link: any, index: number) => (
         <div key={index} className='relative group'>
           <Link
             href={`/category/${link.categorySlug}`}

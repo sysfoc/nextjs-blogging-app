@@ -4,12 +4,14 @@ import React, { useEffect, useState } from "react";
 import Popular from "@/app/(public)/components/sidebar/Popular";
 import Recent from "@/app/(public)/components/sidebar/Recent";
 import Topics from "@/app/(public)/components/sidebar/Topics";
-import Newsletter from "@/app/(public)/components/sidebar/Newsletter";
+// import Newsletter from "@/app/(public)/components/sidebar/Newsletter";
 import Tags from "@/app/(public)/components/sidebar/Tags";
+import Categories from "@/app/(public)/components/sidebar/Categories";
 
 const URL = {
   popular: "/api/v1/blog/get/popular-posts",
   recent: "/api/v1/blog/get/get-recent",
+  categories: "/api/v1/category/get-all",
   topics: "/api/v1/blog/get/topics",
 };
 
@@ -20,6 +22,7 @@ const RETRY_DELAY = 3000;
 const Sidebar = () => {
   const [editorsBlogs, setEditorsBlogs] = useState<any[]>([]);
   const [popularBlogs, setPopularBlogs] = useState<any[]>([]);
+  const [categories, setCategories] = useState<any[]>([]);
   const [topics, setTopics] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -52,16 +55,19 @@ const Sidebar = () => {
           if (Date.now() - timestamp < CACHE_EXPIRY) {
             setPopularBlogs(data.popularBlogs || []);
             setEditorsBlogs(data.editorsBlogs || []);
+            setCategories(data.categories || []);
             setTopics(data.topics || []);
             setLoading(false);
             return;
           }
         }
-        const [popularRes, recentRes, topicRes] = await Promise.all([
-          fetchWithRetry(URL.popular),
-          fetchWithRetry(URL.recent),
-          fetchWithRetry(URL.topics),
-        ]);
+        const [popularRes, recentRes, categoriesRes, topicRes] =
+          await Promise.all([
+            fetchWithRetry(URL.popular),
+            fetchWithRetry(URL.recent),
+            fetchWithRetry(URL.categories),
+            fetchWithRetry(URL.topics),
+          ]);
 
         let data: any = {};
 
@@ -70,12 +76,16 @@ const Sidebar = () => {
           data.popularBlogs = popularRes.posts;
         }
         if (recentRes?.posts) {
-  setEditorsBlogs(recentRes.posts);
-  data.editorsBlogs = recentRes.posts;
-}
+          setEditorsBlogs(recentRes.posts);
+          data.editorsBlogs = recentRes.posts;
+        }
         if (topicRes?.topics) {
           setTopics(topicRes.topics);
           data.topics = topicRes.topics;
+        }
+        if (categoriesRes?.categories) {
+          setCategories(categoriesRes.categories);
+          data.categories = categoriesRes.categories;
         }
         if (Object.keys(data).length > 0) {
           localStorage.setItem(
@@ -97,6 +107,7 @@ const Sidebar = () => {
     <aside className="flex md:w-[32%] flex-col gap-y-5">
       <Popular data={popularBlogs} loading={loading} />
       <Recent data={editorsBlogs} loading={loading} />
+      <Categories data={categories} loading={loading} />
       <Topics data={topics} loading={loading} />
       {/* <Newsletter /> */}
       <Tags data={topics} loading={loading} />

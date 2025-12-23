@@ -1,7 +1,10 @@
+import Link from "next/link";
+
 interface Props {
   data: any;
   loading: boolean;
 }
+
 const Tags = ({ data: tags, loading }: Props) => {
   return (
     <div className='px-4 border border-gray-200 rounded-xl'>
@@ -48,12 +51,13 @@ const Tags = ({ data: tags, loading }: Props) => {
                 />
               ))
             : tags?.map((tag: any, index: number) => (
-                <p
+                <Link
                   key={index}
-                  className='text-xs text-gray-600 px-2 py-1 border-gray-600 border w-fit rounded-full'
+                  href={`/category/${tag?.parentCategorySlug}/${tag?.subCategorySlug}`}
+                  className='text-xs text-gray-600 px-2 py-1 border-gray-600 border w-fit rounded-full hover:bg-[#FE4F70] hover:text-white hover:border-[#FE4F70] transition-colors duration-200'
                 >
                   #{tag?.subCategoryName}
-                </p>
+                </Link>
               ))}
         </div>
       </div>
