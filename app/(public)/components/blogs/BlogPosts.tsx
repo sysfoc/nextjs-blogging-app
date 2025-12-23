@@ -69,7 +69,7 @@ const BlogPosts = () => {
                       <h3 className="font-bold text-lg">{post?.title}</h3>
                     </Link>
                     <div className="my-3 flex items-center justify-between">
-                      <p className="text-sm">By {post?.author}</p>
+                      {post.author && (<p className="text-sm">By {post?.author}</p>)}
                       <div className="flex items-center gap-x-3">
                         <div className="w-1 h-1 rounded-full bg-[#FE4F70]" />
                         <p className="text-sm">
