@@ -19,7 +19,7 @@ const MobileNav = ({ navLinks }: { navLinks: any }) => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant='outline' size='icon' className='cursor-pointer'>
+        <Button variant='outline' size='icon' className='cursor-pointer' aria-label='Open menu'>
           <Menu className='h-6 w-6' />
         </Button>
       </DropdownMenuTrigger>

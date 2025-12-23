@@ -14,7 +14,7 @@ const NewsBlogs = ({ data: newsBlogs, loading }: Props) => {
       <div className="my-4">
         <div className="flex items-center justify-between">
           <div>
-            <h3 className="text-xl sm:text-2xl font-bold">Latest News</h3>
+            <h2 className="text-xl sm:text-2xl font-bold">Latest News</h2>
             <div className="mt-2">
               <svg width="33" height="6" xmlns="http://www.w3.org/2000/svg">
                 <defs>
@@ -44,7 +44,7 @@ const NewsBlogs = ({ data: newsBlogs, loading }: Props) => {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {loading ? (
           <>
-            {Array.from({ length: 4 }).map((_, i) => (
+            {Array.from({ length: 6 }).map((_, i) => (
               <div key={i} className="animate-pulse">
                 <div className="flex gap-4">
                   <div className="w-[120px] sm:w-[150px] md:w-[180px] h-[100px] sm:h-[120px] md:h-[140px] bg-gray-300 rounded-lg shrink-0" />
@@ -80,6 +80,9 @@ const NewsBlogs = ({ data: newsBlogs, loading }: Props) => {
                     alt={`${news?.title}-img`}
                     fill
                     className="object-cover transition-transform duration-500"
+                    sizes="(max-width: 639px) 120px, (max-width: 767px) 150px, 180px"
+                    quality={75}
+                    priority={index < 2}
                   />
                   <div className="absolute top-2 left-2">
                     <span className="px-2 sm:px-3 py-1 bg-gradient-to-r from-[#FE4F70] to-[#FFA387] text-white text-xs font-semibold rounded-full">
@@ -91,9 +94,9 @@ const NewsBlogs = ({ data: newsBlogs, loading }: Props) => {
                 <div className="flex-1 flex flex-col justify-between py-1 min-w-0">
                   <div>
                     <Link href={`/blog/${news?.slug}`}>
-                      <h4 className="font-bold text-sm sm:text-base md:text-lg leading-tight transition-colors line-clamp-2">
+                      <h2 className="font-bold text-sm sm:text-base md:text-lg leading-tight transition-colors line-clamp-2">
                         {news?.title}
-                      </h4>
+                      </h2>
                     </Link>
                     <p
                       className="text-xs sm:text-sm text-gray-500 mt-2 line-clamp-2"
@@ -103,10 +106,10 @@ const NewsBlogs = ({ data: newsBlogs, loading }: Props) => {
                     />
                   </div>
 
-                  <div className="flex items-center gap-2 sm:gap-3 text-xs text-gray-400 mt-2 flex-wrap">
+                  <div className="flex items-center gap-2 sm:gap-3 text-xs text-gray-600 mt-2 flex-wrap">
                     <span className="font-medium truncate">{news?.author}</span>
-                    <div className="w-1 h-1 rounded-full bg-gray-300 shrink-0" />
-                    <span className="whitespace-nowrap">
+                    <div className="w-1 h-1 rounded-full bg-gray-500 shrink-0" />
+                    <span className="whitespace-nowrap text-gray-600">
                       {news?.created_at
                         ? new Date(
                             news?.created_at.replace(" ", "T")

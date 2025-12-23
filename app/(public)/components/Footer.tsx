@@ -64,6 +64,7 @@ const Footer = () => {
               <Link
                 href='https://www.facebook.com/networthmamadotcom'
                 target='_blank'
+                aria-label='Facebook'
               >
                 <FaFacebook size={20} className='text-gray-500' />
               </Link>
@@ -72,12 +73,13 @@ const Footer = () => {
               <Link
                 href='https://www.instagram.com/nethworthmama/'
                 target='_blank'
+                aria-label='Instagram'
               >
                 <FaInstagram size={20} className='text-gray-500' />
               </Link>
             </div>
             <div>
-              <Link href='https://x.com/networthMama' target='_blank'>
+              <Link href='https://x.com/networthMama' target='_blank' aria-label='Twitter'>
                 <FaXTwitter size={20} className='text-gray-500' />
               </Link>
             </div>
@@ -85,6 +87,7 @@ const Footer = () => {
               <Link
                 href='https://www.pinterest.com/networthmama/'
                 target='_blank'
+                aria-label='Pinterest'
               >
                 <FaPinterest size={20} className='text-gray-500' />
               </Link>
@@ -93,6 +96,7 @@ const Footer = () => {
               <Link
                 href='https://www.youtube.com/@Networthmama.'
                 target='_blank'
+                aria-label='YouTube'
               >
                 <FaYoutube size={20} className='text-gray-500' />
               </Link>

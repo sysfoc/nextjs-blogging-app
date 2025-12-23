@@ -27,6 +27,7 @@ const ScrollToTop = () => {
     >
       <Button
         onClick={scrollToTop}
+        aria-label="Scroll to top"
         className='h-12 w-12 rounded-full shadow-lg text-white bg-gradient-to-r from-[#FE4F70] to-[#FFA387] transition-transform duration-200 hover:scale-110 cursor-pointer'
       >
         <ArrowUp className='h-6 w-6' />

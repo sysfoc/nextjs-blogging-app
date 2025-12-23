@@ -98,9 +98,9 @@ const GeneralBlogs = ({ data: generalBlogs, loading }: Props) => {
                     <div className="flex-1 flex flex-col justify-between py-1">
                       <div>
                         <Link href={`/blog/${blog?.slug}`}>
-                          <h4 className="font-bold text-lg sm:text-xl leading-tight transition-colors line-clamp-2">
+                          <h2 className="font-bold text-lg sm:text-xl leading-tight transition-colors line-clamp-2">
                             {blog?.title}
-                          </h4>
+                          </h2>
                         </Link>
                         <p
                           className="text-sm text-gray-500 mt-2 line-clamp-2"
@@ -114,8 +114,8 @@ const GeneralBlogs = ({ data: generalBlogs, loading }: Props) => {
                         <span className="font-medium text-gray-700">
                           {blog?.author}
                         </span>
-                        <div className="w-1 h-1 rounded-full bg-gray-300" />
-                        <span>
+                        <div className="w-1 h-1 rounded-full bg-gray-500" />
+                        <span className="text-gray-600">
                           {blog?.created_at
                             ? new Date(
                                 blog?.created_at.replace(" ", "T")

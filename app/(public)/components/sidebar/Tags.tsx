@@ -50,7 +50,7 @@ const Tags = ({ data: tags, loading }: Props) => {
             : tags?.map((tag: any, index: number) => (
                 <p
                   key={index}
-                  className='text-xs text-gray-400 px-2 py-1 border-gray-400 border w-fit rounded-full'
+                  className='text-xs text-gray-600 px-2 py-1 border-gray-600 border w-fit rounded-full'
                 >
                   #{tag?.subCategoryName}
                 </p>

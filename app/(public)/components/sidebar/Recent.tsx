@@ -56,8 +56,9 @@ const Recent = ({ data: blogs, loading }: Props) => {
                     alt={`${post?.title}-img`}
                     fill
                     className="object-cover"
-                    fetchPriority="high"
-                    priority
+                    sizes="65px"
+                    quality={75}
+                    priority={index < 2}
                   />
                 </div>
                 <div>
@@ -66,7 +67,7 @@ const Recent = ({ data: blogs, loading }: Props) => {
                   >
                     <h3 className="font-bold">{post?.title}</h3>
                   </Link>
-                  <p className="text-xs text-gray-400 mt-1">
+                  <p className="text-xs text-gray-600 mt-1">
                     {new Date(
                       post?.created_at.replace(" ", "T")
                     ).toLocaleDateString("en-US", {
