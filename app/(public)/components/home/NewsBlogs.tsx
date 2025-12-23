@@ -109,7 +109,7 @@ const NewsBlogs = ({ data: newsBlogs, loading }: Props) => {
                   <div className="flex items-center gap-2 sm:gap-3 text-xs text-gray-600 mt-2 flex-wrap">
                     <span className="font-medium truncate">{news?.author}</span>
                     <div className="w-1 h-1 rounded-full bg-gray-500 shrink-0" />
-                    <span className="whitespace-nowrap text-gray-600">
+                    <span className="whitespace-nowrap text-gray-800 md:text-gray-600">
                       {news?.created_at
                         ? new Date(
                             news?.created_at.replace(" ", "T")

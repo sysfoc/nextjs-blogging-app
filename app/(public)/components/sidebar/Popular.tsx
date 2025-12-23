@@ -67,7 +67,7 @@ const Popular = ({ data: blogs, loading }: PopularProps) => {
                   >
                     <h3 className='font-bold'>{post?.title}</h3>
                   </Link>
-                  <p className='text-xs text-gray-400 mt-1'>
+                  <p className='text-xs text-gray-800 md:text-gray-600 mt-1'>
                     {new Date(
                       post?.created_at.replace(" ", "T")
                     ).toLocaleDateString("en-US", {

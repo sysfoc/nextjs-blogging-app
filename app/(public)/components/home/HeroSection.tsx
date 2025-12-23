@@ -35,7 +35,8 @@ const HeroSection = ({ data: blogs, loading }: Props) => {
               fill
               className='object-cover rounded-xl group-hover:scale-105 transition-all duration-500 ease-in-out'
               priority
-              fetchPriority='high'
+              // fetchPriority='high'
+              loading="eager"
             />
             <div className='absolute inset-0 bg-black/40 rounded-xl' />
             <div className='absolute inset-0 flex flex-col gap-y-5 justify-end p-5 md:p-10 text-white'>

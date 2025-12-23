@@ -26,25 +26,25 @@ const Footer = () => {
             />
           </Link>
           <div className='flex flex-wrap items-center gap-x-6'>
-            <Link href='/about-us' className='text-sm text-gray-500'>
+            <Link href='/about-us' className='text-sm text-gray-500 p-2'>
               About
             </Link>
-            <Link href='/contact-us' className='text-sm text-gray-500'>
+            <Link href='/contact-us' className='text-sm text-gray-500 p-2'>
               Contact us
             </Link>
             <Link
               href='/terms-and-conditions'
-              className='text-sm text-gray-500'
+              className='text-sm text-gray-500 p-2'
             >
               Terms
             </Link>
-            <Link href='/privacy-policy' className='text-sm text-gray-500'>
+            <Link href='/privacy-policy' className='text-sm text-gray-500 p-2'>
               Privacy Policy
             </Link>
-            <Link href='/disclaimer' className='text-sm text-gray-500'>
+            <Link href='/disclaimer' className='text-sm text-gray-500 p-2'>
               Disclaimer
             </Link>
-            <Link href='/advertise-with-us' className='text-sm text-gray-500'>
+            <Link href='/advertise-with-us' className='text-sm text-gray-500 p-2'>
               Advertise with us
             </Link>
           </div>
@@ -65,6 +65,7 @@ const Footer = () => {
                 href='https://www.facebook.com/networthmamadotcom'
                 target='_blank'
                 aria-label='Facebook'
+                className='p-2'
               >
                 <FaFacebook size={20} className='text-gray-500' />
               </Link>
@@ -74,12 +75,13 @@ const Footer = () => {
                 href='https://www.instagram.com/nethworthmama/'
                 target='_blank'
                 aria-label='Instagram'
+                className='p-2'
               >
                 <FaInstagram size={20} className='text-gray-500' />
               </Link>
             </div>
             <div>
-              <Link href='https://x.com/networthMama' target='_blank' aria-label='Twitter'>
+              <Link href='https://x.com/networthMama' target='_blank' aria-label='Twitter' className='p-2'>
                 <FaXTwitter size={20} className='text-gray-500' />
               </Link>
             </div>
@@ -88,6 +90,7 @@ const Footer = () => {
                 href='https://www.pinterest.com/networthmama/'
                 target='_blank'
                 aria-label='Pinterest'
+                className='p-2'
               >
                 <FaPinterest size={20} className='text-gray-500' />
               </Link>
@@ -97,6 +100,7 @@ const Footer = () => {
                 href='https://www.youtube.com/@Networthmama.'
                 target='_blank'
                 aria-label='YouTube'
+                className='p-2'
               >
                 <FaYoutube size={20} className='text-gray-500' />
               </Link>

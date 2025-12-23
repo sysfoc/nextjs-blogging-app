@@ -153,7 +153,7 @@ const EditorsPick = ({ data: blogs, loading }: Props) => {
                             {post?.title.slice(0, 48)}...
                           </h2>
                         </Link>
-                        <p className="text-xs text-gray-600 mt-1">
+                        <p className="text-xs text-gray-800 md:text-gray-600 mt-1">
                           {new Date(
                             post?.created_at.replace(" ", "T")
                           ).toLocaleDateString("en-US", {
