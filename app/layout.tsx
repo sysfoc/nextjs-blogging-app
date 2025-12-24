@@ -12,8 +12,8 @@ const montserrat = Montserrat({
 });
 
 export const metadata: Metadata = {
-  title: "Next Blogging Application",
-  description: "Getting Started ...",
+  title: "NetWorthMama – Celebrity Net Worth, Luxury Lifestyle & Wealth Insights",
+  description: "Explore the latest celebrity net worth, luxury lifestyle, earnings, and career insights on NetWorthMama. Discover how your favorite stars live and earn.",
 };
 
 export default function RootLayout({
